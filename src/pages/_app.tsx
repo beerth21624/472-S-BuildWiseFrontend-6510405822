@@ -19,9 +19,9 @@ const fontSans = Anuphan({
 
 const themeMantine = createTheme({
   fontFamily: "Anuphan",
-//   radius: {
-//     sm: "0.8rem",
-//   },
+  radius: {
+    sm: "0.4rem",
+  },
 });
 
 const MyApp: AppType = ({ Component, pageProps }) => {

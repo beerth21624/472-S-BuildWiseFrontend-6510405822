@@ -25,10 +25,6 @@ interface ControlledDatePickerProps<T extends FieldValues> {
   disabled?: boolean;
   required?: boolean;
   clearable?: boolean;
-  prefixSectionWidth?: number;
-  suffixSectionWidth?: number;
-  prefix?: React.ReactNode;
-  suffix?: React.ReactNode;
 }
 
 const ControlledDatePicker = <T extends FieldValues>(
@@ -59,18 +55,7 @@ const ControlledDatePicker = <T extends FieldValues>(
               label={props.label}
               value={value}
               onChange={handleOnChange}
-              leftSectionWidth={props.prefixSectionWidth}
-              rightSectionWidth={props.suffixSectionWidth}
-              rightSection={
-                (props.prefix ? <IconCalendar size={15} /> : undefined) ?? (
-                  <IconCalendar size={15} />
-                )
-              }
-              leftSection={
-                props.prefix && (
-                  <div className="whitespace-nowrap">{props.prefix}</div>
-                )
-              }
+              leftSection={<IconCalendar size={15} />}
               className={props.className}
               clearable={props.clearable}
             />
