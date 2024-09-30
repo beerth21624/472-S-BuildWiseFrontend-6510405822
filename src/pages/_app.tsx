@@ -5,17 +5,13 @@ import { createTheme, MantineProvider } from "@mantine/core";
 import { nprogress, NavigationProgress } from "@mantine/nprogress";
 import AppLayout from "@/layouts/AppLayout";
 import { SessionProvider } from "next-auth/react";
-import { Anuphan } from "next/font/google";
+import router from "next/router";
 
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/nprogress/styles.css";
 import "@mantine/dates/styles.css";
-
-const fontSans = Anuphan({
-  subsets: ["latin"],
-  variable: "--font-sans",
-});
+import { useEffect } from "react";
 
 const themeMantine = createTheme({
   fontFamily: "Anuphan",
@@ -25,17 +21,30 @@ const themeMantine = createTheme({
 });
 
 const MyApp: AppType = ({ Component, pageProps }) => {
+  useEffect(() => {
+    const handleRouteStart = () => nprogress.start();
+    const handleRouteDone = () => nprogress.complete();
+
+    router.events.on("routeChangeStart", handleRouteStart);
+    router.events.on("routeChangeComplete", handleRouteDone);
+    router.events.on("routeChangeError", handleRouteDone);
+
+    return () => {
+      router.events.off("routeChangeStart", handleRouteStart);
+      router.events.off("routeChangeComplete", handleRouteDone);
+      router.events.off("routeChangeError", handleRouteDone);
+    };
+  }, []);
+
   return (
     <SessionProvider>
-      {/* <div className={fontSans.className}> */}
-        <MantineProvider theme={themeMantine}>
-          <NavigationProgress />
-          <Notifications position="top-right" />
-          <AppLayout>
-            <Component {...pageProps} />
-          </AppLayout>
-        </MantineProvider>
-      {/* </div> */}
+      <MantineProvider theme={themeMantine}>
+        <NavigationProgress />
+        <Notifications position="top-right" />
+        <AppLayout>
+          <Component {...pageProps} />
+        </AppLayout>
+      </MantineProvider>
     </SessionProvider>
   );
 };

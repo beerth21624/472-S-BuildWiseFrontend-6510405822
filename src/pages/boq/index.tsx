@@ -1,5 +1,7 @@
-export default function Index() {
+export default function BOQ() {
   return (
-    <div>Index</div>
+    <div className="flex flex-col gap-3">
+        asdf
+    </div>
   )
 }
