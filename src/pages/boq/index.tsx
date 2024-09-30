@@ -1,12 +1,31 @@
-import { Button, Drawer, MultiSelect, Text, TextInput } from "@mantine/core";
+import {
+  ActionIcon,
+  Badge,
+  Box,
+  Button,
+  Drawer,
+  Menu,
+  MultiSelect,
+  rem,
+  Text,
+  TextInput,
+  UnstyledButton,
+} from "@mantine/core";
 import { DateInput } from "@mantine/dates";
 import { useDisclosure } from "@mantine/hooks";
+import { showNotification } from "@mantine/notifications";
+import { format } from "date-fns";
 import {
   IconCalendar,
+  IconDotsVertical,
+  IconEdit,
+  IconEye,
   IconFilter,
   IconPlus,
   IconSearch,
+  IconTrash,
 } from "@tabler/icons-react";
+import { DataTable } from "mantine-datatable";
 import Link from "next/link";
 import React from "react";
 
@@ -24,19 +43,9 @@ export default function BOQ() {
           <MultiSelect
             searchable
             clearable
-            label="สถานะโครงการ"
-            placeholder="เลือกสถานะโครงการ"
-            data={["วางแผน", "กำลังดำเนินการ", "Vue", "Svelte"]}
-          />
-          <DateInput
-            label="วันที่เริ่มโครงการ"
-            placeholder="เลือกวันที่เริ่มโครงการ"
-            leftSection={<IconCalendar size={15} />}
-          />
-          <DateInput
-            label="วันที่สิ้นสุดโครงการ"
-            placeholder="เลือกวันที่สิ้นสุดโครงการ"
-            leftSection={<IconCalendar size={15} />}
+            label="สถานะ BOQ"
+            placeholder="สถานะ BOQ"
+            data={["แบบร่าง", "ยังไม่ได้ทำ", "ทำแล้ว"]}
           />
         </div>
       </Drawer>
@@ -56,6 +65,99 @@ export default function BOQ() {
             </Button>
           </div>
         </div>
+        <DataTable
+          records={[
+            {
+              id: 1,
+              project_name: "โครงการคอนโด 30 ชั้น",
+              bqo_status: "สถานะ BOQ",
+              last_update: new Date().toJSON(),
+            },
+            // more records...
+          ]}
+          // define columns
+          columns={[
+            {
+              accessor: "id",
+              title: "#",
+              textAlign: "right",
+            },
+            {
+              accessor: "project_name",
+              title: "ชื่อโครงการ",
+              width: 600,
+            },
+
+            {
+              accessor: "bqo_status",
+              title: "สถานะ BOQ",
+              noWrap: true,
+              render: (record) => (
+                <Badge variant="dot">{record.bqo_status}</Badge>
+              ),
+            },
+            {
+              accessor: "last_update",
+              title: "วันที่อัพเดทล่าสุด",
+              noWrap: true,
+              render(record) {
+                return (
+                  <div>
+                    {format(new Date(record.last_update), "dd/MM/yyyy HH:mm")}
+                  </div>
+                );
+              },
+            },
+            {
+              accessor: "id",
+              title: "ดำเนินการ",
+              textAlign: "center",
+              render: (record) => (
+                <Menu
+                  shadow="md"
+                  width={200}
+                  position="bottom-end"
+                  trigger="hover"
+                  withArrow
+                >
+                  <Menu.Target>
+                    <UnstyledButton variant="transparent">
+                      <IconDotsVertical size={15} color="gray" />
+                    </UnstyledButton>
+                  </Menu.Target>
+
+                  <Menu.Dropdown>
+                    <Menu.Label>การดำเนินการ</Menu.Label>
+                    <Menu.Item
+                      leftSection={
+                        <IconEdit style={{ width: rem(14), height: rem(14) }} />
+                      }
+                    >
+                      แก้ไข
+                    </Menu.Item>
+                    <Menu.Item
+                      leftSection={
+                        <IconEye style={{ width: rem(14), height: rem(14) }} />
+                      }
+                    >
+                      ดูรายละเอียด
+                    </Menu.Item>
+                    <Menu.Item
+                      leftSection={
+                        <IconTrash
+                          style={{ width: rem(14), height: rem(14) }}
+                        />
+                      }
+                      c="red"
+                    >
+                      ลบ
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
+              ),
+            },
+          ]}
+        />
       </div>
     </>
   );

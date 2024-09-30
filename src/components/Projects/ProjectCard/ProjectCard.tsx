@@ -1,4 +1,4 @@
-import { ActionIcon, Card, Menu, rem, Text } from "@mantine/core";
+import { ActionIcon, Card, Menu, rem, Text, UnstyledButton } from "@mantine/core";
 import {
   IconCalendar,
   IconClock,
@@ -24,15 +24,11 @@ export default function ProjectCard() {
             trigger="hover"
             offset={1}
             withArrow
-            
           >
             <Menu.Target>
-              <ActionIcon color="gray" variant="transparent">
-                <IconDotsVertical
-                  style={{ width: "70%", height: "70%" }}
-                  stroke={1.5}
-                />
-              </ActionIcon>
+              <UnstyledButton variant="transparent">
+                <IconDotsVertical size={15} color="gray" />
+              </UnstyledButton>
             </Menu.Target>
 
             <Menu.Dropdown>

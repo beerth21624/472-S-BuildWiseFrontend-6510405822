@@ -11,6 +11,8 @@
   }
 }
 
+@layer mantine, mantine-datatable;
+
 .a4-vertical {
   letter-spacing: -0.04em;
   width: 21cm;

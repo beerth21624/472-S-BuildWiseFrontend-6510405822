@@ -6,12 +6,14 @@ import { nprogress, NavigationProgress } from "@mantine/nprogress";
 import AppLayout from "@/layouts/AppLayout";
 import { SessionProvider } from "next-auth/react";
 import router from "next/router";
+import { useEffect } from "react";
 
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/nprogress/styles.css";
 import "@mantine/dates/styles.css";
-import { useEffect } from "react";
+import "@mantine/core/styles.layer.css";
+import "mantine-datatable/styles.layer.css";
 
 const themeMantine = createTheme({
   fontFamily: "Anuphan",
