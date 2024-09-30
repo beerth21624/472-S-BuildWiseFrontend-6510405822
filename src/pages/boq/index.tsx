@@ -1,11 +1,62 @@
-import { Text } from "@mantine/core";
+import { Button, Drawer, MultiSelect, Text, TextInput } from "@mantine/core";
+import { DateInput } from "@mantine/dates";
+import { useDisclosure } from "@mantine/hooks";
+import {
+  IconCalendar,
+  IconFilter,
+  IconPlus,
+  IconSearch,
+} from "@tabler/icons-react";
+import Link from "next/link";
+import React from "react";
 
 export default function BOQ() {
+  const [opened, { open, close }] = useDisclosure(false);
   return (
-    <div className="flex flex-col gap-3">
-      <Text size="xl" fw={700}>
-        รายการ BOQ
-      </Text>
-    </div>
+    <>
+      <Drawer
+        opened={opened}
+        position="right"
+        onClose={close}
+        title="การค้นหาขั้นสูง"
+      >
+        <div className="flex flex-col gap-3">
+          <MultiSelect
+            searchable
+            clearable
+            label="สถานะโครงการ"
+            placeholder="เลือกสถานะโครงการ"
+            data={["วางแผน", "กำลังดำเนินการ", "Vue", "Svelte"]}
+          />
+          <DateInput
+            label="วันที่เริ่มโครงการ"
+            placeholder="เลือกวันที่เริ่มโครงการ"
+            leftSection={<IconCalendar size={15} />}
+          />
+          <DateInput
+            label="วันที่สิ้นสุดโครงการ"
+            placeholder="เลือกวันที่สิ้นสุดโครงการ"
+            leftSection={<IconCalendar size={15} />}
+          />
+        </div>
+      </Drawer>
+      <div className="flex flex-col gap-3">
+        <Text size="xl" fw={700}>
+          รายการ BOQ
+        </Text>
+        <div className="flex justify-between">
+          <div className="flex gap-3">
+            <TextInput
+              className="min-w-[400px]"
+              placeholder="ค้นหา"
+              leftSection={<IconSearch size={15} />}
+            />
+            <Button onClick={open} leftSection={<IconFilter size={15} />}>
+              การค้นหาขั้นสูง
+            </Button>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
