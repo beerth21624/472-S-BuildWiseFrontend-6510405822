@@ -9,6 +9,7 @@ import {
 } from "@tabler/icons-react";
 import { DateInput } from "@mantine/dates";
 import React from "react";
+import Link from "next/link";
 
 export default function Index() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -55,7 +56,9 @@ export default function Index() {
               การค้นหาขั้นสูง
             </Button>
           </div>
-          <Button leftSection={<IconPlus size={15} />}>สร้างโครงการ</Button>
+          <Link href="/project/create">
+            <Button leftSection={<IconPlus size={15} />}>สร้างโครงการ</Button>
+          </Link>
         </div>
         <div className="grid grid-cols-3 gap-3">
           {[...Array(6)].map((_, index) => (

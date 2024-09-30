@@ -13,9 +13,9 @@ import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 
 const data = [
-    { link: "/projects", label: "โครงการ", icon: IconBriefcase },
-    { link: "/boqs", label: "BOQ", icon: IconFileDescription },
-    { link: "/materials", label: "วัสดุ", icon: IconBox },
+  { link: "/project", label: "โครงการ", icon: IconBriefcase },
+  { link: "/boq", label: "BOQ", icon: IconFileDescription },
+  { link: "/material", label: "วัสดุ", icon: IconBox },
 ];
 
 export function Menu() {

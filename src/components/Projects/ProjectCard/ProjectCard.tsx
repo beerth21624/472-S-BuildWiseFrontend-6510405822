@@ -3,6 +3,7 @@ import {
   IconCalendar,
   IconClock,
   IconDotsVertical,
+  IconEdit,
   IconEye,
   IconSettings,
   IconTrash,
@@ -38,7 +39,7 @@ export default function ProjectCard() {
               <Menu.Label>การดำเนินการ</Menu.Label>
               <Menu.Item
                 leftSection={
-                  <IconSettings style={{ width: rem(14), height: rem(14) }} />
+                  <IconEdit style={{ width: rem(14), height: rem(14) }} />
                 }
               >
                 แก้ไข
