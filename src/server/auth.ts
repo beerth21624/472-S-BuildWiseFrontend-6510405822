@@ -1,63 +1,93 @@
 import { type GetServerSidePropsContext } from "next";
 import {
   getServerSession,
+  type User,
   type DefaultSession,
   type NextAuthOptions,
 } from "next-auth";
-import DiscordProvider from "next-auth/providers/discord";
+import { jwtDecode } from "jwt-decode";
+import CredentialsProvider from "next-auth/providers/credentials";
 
-import { env } from "@/env";
+import { type JWT } from "next-auth/jwt";
 
-/**
- * Module augmentation for `next-auth` types. Allows us to add custom properties to the `session`
- * object and keep type safety.
- *
- * @see https://next-auth.js.org/getting-started/typescript#module-augmentation
- */
 declare module "next-auth" {
   interface Session extends DefaultSession {
-    user: DefaultSession["user"] & {
-      id: string;
-      // ...other properties
-      // role: UserRole;
-    };
+    user: User;
   }
-
-  // interface User {
-  //   // ...other properties
-  //   // role: UserRole;
-  // }
+  interface User {
+    iat: number;
+    exp: number;
+    token?: string;
+  }
 }
 
-/**
- * Options for NextAuth.js used to configure adapters, providers, callbacks, etc.
- *
- * @see https://next-auth.js.org/configuration/options
- */
+declare module "next-auth/jwt" {
+  interface JWT {
+    user: User;
+  }
+}
+
 export const authOptions: NextAuthOptions = {
+  pages: {
+    signIn: "/login",
+    error: "/login",
+  },
+  session: {
+    strategy: "jwt",
+  },
   callbacks: {
-    session: ({ session, token }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: token.sub,
-      },
-    }),
+    session: (session) => {
+      session.session.user = session.token.user;
+      return session.session;
+    },
+    async jwt({ user, token }) {
+      if (user) {
+        return {
+          user: user,
+        } as JWT;
+      }
+      return token;
+    },
   },
   providers: [
-    DiscordProvider({
-      clientId: env.DISCORD_CLIENT_ID,
-      clientSecret: env.DISCORD_CLIENT_SECRET,
+    CredentialsProvider({
+      name: "login",
+      credentials: {
+        username: {
+          label: "Username",
+          type: "text",
+          placeholder: "username",
+        },
+        password: {
+          label: "Password",
+          type: "password",
+          placeholder: "password",
+        },
+      },
+      async authorize(credentials, _) {
+        if (!credentials?.username || !credentials?.password) {
+          throw new Error("Missing username or password");
+        }
+
+        // const result = await LoginService(
+        //   credentials?.username,
+        //   credentials?.password,
+        // );
+
+        // if (!result?.refreshToken || !result?.token) {
+        //   throw new Error("Not found any token or refresh token");
+        // }
+
+        const decoded = jwtDecode<User & { userId: string }>("result.token");
+
+        return {
+          id: decoded.userId,
+          exp: decoded.exp,
+          iat: decoded.iat,
+          token: "result.token",
+        };
+      },
     }),
-    /**
-     * ...add more providers here.
-     *
-     * Most other providers require a bit more work than the Discord provider. For example, the
-     * GitHub provider requires you to add the `refresh_token_expires_in` field to the Account
-     * model. Refer to the NextAuth.js docs for the provider you want to use. Example:
-     *
-     * @see https://next-auth.js.org/providers/github
-     */
   ],
 };
 
