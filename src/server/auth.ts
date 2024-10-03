@@ -9,15 +9,20 @@ import { jwtDecode } from "jwt-decode";
 import CredentialsProvider from "next-auth/providers/credentials";
 
 import { type JWT } from "next-auth/jwt";
+import { loginService } from "@/services/auth.service";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
     user: User;
   }
   interface User {
-    iat: number;
-    exp: number;
-    token?: string;
+    id: string;
+    username: string;
+    first_name: string;
+    last_name: string;
+    email: string;
+    tel: string;
+    access_token?: string;
   }
 }
 
@@ -29,8 +34,8 @@ declare module "next-auth/jwt" {
 
 export const authOptions: NextAuthOptions = {
   pages: {
-    signIn: "/login",
-    error: "/login",
+    signIn: "/auth/sign-in",
+    error: "/auth/sign-in",
   },
   session: {
     strategy: "jwt",
@@ -69,22 +74,33 @@ export const authOptions: NextAuthOptions = {
           throw new Error("Missing username or password");
         }
 
-        // const result = await LoginService(
-        //   credentials?.username,
-        //   credentials?.password,
-        // );
+        const result = await loginService(
+          credentials.username,
+          credentials.password,
+        );
 
-        // if (!result?.refreshToken || !result?.token) {
-        //   throw new Error("Not found any token or refresh token");
-        // }
+        if (!result?.data.data.access_token) {
+          throw new Error("Not found any token or refresh token");
+        }
 
-        const decoded = jwtDecode<User & { userId: string }>("result.token");
+        const decoded = jwtDecode<{ exp: number }>(
+          result?.data.data.access_token,
+        );
+
+        console.log(decoded);
+
+        const { id, email, first_name, last_name, tel, username } =
+          result.data.data.user;
 
         return {
-          id: decoded.userId,
           exp: decoded.exp,
-          iat: decoded.iat,
-          token: "result.token",
+          id,
+          email,
+          first_name,
+          last_name,
+          tel,
+          username,
+          access_token: result.data.data.access_token,
         };
       },
     }),

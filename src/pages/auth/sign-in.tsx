@@ -1,5 +1,59 @@
-export default function SignIn() {
+import { Alert, Button, PasswordInput, TextInput } from "@mantine/core";
+import { IconInfoCircle } from "@tabler/icons-react";
+import {
+  type GetServerSidePropsContext,
+  type InferGetServerSidePropsType,
+} from "next";
+import { getCsrfToken } from "next-auth/react";
+import { useRef } from "react";
+
+export default function SignIn(
+  props: InferGetServerSidePropsType<typeof getServerSideProps>,
+) {
+  const username = useRef<HTMLInputElement>(null);
+  const password = useRef<HTMLInputElement>(null);
   return (
-    <div>Sign-in</div>
-  )
+    <div className="mx-auto max-w-md">
+      <form
+        method="post"
+        action="/api/auth/callback/credentials"
+        className="flex flex-col gap-3"
+      >
+        {props.error && (
+          <Alert
+            variant="light"
+            color="red"
+            title="เกิดข้อผิดพลาด"
+            icon={<IconInfoCircle />}
+          >
+            {props.error}
+          </Alert>
+        )}
+
+        <input name="csrfToken" type="hidden" defaultValue={props.csrfToken} />
+        <TextInput
+          ref={username}
+          label="Username"
+          name="username"
+          placeholder="Username"
+        />
+        <PasswordInput
+          ref={password}
+          name="password"
+          label="Password"
+          placeholder="Password"
+        />
+        <Button type="submit">Sign In</Button>
+      </form>
+    </div>
+  );
+}
+
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+  return {
+    props: {
+      csrfToken: await getCsrfToken(context),
+      error: context.query.error ?? null,
+    },
+  };
 }

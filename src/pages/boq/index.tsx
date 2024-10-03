@@ -70,10 +70,9 @@ export default function BOQ() {
             {
               id: 1,
               project_name: "โครงการคอนโด 30 ชั้น",
-              bqo_status: "สถานะ BOQ",
+              bqo_status: "แบบร่าง",
               last_update: new Date().toJSON(),
             },
-            // more records...
           ]}
           // define columns
           columns={[
@@ -134,23 +133,6 @@ export default function BOQ() {
                       }
                     >
                       แก้ไข
-                    </Menu.Item>
-                    <Menu.Item
-                      leftSection={
-                        <IconEye style={{ width: rem(14), height: rem(14) }} />
-                      }
-                    >
-                      ดูรายละเอียด
-                    </Menu.Item>
-                    <Menu.Item
-                      leftSection={
-                        <IconTrash
-                          style={{ width: rem(14), height: rem(14) }}
-                        />
-                      }
-                      c="red"
-                    >
-                      ลบ
                     </Menu.Item>
                   </Menu.Dropdown>
                 </Menu>

@@ -7,8 +7,8 @@ import {
 } from "@tabler/icons-react";
 import classes from "./Menu.module.css";
 import clsx from "clsx";
-import { Button } from "@mantine/core";
-import { useSession } from "next-auth/react";
+import { Button, Card } from "@mantine/core";
+import { signOut, useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
 
@@ -42,18 +42,25 @@ export function Menu() {
 
   return (
     <nav>
-      <div className={clsx("flex flex-col gap-2")}>{links}</div>
+      <div className={clsx("mb-5 flex flex-col gap-2")}>{links}</div>
       {sessionStatus === "authenticated" ? (
-        <Button
-          type="submit"
-          justify="start"
-          variant={"subtle"}
-          color="red"
-          fullWidth
-          leftSection={<IconLogout stroke={1.5} />}
-        >
-          ออกจากระบบ
-        </Button>
+        <Card p={3} className="flex flex-col">
+          <Button py={0} variant="white" justify="start">
+            {session.user.email}
+          </Button>
+          <Button
+            justify="start"
+            variant={"subtle"}
+            color="red"
+            fullWidth
+            onClick={() => {
+              void signOut();
+            }}
+            leftSection={<IconLogout stroke={1.5} />}
+          >
+            ออกจากระบบ
+          </Button>
+        </Card>
       ) : (
         <div className={classes.footer}>
           <Link href="/auth/sign-in">

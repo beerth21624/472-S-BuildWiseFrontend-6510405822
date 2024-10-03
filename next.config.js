@@ -18,6 +18,9 @@ const config = {
     defaultLocale: "en",
   },
   transpilePackages: ["geist"],
+  env: {
+    NEXT_PUBLIC_BASE_API: "https://general-boonkosang-be.tu4rl4.easypanel.host",
+  }
 };
 
 export default config;
