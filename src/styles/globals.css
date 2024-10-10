@@ -30,3 +30,11 @@
   box-shadow: 0 0 0.5cm rgba(0, 0, 0, 0.5);
   margin-bottom: 0.5cm;
 }
+
+@media print {
+  .a4-vertical,
+  .a4-horizontal {
+    box-shadow: none;
+    margin-bottom: 0;
+  }
+}
