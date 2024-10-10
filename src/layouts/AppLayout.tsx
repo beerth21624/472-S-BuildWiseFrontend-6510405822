@@ -25,6 +25,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     }
   }, [pathname]);
 
+  const excludeStartPathname = ["/login", "/pdf"];
+
+  if (excludeStartPathname.includes(pathname)) {
+    return <>{children}</>;
+  }
+
   return (
     <AppShell
       header={{ height: 60 }}
