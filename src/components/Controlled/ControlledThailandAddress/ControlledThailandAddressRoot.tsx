@@ -40,6 +40,7 @@ export default function ControlledThailandAddressRoot(props: Props) {
         props={{
           label: "ที่อยู่",
           placeholder: "กรอกที่อยู่",
+          withAsterisk: true,
         }}
         control={props.control}
         name="address"
