@@ -54,16 +54,7 @@ export default function BOQ() {
           รายการ BOQ
         </Text>
         <div className="flex justify-between">
-          <div className="flex gap-3">
-            <TextInput
-              className="min-w-[400px]"
-              placeholder="ค้นหา"
-              leftSection={<IconSearch size={15} />}
-            />
-            <Button onClick={open} leftSection={<IconFilter size={15} />}>
-              การค้นหาขั้นสูง
-            </Button>
-          </div>
+          
         </div>
         <DataTable
           records={[
