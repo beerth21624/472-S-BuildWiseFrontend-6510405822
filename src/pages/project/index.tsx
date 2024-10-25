@@ -42,20 +42,10 @@ export default function Index() {
         </div>
       </Drawer>
       <div className="flex flex-col gap-3">
-        <Text size="xl" fw={700}>
-          รายการโครงการ
-        </Text>
         <div className="flex justify-between">
-          <div className="flex gap-3">
-            <TextInput
-              className="min-w-[400px]"
-              placeholder="ค้นหา"
-              leftSection={<IconSearch size={15} />}
-            />
-            <Button onClick={open} leftSection={<IconFilter size={15} />}>
-              การค้นหาขั้นสูง
-            </Button>
-          </div>
+          <Text size="xl" fw={700}>
+            รายการโครงการ
+          </Text>
           <Link href="/project/create">
             <Button leftSection={<IconPlus size={15} />}>สร้างโครงการ</Button>
           </Link>
