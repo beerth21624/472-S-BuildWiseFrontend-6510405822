@@ -4,17 +4,23 @@ import {
   type Control,
   Controller,
 } from "react-hook-form";
-import { TextInput, type TextInputProps } from "@mantine/core";
 import React from "react";
+import { IMaskInput } from "react-imask";
+import {
+  InputBase,
+  type InputBaseProps,
+  type PolymorphicComponentProps,
+} from "@mantine/core";
 
-interface ControlledInputTextProps<T extends FieldValues> {
+interface ControlledInputBaseProps<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
-  props?: TextInputProps;
+  props?: PolymorphicComponentProps<"input", InputBaseProps>;
+  mask?: string;
 }
 
-const ControlledInputText = <T extends FieldValues>(
-  props: ControlledInputTextProps<T>,
+const ControlledInputBase = <T extends FieldValues>(
+  props: ControlledInputBaseProps<T>,
 ) => {
   return (
     <Controller
@@ -32,13 +38,17 @@ const ControlledInputText = <T extends FieldValues>(
 
         return (
           <>
-            <TextInput
+            <InputBase
               error={error ? error.message : undefined}
               onWheel={(e) => e.currentTarget.blur()}
               {...props.props}
+              mask={props.mask}
+              component={IMaskInput}
               ref={ref}
               value={value}
-              onChange={(e) => onChangeValue(e.target.value)}
+              onChange={(e) => {
+                onChangeValue(e.currentTarget.value);
+              }}
               className="w-full"
             />
           </>
@@ -48,4 +58,4 @@ const ControlledInputText = <T extends FieldValues>(
   );
 };
 
-export default ControlledInputText;
+export default ControlledInputBase;

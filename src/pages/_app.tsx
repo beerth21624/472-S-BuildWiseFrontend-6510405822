@@ -7,6 +7,7 @@ import AppLayout from "@/layouts/AppLayout";
 import { SessionProvider } from "next-auth/react";
 import router from "next/router";
 import { useEffect } from "react";
+import { ModalsProvider } from "@mantine/modals";
 
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
@@ -41,11 +42,13 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   return (
     <SessionProvider>
       <MantineProvider theme={themeMantine}>
-        <NavigationProgress />
-        <Notifications position="top-right" />
-        <AppLayout>
-          <Component {...pageProps} />
-        </AppLayout>
+        <ModalsProvider>
+          <NavigationProgress />
+          <Notifications position="top-right" />
+          <AppLayout>
+            <Component {...pageProps} />
+          </AppLayout>
+        </ModalsProvider>
       </MantineProvider>
     </SessionProvider>
   );

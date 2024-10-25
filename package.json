@@ -41,7 +41,10 @@
     "puppeteer": "^23.4.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-highlight-words": "^0.20.0",
     "react-hook-form": "^7.53.0",
+    "react-imask": "^7.6.1",
+    "react-thailand-address-typeahead": "^2.0.1",
     "recharts": "2",
     "zod": "^3.23.3"
   },
@@ -50,6 +53,7 @@
     "@types/node": "^20.14.10",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "@types/react-highlight-words": "^0.20.0",
     "@typescript-eslint/eslint-plugin": "^8.1.0",
     "@typescript-eslint/parser": "^8.1.0",
     "eslint": "^8.57.0",

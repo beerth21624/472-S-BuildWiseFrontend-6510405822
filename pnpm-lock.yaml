@@ -101,9 +101,18 @@ importers:
       react-dom:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
+      react-highlight-words:
+        specifier: ^0.20.0
+        version: 0.20.0(react@18.3.1)
       react-hook-form:
         specifier: ^7.53.0
         version: 7.53.0(react@18.3.1)
+      react-imask:
+        specifier: ^7.6.1
+        version: 7.6.1(react@18.3.1)
+      react-thailand-address-typeahead:
+        specifier: ^2.0.1
+        version: 2.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       recharts:
         specifier: '2'
         version: 2.12.7(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
@@ -123,6 +132,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.3.0
         version: 18.3.0
+      '@types/react-highlight-words':
+        specifier: ^0.20.0
+        version: 0.20.0
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.1.0
         version: 8.7.0(@typescript-eslint/parser@8.7.0(eslint@8.57.1)(typescript@5.6.2))(eslint@8.57.1)(typescript@5.6.2)
@@ -167,6 +179,10 @@ packages:
 
   '@babel/highlight@7.24.7':
     resolution: {integrity: sha512-EStJpq4OuY8xYfhGVXngigBJRWxftKX9ksiGDnmlY3o7B/V7KIAc9X4oiK87uPJSc/vs5L869bem5fhZa8caZw==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/runtime-corejs3@7.25.7':
+    resolution: {integrity: sha512-gMmIEhg35sXk9Te5qbGp3W9YKrvLt3HV658/d3odWrHSqT0JeG5OzsJWFHRLiOohRyjRsJc/x03DhJm3i8VJxg==}
     engines: {node: '>=6.9.0'}
 
   '@babel/runtime@7.25.6':
@@ -678,6 +694,9 @@ packages:
   '@types/react-dom@18.3.0':
     resolution: {integrity: sha512-EhwApuTmMBmXuFOikhQLIBUn6uFg81SwLMOAUgodJF14SOBOCMdU04gDoYi0WOJJHD144TL32z4yDqCW3dnkQg==}
 
+  '@types/react-highlight-words@0.20.0':
+    resolution: {integrity: sha512-Qm512TiOakvtNzHJ2+TNVHnLn5cJ2wLQV0+LrhuispVth6dRf5b8ydjq3Kc0thpZ7bz4s6RnG6meboAXHWRK+Q==}
+
   '@types/react@18.3.10':
     resolution: {integrity: sha512-02sAAlBnP39JgXwkAq3PeU9DVaaGpZyF3MGcC0MKgQVkZor5IiiDAipVaxQHtDJAmO4GIy/rVBy/LzVj76Cyqg==}
 
@@ -979,6 +998,9 @@ packages:
   cookie@0.5.0:
     resolution: {integrity: sha512-YZ3GUyn/o8gfKJlnlX7g7xq4gyO6OSuhGPKaaGssGB2qgDUS0gPgtTvoyZLTt9Ab6dC4hfc9dV5arkvc/OCmrw==}
     engines: {node: '>= 0.6'}
+
+  core-js-pure@3.38.1:
+    resolution: {integrity: sha512-BY8Etc1FZqdw1glX0XNOq2FDwfrg/VGqoZOZCdaL+UmdaqDwQwYXkMJT4t6In+zfEfOJDcM9T0KdbBeJg8KKCQ==}
 
   cosmiconfig@9.0.0:
     resolution: {integrity: sha512-itvL5h8RETACmOTFc4UfIyB2RfEHi71Ax6E/PivVxq9NseKbOWpeyHEOIbmAw1rs8Ak0VursQNww7lf7YtUwzg==}
@@ -1537,6 +1559,9 @@ packages:
     resolution: {integrity: sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==}
     engines: {node: '>= 0.4'}
 
+  highlight-words-core@1.2.3:
+    resolution: {integrity: sha512-m1O9HW3/GNHxzSIXWw1wCNXXsgLlxrP0OI6+ycGUhiUHkikqW3OrwVHz+lxeNBe5yqLESdIcj8PowHQ2zLvUvQ==}
+
   highlight.js@11.10.0:
     resolution: {integrity: sha512-SYVnVFswQER+zu1laSya563s+F8VDGt7o35d4utbamowvUNLLMovFqwCLSocpZTz3MgaSRA1IbqRWZv97dtErQ==}
     engines: {node: '>=12.0.0'}
@@ -1555,6 +1580,10 @@ packages:
   ignore@5.3.2:
     resolution: {integrity: sha512-hsBTNUqQTDwkWtcdYI2i06Y/nUBEsNEDJKjWdigLvegy8kDuJAS8uRlpkkcQpyEXL0Z/pjDy5HBmMjRCJ2gq+g==}
     engines: {node: '>= 4'}
+
+  imask@7.6.1:
+    resolution: {integrity: sha512-sJlIFM7eathUEMChTh9Mrfw/IgiWgJqBKq2VNbyXvBZ7ev/IlO6/KQTKlV/Fm+viQMLrFLG/zCuudrLIwgK2dg==}
+    engines: {npm: '>=4.0.0'}
 
   import-fresh@3.3.0:
     resolution: {integrity: sha512-veYYhQa+D1QBKznvhUHxb8faxlrwUnxseDAbAp457E0wLNio2bOSKnjYDhMj+YiAq61xrMGhQk9iXVk5FzgQMw==}
@@ -1835,6 +1864,9 @@ packages:
 
   mdurl@2.0.0:
     resolution: {integrity: sha512-Lf+9+2r+Tdp5wXDXC4PcIBjTDtq4UKjCPMQhKIuzpJNW0b96kVqSwW0bT7FhRSfmAiFYgP+SCRvdrDozfh0U5w==}
+
+  memoize-one@4.0.3:
+    resolution: {integrity: sha512-QmpUu4KqDmX0plH4u+tf0riMc1KHE1+lw95cMrLlXQAFOx/xnBtwhZ52XJxd9X2O6kwKBqX32kmhbhlobD0cuw==}
 
   merge2@1.4.1:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
@@ -2284,11 +2316,22 @@ packages:
     peerDependencies:
       react: '>= 16.8 || 18.0.0'
 
+  react-highlight-words@0.20.0:
+    resolution: {integrity: sha512-asCxy+jCehDVhusNmCBoxDf2mm1AJ//D+EzDx1m5K7EqsMBIHdZ5G4LdwbSEXqZq1Ros0G0UySWmAtntSph7XA==}
+    peerDependencies:
+      react: ^0.14.0 || ^15.0.0 || ^16.0.0-0 || ^17.0.0-0 || ^18.0.0-0
+
   react-hook-form@7.53.0:
     resolution: {integrity: sha512-M1n3HhqCww6S2hxLxciEXy2oISPnAzxY7gvwVPrtlczTM/1dDadXgUxDpHMrMTblDOcm/AXtXxHwZ3jpg1mqKQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       react: ^16.8.0 || ^17 || ^18 || ^19
+
+  react-imask@7.6.1:
+    resolution: {integrity: sha512-vLNfzcCz62Yzx/GRGh5tiCph9Gbh2cZu+Tz8OiO5it2eNuuhpA0DWhhSlOtVtSJ80+Bx+vFK5De8eQ9AmbkXzA==}
+    engines: {npm: '>=4.0.0'}
+    peerDependencies:
+      react: '>=0.14.0'
 
   react-is@16.13.1:
     resolution: {integrity: sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==}
@@ -2340,6 +2383,12 @@ packages:
     engines: {node: '>=10'}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0 || ^18.0.0
+
+  react-thailand-address-typeahead@2.0.1:
+    resolution: {integrity: sha512-8e0KK0B5fJFLJf6USRqJ/73HEepXV/n4wlIuf3KzgGtjPFx/sQ8TahXVv4Q6UKHhB8B52cJFePNaFj75RrfvlQ==}
+    peerDependencies:
+      react: ^18.2.0
+      react-dom: ^18.2.0
 
   react-transition-group@4.4.5:
     resolution: {integrity: sha512-pZcd1MCJoiKiBR2NRxeCRg13uCXbydPnmB4EOeRrY7480qNWO8IIgQG6zlDkm6uRMsURXPuKq0GWtiM59a5Q6g==}
@@ -2838,6 +2887,11 @@ snapshots:
       chalk: 2.4.2
       js-tokens: 4.0.0
       picocolors: 1.1.0
+
+  '@babel/runtime-corejs3@7.25.7':
+    dependencies:
+      core-js-pure: 3.38.1
+      regenerator-runtime: 0.14.1
 
   '@babel/runtime@7.25.6':
     dependencies:
@@ -3349,6 +3403,10 @@ snapshots:
     dependencies:
       '@types/react': 18.3.10
 
+  '@types/react-highlight-words@0.20.0':
+    dependencies:
+      '@types/react': 18.3.10
+
   '@types/react@18.3.10':
     dependencies:
       '@types/prop-types': 15.7.13
@@ -3714,6 +3772,8 @@ snapshots:
   concat-map@0.0.1: {}
 
   cookie@0.5.0: {}
+
+  core-js-pure@3.38.1: {}
 
   cosmiconfig@9.0.0(typescript@5.6.2):
     dependencies:
@@ -4439,6 +4499,8 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
+  highlight-words-core@1.2.3: {}
+
   highlight.js@11.10.0: {}
 
   http-proxy-agent@7.0.2:
@@ -4458,6 +4520,10 @@ snapshots:
   ieee754@1.2.1: {}
 
   ignore@5.3.2: {}
+
+  imask@7.6.1:
+    dependencies:
+      '@babel/runtime-corejs3': 7.25.7
 
   import-fresh@3.3.0:
     dependencies:
@@ -4726,6 +4792,8 @@ snapshots:
       uc.micro: 2.1.0
 
   mdurl@2.0.0: {}
+
+  memoize-one@4.0.3: {}
 
   merge2@1.4.1: {}
 
@@ -5184,8 +5252,21 @@ snapshots:
       prop-types: 15.8.1
       react: 18.3.1
 
+  react-highlight-words@0.20.0(react@18.3.1):
+    dependencies:
+      highlight-words-core: 1.2.3
+      memoize-one: 4.0.3
+      prop-types: 15.8.1
+      react: 18.3.1
+
   react-hook-form@7.53.0(react@18.3.1):
     dependencies:
+      react: 18.3.1
+
+  react-imask@7.6.1(react@18.3.1):
+    dependencies:
+      imask: 7.6.1
+      prop-types: 15.8.1
       react: 18.3.1
 
   react-is@16.13.1: {}
@@ -5239,6 +5320,11 @@ snapshots:
       use-latest: 1.2.1(@types/react@18.3.10)(react@18.3.1)
     transitivePeerDependencies:
       - '@types/react'
+
+  react-thailand-address-typeahead@2.0.1(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+    dependencies:
+      react: 18.3.1
+      react-dom: 18.3.1(react@18.3.1)
 
   react-transition-group@4.4.5(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:

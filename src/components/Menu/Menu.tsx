@@ -4,6 +4,7 @@ import {
   IconBriefcase,
   IconFileDescription,
   IconBox,
+  IconUser,
 } from "@tabler/icons-react";
 import classes from "./Menu.module.css";
 import clsx from "clsx";
@@ -16,6 +17,8 @@ const data = [
   { link: "/project", label: "โครงการ", icon: IconBriefcase },
   { link: "/boq", label: "BOQ", icon: IconFileDescription },
   { link: "/material", label: "วัสดุ", icon: IconBox },
+  { link: "/client", label: "Client", icon: IconUser },
+  { link: "/supplier", label: "Supplier", icon: IconUser },
 ];
 
 export function Menu() {
