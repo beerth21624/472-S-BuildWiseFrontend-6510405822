@@ -47,7 +47,7 @@ export default function SupplierForm(props: Props) {
 
   return (
     <form className="flex flex-col gap-3" onSubmit={handleSubmit(onFinish)}>
-      <div className="flex items-baseline gap-3">
+      <div className="flex items-baseline gap-5">
         <ControlledInputText
           control={control}
           name="name"
@@ -66,7 +66,7 @@ export default function SupplierForm(props: Props) {
             withAsterisk: true,
           }}
         />
-        <ControlledInputBase
+        <ControlledInputText
           control={control}
           name="phone"
           props={{
@@ -74,14 +74,13 @@ export default function SupplierForm(props: Props) {
             placeholder: "กรอกเบอร์โทรติดต่อ",
             withAsterisk: true,
           }}
-          mask="000-000-0000"
         />
       </div>
       <ControlledThailandAddress
         control={control as unknown as Control<AddressSchemaType>}
       />
       <Button type="submit">
-        {props.type === "create" ? "บันทึก" : "แก้ไข"}
+        {props.type === "create" ? "สร้าง" : "บันทึก"}
       </Button>
     </form>
   );

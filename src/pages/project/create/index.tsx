@@ -1,6 +1,6 @@
 import BackButton from "@/components/BackButton/BackButton";
 import { Button, Text } from "@mantine/core";
-import { useForm } from "react-hook-form";
+import { Control, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ControlledInputText from "@/components/Controlled/ControlledInputText";
 import ControlledInputTextarea from "@/components/Controlled/ControlledInputTextarea";
@@ -11,6 +11,8 @@ import {
   createProjectSchema,
   type CreateProjectSchemaType,
 } from "@/schemas/project/create-project.schema copy";
+import ControlledThailandAddress from "@/components/Controlled/ControlledThailandAddress/ControlledThailandAddress";
+import { AddressSchemaType } from "@/schemas/address.schema";
 
 export default function Index() {
   const {
@@ -30,7 +32,7 @@ export default function Index() {
     );
     setValue("project_start_date", new Date());
     setValue("project_end_date", new Date());
-    setValue("contract_url", "http://localhost:3000/project/create");
+    // setValue("contract_url", "http://localhost:3000/project/create");
   }, []);
 
   return (
@@ -63,6 +65,9 @@ export default function Index() {
             withAsterisk: true,
           }}
         />
+        <ControlledThailandAddress
+          control={control as unknown as Control<AddressSchemaType>}
+        />
         <div className="flex gap-3">
           <ControlledDatePicker
             className="w-full"
@@ -83,7 +88,7 @@ export default function Index() {
             required
           />
         </div>
-        <ControlledInputText
+        {/* <ControlledInputText
           control={control}
           name="contract_url"
           props={{
@@ -92,7 +97,7 @@ export default function Index() {
             leftSection: <IconLink size={15} />,
             withAsterisk: true,
           }}
-        />
+        /> */}
         <Button type="submit">สร้างโครงการ</Button>
       </form>
     </div>

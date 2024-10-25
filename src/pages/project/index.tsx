@@ -1,4 +1,3 @@
-import ProjectCard from "@/components/Projects/ProjectCard/ProjectCard";
 import { Button, Drawer, MultiSelect, Text, TextInput } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import {
@@ -10,6 +9,7 @@ import {
 import { DateInput } from "@mantine/dates";
 import React from "react";
 import Link from "next/link";
+import ProjectCard from "@/components/Project/ProjectCard/ProjectCard";
 
 export default function Index() {
   const [opened, { open, close }] = useDisclosure(false);
