@@ -1,101 +1,90 @@
 import BackButton from "@/components/BackButton/BackButton";
-import ControlledInputBase from "@/components/Controlled/ControlledInputBase";
 import ControlledInputText from "@/components/Controlled/ControlledInputText";
+import ControlledInputTextarea from "@/components/Controlled/ControlledInputTextarea";
 import ControlledThailandAddress from "@/components/Controlled/ControlledThailandAddress/ControlledThailandAddress";
-import { AddressSchemaType } from "@/schemas/address.schema";
+import { type AddressSchemaType } from "@/schemas/address.schema";
 import {
-  clientSchema,
-  type ClientSchemaType,
-} from "@/schemas/client/client.schema";
+  createProjectSchema,
+  type CreateProjectSchemaType,
+} from "@/schemas/project/create-project.schema copy";
+import { type ProjectSchemaType } from "@/schemas/project/project.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button, Text } from "@mantine/core";
-import { useEffect } from "react";
-import { Control, useForm } from "react-hook-form";
+import { type Control, useForm } from "react-hook-form";
 
 interface Props {
   type: "create" | "edit";
-  onFinish?: (data: ClientSchemaType) => void;
-  data?: ClientSchemaType;
+  onFinish?: (data: ProjectSchemaType) => void;
+  data?: ProjectSchemaType;
 }
 
 export default function ProjectForm(props: Props) {
   const {
     control,
     setValue,
-    watch,
     handleSubmit,
     formState: { errors },
-  } = useForm<ClientSchemaType>({
-    resolver: zodResolver(clientSchema),
+  } = useForm<CreateProjectSchemaType>({
+    resolver: zodResolver(createProjectSchema),
   });
 
-  const onFinish = (data: ClientSchemaType) => {
+  const onFinish = (data: ProjectSchemaType) => {
     console.log(data);
     props.onFinish?.(data);
   };
 
-  useEffect(() => {
-    if (props.data) {
-      setValue("name", props.data.name);
-      setValue("email", props.data.email);
-      setValue("phone", props.data.phone);
-      setValue("tax_id", props.data.tax_id);
-      setValue("address", props.data.address);
-      setValue("subdistrict", props.data.subdistrict);
-      setValue("district", props.data.district);
-      setValue("province", props.data.province);
-      setValue("postal_code", props.data.postal_code);
-    }
-  }, [props.data, setValue]);
-
   return (
-    <form className="flex flex-col gap-3" onSubmit={handleSubmit(onFinish)}>
-      <div className="flex items-baseline gap-5">
-        <ControlledInputText
-          control={control}
-          name="name"
-          props={{
-            label: "ชื่อ",
-            placeholder: "กรอกชื่อ",
-            withAsterisk: true,
-          }}
-        />
-        <ControlledInputText
-          control={control}
-          name="email"
-          props={{
-            label: "อีเมล",
-            placeholder: "กรอกอีเมล",
-            withAsterisk: true,
-          }}
-        />
+    <div className="flex flex-col">
+      <div>
+        <BackButton label="กลับไปหน้ารายการโครงการ" href="/project" />
       </div>
-      <div className="flex items-baseline gap-3">
+      <Text size="xl" fw={700}>
+        สร้างโครงการใหม่
+      </Text>
+      <form className="flex flex-col gap-5" onSubmit={handleSubmit(onFinish)}>
         <ControlledInputText
           control={control}
-          name="phone"
+          name="project_name"
           props={{
-            label: "เบอร์โทรติดต่อ",
-            placeholder: "กรอกเบอร์โทรติดต่อ",
+            label: "ชื่อโครงการ",
+            placeholder: "กรอกชื่อโครงการ",
             withAsterisk: true,
           }}
         />
-        <ControlledInputText
+        <ControlledInputTextarea
           control={control}
-          name="tax_id"
+          name="project_details"
           props={{
-            label: "เลขประจำตัวผู้เสียภาษี",
-            placeholder: "กรอกเลขประจำตัวผู้เสียภาษี",
+            label: "รายละเอียดโครงการ",
+            placeholder: "กรอกรายละเอียดโครงการ",
             withAsterisk: true,
           }}
         />
-      </div>
-      <ControlledThailandAddress
-        control={control as unknown as Control<AddressSchemaType>}
-      />
-      <Button type="submit">
-        {props.type === "create" ? "สร้าง" : "บันทึก"}
-      </Button>
-    </form>
+        <ControlledThailandAddress
+          control={control as unknown as Control<AddressSchemaType>}
+        />
+        {/* <div className="flex gap-3">
+          <ControlledDatePicker
+            className="w-full"
+            label="วันที่เริ่มโครงการ"
+            clearable
+            control={control}
+            name="project_start_date"
+            placeholder="เลือกวันที่"
+            required
+          />
+          <ControlledDatePicker
+            className="w-full"
+            label="วันที่สิ้นสุดโครงการ"
+            clearable
+            control={control}
+            name="project_end_date"
+            placeholder="เลือกวันที่"
+            required
+          />
+        </div> */}
+        <Button type="submit">สร้างโครงการ</Button>
+      </form>
+    </div>
   );
 }
