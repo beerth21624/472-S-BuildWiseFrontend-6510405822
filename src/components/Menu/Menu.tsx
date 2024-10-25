@@ -5,20 +5,34 @@ import {
   IconFileDescription,
   IconBox,
   IconUser,
+  type IconProps,
+  type Icon,
 } from "@tabler/icons-react";
 import classes from "./Menu.module.css";
 import clsx from "clsx";
-import { Button, Card } from "@mantine/core";
+import { Button, Card, NavLink } from "@mantine/core";
 import { signOut, useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+import { type ForwardRefExoticComponent, type RefAttributes } from "react";
 
-const data = [
+type MenuList = {
+  link?: string;
+  label: string;
+  icon?: ForwardRefExoticComponent<IconProps & RefAttributes<Icon>>;
+  children?: MenuList[];
+};
+
+const menuList: MenuList[] = [
   { link: "/project", label: "โครงการ", icon: IconBriefcase },
   { link: "/boq", label: "BOQ", icon: IconFileDescription },
   { link: "/material", label: "วัสดุ", icon: IconBox },
   { link: "/client", label: "Client", icon: IconUser },
-  { link: "/supplier", label: "Supplier", icon: IconUser },
+  {
+    link: "/supplier",
+    label: "Supplier",
+    icon: IconUser,
+  },
 ];
 
 export function Menu() {
@@ -30,22 +44,45 @@ export function Menu() {
     return pathname === link;
   };
 
-  const links = data.map((item, index) => (
-    <Button
-      onClick={() => navigate.push(item.link)}
-      justify="start"
-      variant={isCurrentPath(item.link) ? "gradient" : "subtle"}
-      leftSection={<item.icon stroke={1.5} />}
-      fullWidth
-      key={index}
+  const links = menuList.map((item) => (
+    <NavLink
+      px={20}
+      href={item.link}
+      key={item.link}
+      onClick={(e) => {
+        e.preventDefault();
+        if (item.link) {
+          navigate.push(item.link);
+        }
+      }}
+      active={isCurrentPath(item.link ?? "")}
+      label={item.label}
+      leftSection={item.icon ? <item.icon stroke={1.5} /> : undefined}
     >
-      {item.label}
-    </Button>
+      {item.children
+        ? item.children.map((child) => (
+            <NavLink
+              active={isCurrentPath(child.link ?? "")}
+              label={child.label}
+              href={child.link}
+              onClick={(e) => {
+                e.preventDefault();
+                if (child.link) {
+                  navigate.push(child.link);
+                }
+              }}
+              key={child.link}
+              leftSection={child.icon ? <child.icon stroke={1.5} /> : undefined}
+            />
+          ))
+        : null}
+    </NavLink>
   ));
 
   return (
     <nav>
-      <div className={clsx("mb-5 flex flex-col gap-2")}>{links}</div>
+      <div className={clsx("flex flex-col mt-3")}>{links}</div>
+
       {sessionStatus === "authenticated" ? (
         <Card p={3} className="flex flex-col">
           <Button py={0} variant="white" justify="start">

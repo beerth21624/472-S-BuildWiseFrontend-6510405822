@@ -69,7 +69,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </ActionIcon>
         )} */}
       </AppShell.Header>
-      <AppShell.Navbar p="sm">
+      <AppShell.Navbar>
         <Menu />
       </AppShell.Navbar>
       <AppShell.Main>{children}</AppShell.Main>

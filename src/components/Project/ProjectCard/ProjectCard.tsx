@@ -1,4 +1,11 @@
-import { ActionIcon, Card, Menu, rem, Text, UnstyledButton } from "@mantine/core";
+import {
+  ActionIcon,
+  Card,
+  Menu,
+  rem,
+  Text,
+  UnstyledButton,
+} from "@mantine/core";
 import {
   IconCalendar,
   IconClock,
@@ -8,15 +15,18 @@ import {
   IconSettings,
   IconTrash,
 } from "@tabler/icons-react";
+import Link from "next/link";
 
 export default function ProjectCard() {
   return (
     <Card withBorder className="flex flex-col gap-3">
       <div className="flex flex-col">
         <div className="flex justify-between">
-          <Text size="md" fw={500}>
-            โครงการคอนโด 30 ชั้น
-          </Text>
+          <Link href={"/project/" + "LK687678"}>
+            <Text size="md" fw={500}>
+              โครงการคอนโด 30 ชั้น
+            </Text>
+          </Link>
           <Menu
             shadow="md"
             width={200}
