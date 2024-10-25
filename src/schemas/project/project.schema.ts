@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const createProjectSchema = z.object({
+export const projectSchema = z.object({
   project_name: z
     .string({ required_error: "กรุณากรอกชื่อโครงการ" })
     .min(1, "กรุณากรอกชื่อโครงการ"),
@@ -20,4 +20,4 @@ export const createProjectSchema = z.object({
     .url({ message: "ประเภท URL ไม่ถูกต้อง" }),
 });
 
-export type CreateProjectSchemaType = z.infer<typeof createProjectSchema>;
+export type ProjectSchemaType = z.infer<typeof projectSchema>;

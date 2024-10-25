@@ -4,21 +4,13 @@ import {
   type Control,
   Controller,
 } from "react-hook-form";
-import { NumberInput } from "@mantine/core";
+import { NumberInput, type NumberInputProps } from "@mantine/core";
 import React from "react";
 
 interface ControlledInputNumberProps<T extends FieldValues> {
   control: Control<T>;
   name: Path<T>;
-  label?: string;
-  placeholder?: string;
-  disabled?: boolean;
-  required?: boolean;
-  prefixSectionWidth?: number;
-  suffixSectionWidth?: number;
-  prefix?: React.ReactNode;
-  suffix?: React.ReactNode;
-  pattern?: string;
+  props?: NumberInputProps;
 }
 
 const ControlledInputNumber = <T extends FieldValues>(
@@ -29,11 +21,7 @@ const ControlledInputNumber = <T extends FieldValues>(
       rules={{ required: true }}
       name={props.name}
       control={props.control}
-      render={({
-        field: { onChange, value, ref },
-        fieldState: { invalid, error },
-        formState,
-      }) => {
+      render={({ field: { onChange, value, ref }, fieldState: { error } }) => {
         const onChangeValue = (value: number | string) => {
           if (value === "" || value === null || value === undefined) {
             onChange(null);
@@ -45,33 +33,13 @@ const ControlledInputNumber = <T extends FieldValues>(
         return (
           <>
             <NumberInput
-              pattern={props.pattern ? props.pattern : undefined}
-              withAsterisk={props.required}
-              label={props.label}
               error={error ? error.message : undefined}
-              thousandSeparator=","
-              leftSectionWidth={props.prefixSectionWidth}
-              rightSectionWidth={props.suffixSectionWidth}
-              rightSection={
-                props.suffix ? (
-                  <div className="w-fit whitespace-nowrap">{props.suffix}</div>
-                ) : (
-                  <></>
-                )
-              }
-              leftSection={
-                props.prefix && (
-                  <div className="whitespace-nowrap">{props.prefix}</div>
-                )
-              }
-              className="w-full"
-              disabled={props.disabled}
-              placeholder={props.placeholder}
               onWheel={(e) => e.currentTarget.blur()}
               ref={ref}
-              size="sm"
+              {...props.props}
               value={value}
               onChange={onChangeValue}
+              className="w-full"
             />
           </>
         );

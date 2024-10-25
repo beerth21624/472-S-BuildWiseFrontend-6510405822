@@ -4,9 +4,8 @@ import {
   type Control,
   Controller,
 } from "react-hook-form";
-import { type ComboboxData } from "@mantine/core";
+import { MantineSize, type ComboboxData } from "@mantine/core";
 import {
-  DatePickerInput,
   DatesProvider,
   DateTimePicker,
   type DatesRangeValue,
@@ -30,6 +29,7 @@ interface ControlledDateTimePickerProps<T extends FieldValues> {
   suffixSectionWidth?: number;
   prefix?: React.ReactNode;
   suffix?: React.ReactNode;
+  size?: MantineSize
 }
 
 const ControlledDateTimePicker = <T extends FieldValues>(
@@ -59,6 +59,7 @@ const ControlledDateTimePicker = <T extends FieldValues>(
               placeholder={props.placeholder}
               label={props.label}
               value={value}
+              size={props.size}
               onChange={handleOnChange}
               leftSectionWidth={props.prefixSectionWidth}
               rightSectionWidth={props.suffixSectionWidth}

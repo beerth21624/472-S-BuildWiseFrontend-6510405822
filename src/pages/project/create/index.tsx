@@ -2,15 +2,15 @@ import BackButton from "@/components/BackButton/BackButton";
 import { Button, Text } from "@mantine/core";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  createProjectSchema,
-  type CreateProjectSchemaType,
-} from "@/schemas/create-project.schema";
 import ControlledInputText from "@/components/Controlled/ControlledInputText";
 import ControlledInputTextarea from "@/components/Controlled/ControlledInputTextarea";
 import ControlledDatePicker from "@/components/Controlled/ControlledDatePicker";
 import { IconLink } from "@tabler/icons-react";
 import { useEffect } from "react";
+import {
+  createProjectSchema,
+  type CreateProjectSchemaType,
+} from "@/schemas/project/create-project.schema copy";
 
 export default function Index() {
   const {
@@ -36,7 +36,7 @@ export default function Index() {
   return (
     <div className="flex flex-col">
       <div>
-        <BackButton />
+        <BackButton label="กลับไปหน้ารายการโครงการ" href="/project" />
       </div>
       <Text size="xl" fw={700}>
         สร้างโครงการใหม่
@@ -48,16 +48,20 @@ export default function Index() {
         <ControlledInputText
           control={control}
           name="project_name"
-          label={"ชื่อโครงการ"}
-          placeholder="กรอกชื่อโครงการ"
-          required
+          props={{
+            label: "ชื่อโครงการ",
+            placeholder: "กรอกชื่อโครงการ",
+            withAsterisk: true,
+          }}
         />
         <ControlledInputTextarea
           control={control}
           name="project_details"
-          required
-          label="รายละเอียดโครงการ"
-          placeholder="กรอกรายละเอียดโครงการ"
+          props={{
+            label: "รายละเอียดโครงการ",
+            placeholder: "กรอกรายละเอียดโครงการ",
+            withAsterisk: true,
+          }}
         />
         <div className="flex gap-3">
           <ControlledDatePicker
@@ -81,11 +85,13 @@ export default function Index() {
         </div>
         <ControlledInputText
           control={control}
-          required
           name="contract_url"
-          label={"URL สัญญา"}
-          prefix={<IconLink size={15} />}
-          placeholder="กรอก URL สัญญา"
+          props={{
+            label: "URL สัญญา",
+            placeholder: "กรอก URL สัญญา",
+            leftSection: <IconLink size={15} />,
+            withAsterisk: true,
+          }}
         />
         <Button type="submit">สร้างโครงการ</Button>
       </form>
