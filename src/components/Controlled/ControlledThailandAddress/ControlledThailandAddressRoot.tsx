@@ -6,6 +6,7 @@ import { ThailandAddressTypeahead } from "react-thailand-address-typeahead";
 import Highlighter from "react-highlight-words";
 import { type AddressSchemaType } from "@/schemas/address.schema";
 import ControlledInputText from "../ControlledInputText";
+import { IconMapPin } from "@tabler/icons-react";
 
 interface Props {
   control: Control<AddressSchemaType>;
@@ -32,14 +33,16 @@ export default function ControlledThailandAddressRoot(props: Props) {
   });
 
   const inputClass =
-    "py-[0.35rem] px-3 border border-zinc-300 w-full rounded-[0.2rem] focus:outline-primary focus:outline-[0px]";
+    "py-[0.35rem] px-3 border border-zinc-300 w-full rounded-[0.5rem] focus:outline-primary focus:outline-[0px]";
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-5">
       <ControlledInputText
         props={{
           label: "ที่อยู่",
           placeholder: "กรอกที่อยู่",
+          withAsterisk: true,
+          leftSection: <IconMapPin size={15} />,
         }}
         control={props.control}
         name="address"

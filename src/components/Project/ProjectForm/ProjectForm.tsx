@@ -18,7 +18,7 @@ interface Props {
   data?: ClientSchemaType;
 }
 
-export default function ClientForm(props: Props) {
+export default function ProjectForm(props: Props) {
   const {
     control,
     setValue,
