@@ -32,6 +32,8 @@ export default function MaterialForm(props: Props) {
 
   useEffect(() => {
     if (props.data) {
+      setValue("name", props.data.name);
+      setValue("unit", props.data.unit);
     }
   }, [props.data, setValue]);
 

@@ -1,8 +1,7 @@
 import BackButton from "@/components/BackButton/BackButton";
 import useGetProject from "@/hooks/queries/project/useGetProject";
-import useGetProjects from "@/hooks/queries/project/useGetProjects";
 import { getProjectStatusMap } from "@/utils/projectStatusMap";
-import { Button, Card, Divider, Group, Text } from "@mantine/core";
+import { Button, Card, Text } from "@mantine/core";
 import clsx from "clsx";
 import {
   type GetServerSidePropsContext,
@@ -84,7 +83,7 @@ export default function Project(
                 </FieldLabel>
               </div>
             </div>
-            <Link href={"/project/edit/" + "tesss"}>
+            <Link href={"/project/edit/" + props.id}>
               <Button>แก้ไขรายละเอียด</Button>
             </Link>
           </div>
