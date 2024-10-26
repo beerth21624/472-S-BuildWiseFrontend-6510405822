@@ -24,11 +24,7 @@ export default function ClientEdit(
           name: "งานทดสอบ",
           description: "งานทดสอบ",
           unit: "unit",
-          material: [
-            {
-              material_id: "material_1",
-            },
-          ],
+          material: [],
         }}
         type="edit"
       />
