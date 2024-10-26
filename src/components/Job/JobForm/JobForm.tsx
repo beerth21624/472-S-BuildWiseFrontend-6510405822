@@ -107,9 +107,17 @@ export default function JobForm(props: Props) {
           ))}
         </div>
         <div className="mt-2 flex justify-center">
-          <ActionIcon>
-            <IconPlus onClick={() => append({ material_id: "" })} />
-          </ActionIcon>
+          <Button
+            variant="outline"
+            onClick={() =>
+              append({
+                material_id: "",
+              })
+            }
+            leftSection={<IconPlus />}
+          >
+            เพิ่มรายการวัสดุ
+          </Button>
         </div>
       </div>
       {props.type === "create" ? (

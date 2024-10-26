@@ -42,7 +42,7 @@ export default function ProjectCard() {
             </Menu.Target>
 
             <Menu.Dropdown>
-              <Menu.Label>การดำเนินการ</Menu.Label>
+              {/* <Menu.Label>การดำเนินการ</Menu.Label>
               <Menu.Item
                 leftSection={
                   <IconEdit style={{ width: rem(14), height: rem(14) }} />
@@ -56,7 +56,7 @@ export default function ProjectCard() {
                 }
               >
                 ดูรายละเอียด
-              </Menu.Item>
+              </Menu.Item> */}
               <Menu.Item
                 leftSection={
                   <IconTrash style={{ width: rem(14), height: rem(14) }} />

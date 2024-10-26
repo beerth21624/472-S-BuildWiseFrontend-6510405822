@@ -1,10 +1,24 @@
 import BackButton from "@/components/BackButton/BackButton";
+import Boq from "@/components/Boq/Boq/Boq";
 import BoqForm from "@/components/Boq/BoqForm/BoqForm";
-import { Select, Table, Text, TextInput } from "@mantine/core";
+import GeneralCost from "@/components/Boq/GeneralCost/GeneralCost";
+import {
+  Menu,
+  rem,
+  Select,
+  Table,
+  Tabs,
+  Text,
+  TextInput,
+  UnstyledButton,
+} from "@mantine/core";
+import { IconDotsVertical, IconPencil, IconTrash } from "@tabler/icons-react";
+import { DataTable } from "mantine-datatable";
 import {
   type GetServerSidePropsContext,
   type InferGetServerSidePropsType,
 } from "next";
+import Link from "next/link";
 
 export default function BOQ(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
@@ -17,7 +31,18 @@ export default function BOQ(
           BOQ - โครงการคอนโด 30 ชั้น
         </Text>
       </div>
-      <BoqForm type="create" />
+      <Tabs defaultValue="job">
+        <Tabs.List>
+          <Tabs.Tab value="job">งานทั้งหมด</Tabs.Tab>
+          <Tabs.Tab value="general_cost">ค่าใช้จ่ายทั่วไปของ BOQ</Tabs.Tab>
+        </Tabs.List>
+        <Tabs.Panel value="job" className="py-3">
+          <Boq />
+        </Tabs.Panel>
+        <Tabs.Panel value="general_cost" className="py-3">
+          <GeneralCost />
+        </Tabs.Panel>
+      </Tabs>
     </div>
   );
 }

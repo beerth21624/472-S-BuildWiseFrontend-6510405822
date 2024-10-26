@@ -1,5 +1,6 @@
 import ControlledInputNumber from "@/components/Controlled/ControlledInputNumber";
 import ControlledSelect from "@/components/Controlled/ControlledSelect";
+import { DeleteConfirmModalConfig } from "@/config/ConfirmModalConfig/ConfirmModalConfig";
 import { boqSchema, type BoqSchemaType } from "@/schemas/boq/boq.schema";
 import {
   createBoqSchema,
@@ -7,6 +8,7 @@ import {
 } from "@/schemas/boq/create-boq.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ActionIcon, Button, Table } from "@mantine/core";
+import { modals } from "@mantine/modals";
 import { IconPlus } from "@tabler/icons-react";
 import { useFieldArray, useForm } from "react-hook-form";
 
@@ -85,7 +87,15 @@ export default function BoqForm(props: Props) {
               </Table.Td>
               <Table.Td>
                 <Button
-                  onClick={() => remove(index)}
+                  onClick={() => {
+                    modals.openConfirmModal({
+                      ...DeleteConfirmModalConfig,
+                      children: <p>คุณต้องการลบรายการงานนี้ใช่หรือไม่</p>,
+                      onConfirm: () => {
+                        remove(index);
+                      },
+                    });
+                  }}
                   variant="outline"
                   color="red"
                 >
@@ -97,11 +107,15 @@ export default function BoqForm(props: Props) {
         </Table.Tbody>
       </Table>
       <div className="flex justify-center">
-        <ActionIcon>
-          <IconPlus
-            onClick={() => append({ jobId: "", quantity: 0, labor_cost: 0 })}
-          />
-        </ActionIcon>
+        <Button
+          variant="outline"
+          onClick={() => prepend({ jobId: "", quantity: 0, labor_cost: 0 })}
+          leftSection={
+            <IconPlus />
+          }
+        >
+          เพิ่มรายการงาน
+        </Button>
       </div>
       <Button type="submit">บันทึก</Button>
     </form>

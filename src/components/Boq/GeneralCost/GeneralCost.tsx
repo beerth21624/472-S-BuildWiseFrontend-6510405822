@@ -1,66 +1,43 @@
-import { Badge, Button, Menu, rem, Text, UnstyledButton } from "@mantine/core";
-import {
-  IconDotsVertical,
-  IconPencil,
-  IconPlus,
-  IconTrash,
-} from "@tabler/icons-react";
+import { Button, Menu, Modal, Text, UnstyledButton, rem } from "@mantine/core";
+import { useDisclosure } from "@mantine/hooks";
+import { IconDotsVertical, IconPencil, IconTrash } from "@tabler/icons-react";
 import { DataTable } from "mantine-datatable";
-import React from "react";
 import Link from "next/link";
-import { modals } from "@mantine/modals";
-import { DeleteConfirmModalConfig } from "@/config/ConfirmModalConfig/ConfirmModalConfig";
+import GeneralCostForm from "./GeneralCostForm/GeneralCostForm";
 
-export default function Job() {
-  const onDelete = (client: unknown) => {
-    modals.openConfirmModal({
-      ...DeleteConfirmModalConfig,
-      children: (
-        <Text size="sm">
-          คุณแน่ใจหรือไม่ว่าต้องการลบ <Badge>pawin.bu@ku.th</Badge>
-        </Text>
-      ),
-      onConfirm: () => console.log("Confirmed"),
-    });
-  };
-
+export default function GeneralCost() {
+  const [opened, { open, close }] = useDisclosure(false);
   return (
     <>
+      <Modal opened={opened} onClose={close} title="เพิ่มค่าใช้จ่าย">
+        <GeneralCostForm type="create" />
+      </Modal>
       <div className="flex flex-col gap-3">
-        <div className="flex justify-between">
-          <Text size="xl" fw={700}>
-            รายการงาน
-          </Text>
-          <Link href="/job/create">
-            <Button leftSection={<IconPlus size={15} />}>เพิ่มงาน</Button>
-          </Link>
+        <div className="flex items-center justify-between">
+          <Text fw={700}>ค่าใช้จ่ายทั่วไปของ BOQ</Text>
+          <Button onClick={open}>เพิ่มค่าใช้จ่าย</Button>
         </div>
         <DataTable
           records={[
             {
-              name: "พาวิน บุญก่อสร้าง",
-              email: "pawin.bu@ku.th",
-              phone: "086-3453-446",
-              tax_id: "11xxxxxxxxxxxxx",
+              type: "ค่าใช้จ่ายทั่วไป",
+              name: "ค่าโทรศัพท์",
+              estimated_price: "100 บาท",
             },
           ]}
           // define columns
           columns={[
             {
+              accessor: "type",
+              title: "ประเภท",
+            },
+            {
               accessor: "name",
-              title: "ชื่องาน",
+              title: "ชื่อรายการ",
             },
             {
-              accessor: "email",
-              title: "รายละเอียดงาน",
-            },
-            {
-              accessor: "phone",
-              title: "หน่วยของงาน",
-            },
-            {
-              accessor: "tax_id",
-              title: "วัสดุ",
+              accessor: "estimated_price",
+              title: "ราคาประมาณการ",
             },
             {
               accessor: "id",
@@ -82,7 +59,7 @@ export default function Job() {
 
                   <Menu.Dropdown>
                     <Menu.Label>การดำเนินการ</Menu.Label>
-                    <Link href={"/job/edit/" + "tesss"}>
+                    <Link href={"/client/edit/" + "tesss"}>
                       <Menu.Item
                         leftSection={
                           <IconPencil
@@ -99,7 +76,6 @@ export default function Job() {
                           style={{ width: rem(14), height: rem(14) }}
                         />
                       }
-                      onClick={() => onDelete(record)}
                       color="red"
                     >
                       ลบ

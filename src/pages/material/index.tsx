@@ -24,21 +24,19 @@ import { DataTable } from "mantine-datatable";
 import React from "react";
 import Link from "next/link";
 import { modals } from "@mantine/modals";
+import { DeleteConfirmModalConfig } from "@/config/ConfirmModalConfig/ConfirmModalConfig";
 
 export default function Material() {
   const [opened, { open, close }] = useDisclosure(false);
 
   const onDelete = (client: unknown) => {
     modals.openConfirmModal({
-      title: "ยืนยันการลบ",
+      ...DeleteConfirmModalConfig,
       children: (
         <Text size="sm">
           คุณแน่ใจหรือไม่ว่าต้องการลบ <Badge>pawin.bu@ku.th</Badge>
         </Text>
       ),
-      labels: { confirm: "ยืนยัน", cancel: "ยกเลิก" },
-      confirmProps: { color: "red" },
-      onCancel: () => console.log("Cancel"),
       onConfirm: () => console.log("Confirmed"),
     });
   };

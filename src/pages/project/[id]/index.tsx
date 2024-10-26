@@ -49,7 +49,7 @@ export default function Project(
           </Link>
           <Button variant="white">ใบเสนอราคา</Button>
           <Button variant="white">วัสดุ</Button>
-          <Button variant="white">ค่าใช้จ่าย</Button>
+          <Button variant="white">ค่าใช้จ่ายทั่วไป</Button>
           <Button variant="white">เอกสาร</Button>
           <Button variant="white">สรุป</Button>
         </div>
@@ -79,7 +79,7 @@ export default function Project(
               </div>
             </div>
             <Link href={"/project/edit/" + "tesss"}>
-              <Button>แก้ไขโครงการ</Button>
+              <Button>แก้ไขรายละเอียด</Button>
             </Link>
           </div>
         </Card>
