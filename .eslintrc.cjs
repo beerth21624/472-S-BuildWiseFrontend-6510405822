@@ -31,6 +31,7 @@ const config = {
         argsIgnorePattern: "^_",
       },
     ],
+    "@typescript-eslint/no-non-null-asserted-optional-chain": "off",
     "@typescript-eslint/require-await": "off",
     "@typescript-eslint/no-floating-promises": "off",
     "@typescript-eslint/no-misused-promises": "off",

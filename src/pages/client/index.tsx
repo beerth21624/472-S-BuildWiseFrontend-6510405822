@@ -43,7 +43,14 @@ export default function ClientList() {
         </Text>
       ),
       onConfirm: () => {
-        deleteClientApi.mutate({ client_id: record.id! });
+        deleteClientApi.mutate(
+          { client_id: record.id! },
+          {
+            onSuccess: () => {
+              getClientsApi.refetch();
+            },
+          },
+        );
       },
     });
   };

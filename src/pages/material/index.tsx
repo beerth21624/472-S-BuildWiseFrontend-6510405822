@@ -25,19 +25,38 @@ import React from "react";
 import Link from "next/link";
 import { modals } from "@mantine/modals";
 import { DeleteConfirmModalConfig } from "@/config/ConfirmModalConfig/ConfirmModalConfig";
+import useGetMaterials from "@/hooks/queries/material/useGetMaterials";
+import useDeleteMaterial from "@/hooks/mutates/material/useDeleteMaterial";
 
 export default function Material() {
   const [opened, { open, close }] = useDisclosure(false);
+  const getMaterials = useGetMaterials();
+  const deleteMaterial = useDeleteMaterial();
 
-  const onDelete = (client: unknown) => {
+  type ColumnType = NonNullable<
+    typeof getMaterials.data
+  >["data"]["materials"] extends (infer T)[] | null | undefined
+    ? T
+    : never;
+
+  const onDelete = (record: ColumnType) => {
     modals.openConfirmModal({
       ...DeleteConfirmModalConfig,
       children: (
         <Text size="sm">
-          คุณแน่ใจหรือไม่ว่าต้องการลบ <Badge>pawin.bu@ku.th</Badge>
+          คุณแน่ใจหรือไม่ว่าต้องการลบ <Badge>{record.name}</Badge>
         </Text>
       ),
-      onConfirm: () => console.log("Confirmed"),
+      onConfirm: () => {
+        deleteMaterial.mutate(
+          { material_id: record.material_id! },
+          {
+            onSuccess: () => {
+              getMaterials.refetch();
+            },
+          },
+        );
+      },
     });
   };
 
@@ -53,13 +72,7 @@ export default function Material() {
           </Link>
         </div>
         <DataTable
-          records={[
-            {
-              name: "ปูน",
-              unit: "กิโลกรัม",
-            },
-          ]}
-          // define columns
+          records={getMaterials.data?.data.materials ?? []}
           columns={[
             {
               accessor: "name",
@@ -68,6 +81,7 @@ export default function Material() {
             {
               accessor: "unit",
               title: "หน่วยของวัสดุ",
+              render: (record) => <Badge>{record.unit}</Badge>,
             },
             {
               accessor: "id",
@@ -89,7 +103,7 @@ export default function Material() {
 
                   <Menu.Dropdown>
                     <Menu.Label>การดำเนินการ</Menu.Label>
-                    <Link href={"/material/edit/" + "tesss"}>
+                    <Link href={"/material/edit/" + record.material_id}>
                       <Menu.Item
                         leftSection={
                           <IconPencil

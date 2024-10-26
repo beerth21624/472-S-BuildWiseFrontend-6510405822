@@ -26,10 +26,12 @@ import Link from "next/link";
 import { modals } from "@mantine/modals";
 import { DeleteConfirmModalConfig } from "@/config/ConfirmModalConfig/ConfirmModalConfig";
 import useGetSuppliers from "@/hooks/queries/supplier/useGetSuppliers";
+import useDeleteSupplier from "@/hooks/mutates/supplier/useDeleteSupplier";
 
 export default function SupplierList() {
   const [opened, { open, close }] = useDisclosure(false);
   const GetSuppliersApi = useGetSuppliers();
+  const deleteSupplierApi = useDeleteSupplier();
 
   type ColumnType = NonNullable<
     typeof GetSuppliersApi.data
@@ -45,7 +47,16 @@ export default function SupplierList() {
           คุณแน่ใจหรือไม่ว่าต้องการลบ <Badge>{record.name}</Badge>
         </Text>
       ),
-      onConfirm: () => console.log("Confirmed"),
+      onConfirm: () => {
+        deleteSupplierApi.mutate(
+          { supplier_id: record.id! },
+          {
+            onSuccess: () => {
+              GetSuppliersApi.refetch();
+            },
+          },
+        );
+      },
     });
   };
 
@@ -73,7 +84,9 @@ export default function SupplierList() {
             รายการซัพพลายเออร์
           </Text>
           <Link href="/supplier/create">
-            <Button leftSection={<IconPlus size={15} />}>สร้างซัพพลายเออร์</Button>
+            <Button leftSection={<IconPlus size={15} />}>
+              สร้างซัพพลายเออร์
+            </Button>
           </Link>
         </div>
         <DataTable
