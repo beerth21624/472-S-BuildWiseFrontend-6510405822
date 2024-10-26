@@ -1,23 +1,8 @@
-import {
-  Badge,
-  Button,
-  Drawer,
-  Menu,
-  MultiSelect,
-  rem,
-  Text,
-  TextInput,
-  UnstyledButton,
-} from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { format } from "date-fns";
+import { Badge, Button, Menu, rem, Text, UnstyledButton } from "@mantine/core";
 import {
   IconDotsVertical,
-  IconEdit,
-  IconFilter,
   IconPencil,
   IconPlus,
-  IconSearch,
   IconTrash,
 } from "@tabler/icons-react";
 import { DataTable } from "mantine-datatable";
@@ -25,9 +10,7 @@ import React from "react";
 import Link from "next/link";
 import { modals } from "@mantine/modals";
 
-export default function SupplierList() {
-  const [opened, { open, close }] = useDisclosure(false);
-
+export default function Job() {
   const onDelete = (client: unknown) => {
     modals.openConfirmModal({
       title: "ยืนยันการลบ",
@@ -45,29 +28,13 @@ export default function SupplierList() {
 
   return (
     <>
-      <Drawer
-        opened={opened}
-        position="right"
-        onClose={close}
-        title="การค้นหาขั้นสูง"
-      >
-        <div className="flex flex-col gap-3">
-          <MultiSelect
-            searchable
-            clearable
-            label="สถานะ BOQ"
-            placeholder="สถานะ BOQ"
-            data={["แบบร่าง", "ยังไม่ได้ทำ", "ทำแล้ว"]}
-          />
-        </div>
-      </Drawer>
       <div className="flex flex-col gap-3">
         <div className="flex justify-between">
           <Text size="xl" fw={700}>
-            รายการซัพพลายเออร์
+            รายการงาน
           </Text>
-          <Link href="/supplier/create">
-            <Button leftSection={<IconPlus size={15} />}>สร้าง Supplier</Button>
+          <Link href="/job/create">
+            <Button leftSection={<IconPlus size={15} />}>เพิ่มงาน</Button>
           </Link>
         </div>
         <DataTable
@@ -76,21 +43,26 @@ export default function SupplierList() {
               name: "พาวิน บุญก่อสร้าง",
               email: "pawin.bu@ku.th",
               phone: "086-3453-446",
+              tax_id: "11xxxxxxxxxxxxx",
             },
           ]}
           // define columns
           columns={[
             {
               accessor: "name",
-              title: "ชื่อ",
+              title: "ชื่องาน",
             },
             {
               accessor: "email",
-              title: "อีเมล",
+              title: "รายละเอียดงาน",
             },
             {
               accessor: "phone",
-              title: "เบอร์โทรติดต่อ",
+              title: "หน่วยของงาน",
+            },
+            {
+              accessor: "tax_id",
+              title: "วัสดุ",
             },
             {
               accessor: "id",
@@ -112,7 +84,7 @@ export default function SupplierList() {
 
                   <Menu.Dropdown>
                     <Menu.Label>การดำเนินการ</Menu.Label>
-                    <Link href={"/supplier/edit/" + "tesss"}>
+                    <Link href={"/job/edit/" + "tesss"}>
                       <Menu.Item
                         leftSection={
                           <IconPencil

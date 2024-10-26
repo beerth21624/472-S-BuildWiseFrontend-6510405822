@@ -36,7 +36,7 @@ export default function Project(
 ) {
   return (
     <div className="flex flex-col">
-      <div className="flex justify-between items-end">
+      <div className="flex items-end justify-between">
         <div className="flex flex-col">
           <BackButton label="ย้อนกลับไปหน้ารายการโครงการ" href="/project" />
           <Text fz={"xl"} fw={700}>
@@ -44,7 +44,9 @@ export default function Project(
           </Text>
         </div>
         <div className="flex gap-1">
-          <Button variant="white">BOQ</Button>
+          <Link href={`/project/${props.id}/boq`}>
+            <Button variant="white">BOQ</Button>
+          </Link>
           <Button variant="white">ใบเสนอราคา</Button>
           <Button variant="white">วัสดุ</Button>
           <Button variant="white">ค่าใช้จ่าย</Button>

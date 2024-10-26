@@ -34,36 +34,29 @@ export default function ProjectForm(props: Props) {
   };
 
   return (
-    <div className="flex flex-col">
-      <div>
-        <BackButton label="กลับไปหน้ารายการโครงการ" href="/project" />
-      </div>
-      <Text size="xl" fw={700}>
-        สร้างโครงการใหม่
-      </Text>
-      <form className="flex flex-col gap-5" onSubmit={handleSubmit(onFinish)}>
-        <ControlledInputText
-          control={control}
-          name="project_name"
-          props={{
-            label: "ชื่อโครงการ",
-            placeholder: "กรอกชื่อโครงการ",
-            withAsterisk: true,
-          }}
-        />
-        <ControlledInputTextarea
-          control={control}
-          name="project_details"
-          props={{
-            label: "รายละเอียดโครงการ",
-            placeholder: "กรอกรายละเอียดโครงการ",
-            withAsterisk: true,
-          }}
-        />
-        <ControlledThailandAddress
-          control={control as unknown as Control<AddressSchemaType>}
-        />
-        {/* <div className="flex gap-3">
+    <form className="flex flex-col gap-5" onSubmit={handleSubmit(onFinish)}>
+      <ControlledInputText
+        control={control}
+        name="project_name"
+        props={{
+          label: "ชื่อโครงการ",
+          placeholder: "กรอกชื่อโครงการ",
+          withAsterisk: true,
+        }}
+      />
+      <ControlledInputTextarea
+        control={control}
+        name="project_details"
+        props={{
+          label: "รายละเอียดโครงการ",
+          placeholder: "กรอกรายละเอียดโครงการ",
+          withAsterisk: true,
+        }}
+      />
+      <ControlledThailandAddress
+        control={control as unknown as Control<AddressSchemaType>}
+      />
+      {/* <div className="flex gap-3">
           <ControlledDatePicker
             className="w-full"
             label="วันที่เริ่มโครงการ"
@@ -83,8 +76,7 @@ export default function ProjectForm(props: Props) {
             required
           />
         </div> */}
-        <Button type="submit">สร้างโครงการ</Button>
-      </form>
-    </div>
+      <Button type="submit">สร้างโครงการ</Button>
+    </form>
   );
 }

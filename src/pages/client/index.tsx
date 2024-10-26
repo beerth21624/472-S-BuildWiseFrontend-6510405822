@@ -64,10 +64,10 @@ export default function BOQ() {
       <div className="flex flex-col gap-3">
         <div className="flex justify-between">
           <Text size="xl" fw={700}>
-            รายการ Client
+            รายการลูกค้า
           </Text>
           <Link href="/client/create">
-            <Button leftSection={<IconPlus size={15} />}>สร้าง Client</Button>
+            <Button leftSection={<IconPlus size={15} />}>สร้างลูกค้า</Button>
           </Link>
         </div>
         <DataTable

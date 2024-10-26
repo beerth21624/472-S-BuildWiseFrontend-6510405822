@@ -7,6 +7,7 @@ import {
   IconUser,
   type IconProps,
   type Icon,
+  IconTruck,
 } from "@tabler/icons-react";
 import classes from "./Menu.module.css";
 import clsx from "clsx";
@@ -25,13 +26,21 @@ type MenuList = {
 
 const menuList: MenuList[] = [
   { link: "/project", label: "โครงการ", icon: IconBriefcase },
-  { link: "/boq", label: "BOQ", icon: IconFileDescription },
-  { link: "/material", label: "วัสดุ", icon: IconBox },
-  { link: "/client", label: "Client", icon: IconUser },
+  { link: "/client", label: "ลูกค้า", icon: IconUser },
   {
     link: "/supplier",
-    label: "Supplier",
-    icon: IconUser,
+    label: "ซัพพลายเออร์",
+    icon: IconTruck,
+  },
+  {
+    link: "/job",
+    label: "งาน",
+    icon: IconBriefcase,
+  },
+  {
+    link: "/material",
+    label: "วัสดุ",
+    icon: IconBox,
   },
 ];
 
@@ -41,7 +50,7 @@ export function Menu() {
   const { data: session, status: sessionStatus } = useSession();
 
   const isCurrentPath = (link: string) => {
-    return pathname === link;
+    return pathname.startsWith(link) || pathname === link;
   };
 
   const links = menuList.map((item) => (
@@ -81,7 +90,7 @@ export function Menu() {
 
   return (
     <nav>
-      <div className={clsx("flex flex-col mt-3")}>{links}</div>
+      <div className={clsx("mt-3 flex flex-col")}>{links}</div>
 
       {sessionStatus === "authenticated" ? (
         <Card p={3} className="flex flex-col">
