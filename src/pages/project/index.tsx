@@ -10,8 +10,10 @@ import { DateInput } from "@mantine/dates";
 import React from "react";
 import Link from "next/link";
 import ProjectCard from "@/components/Project/ProjectCard/ProjectCard";
+import useGetProjects from "@/hooks/queries/project/useGetProjects";
 
 export default function Index() {
+  const getProjectsApi = useGetProjects();
   const [opened, { open, close }] = useDisclosure(false);
   return (
     <>
@@ -51,8 +53,8 @@ export default function Index() {
           </Link>
         </div>
         <div className="grid grid-cols-3 gap-3">
-          {[...Array(6)].map((_, index) => (
-            <ProjectCard key={index} />
+          {getProjectsApi.data?.data.projects.map((project, index) => (
+            <ProjectCard project={project} key={index} />
           ))}
         </div>
       </div>

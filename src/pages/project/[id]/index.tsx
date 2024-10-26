@@ -1,4 +1,7 @@
 import BackButton from "@/components/BackButton/BackButton";
+import useGetProject from "@/hooks/queries/project/useGetProject";
+import useGetProjects from "@/hooks/queries/project/useGetProjects";
+import { getProjectStatusMap } from "@/utils/projectStatusMap";
 import { Button, Card, Divider, Group, Text } from "@mantine/core";
 import clsx from "clsx";
 import {
@@ -34,13 +37,17 @@ export function FieldLabel(props: PropsFieldLabel) {
 export default function Project(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
+  const getProjectApi = useGetProject({
+    id: props.id ?? "",
+  });
+
   return (
     <div className="flex flex-col">
       <div className="flex items-end justify-between">
         <div className="flex flex-col">
           <BackButton label="ย้อนกลับไปหน้ารายการโครงการ" href="/project" />
           <Text fz={"xl"} fw={700}>
-            โครงการคอนโด 30 ชั้น
+            {getProjectApi.data?.data.name}
           </Text>
         </div>
         <div className="flex gap-1">
@@ -49,6 +56,7 @@ export default function Project(
           </Link>
           <Button variant="white">ใบเสนอราคา</Button>
           <Button variant="white">วัสดุ</Button>
+          {/* <Button variant="white">ซัพพลายเออร์</Button>x */}
           <Button variant="white">ค่าใช้จ่ายทั่วไป</Button>
           <Button variant="white">เอกสาร</Button>
           <Button variant="white">สรุป</Button>
@@ -63,18 +71,16 @@ export default function Project(
               </div>
               <div className="flex flex-col">
                 <FieldLabel labelClass="min-w-[5.4rem]" label="ชื่อโครงการ">
-                  โครงการคอนโด 30 ชั้น
+                  {getProjectApi.data?.data.name}
                 </FieldLabel>
                 <FieldLabel labelClass="min-w-[5.4rem]" label="สถานที่">
-                  <div>
-                    50 ถนน งามวงศ์วาน เสนานิคม, จตุจักร, กรุงเทพมหานคร, 10900
-                  </div>
+                  {getProjectApi.data?.data.address.address}, {getProjectApi.data?.data.address.district}, {getProjectApi.data?.data.address.province}, {getProjectApi.data?.data.address.postal_code}
                 </FieldLabel>
                 <FieldLabel labelClass="min-w-[5.4rem]" label="ลูกค้า">
-                  พาวิน บุญก่อสร้าง
+                  {getProjectApi.data?.data.client.name}
                 </FieldLabel>
                 <FieldLabel labelClass="min-w-[5.4rem]" label="สถานะ">
-                  กำลังดำเนินการ
+                {getProjectStatusMap(getProjectApi.data?.data.status ?? "")?.label}
                 </FieldLabel>
               </div>
             </div>

@@ -25,16 +25,24 @@ import React from "react";
 import Link from "next/link";
 import { modals } from "@mantine/modals";
 import { DeleteConfirmModalConfig } from "@/config/ConfirmModalConfig/ConfirmModalConfig";
+import useGetSuppliers from "@/hooks/queries/supplier/useGetSuppliers";
 
 export default function SupplierList() {
   const [opened, { open, close }] = useDisclosure(false);
+  const GetSuppliersApi = useGetSuppliers();
 
-  const onDelete = (client: unknown) => {
+  type ColumnType = NonNullable<
+    typeof GetSuppliersApi.data
+  >["data"]["suppliers"] extends (infer T)[] | null | undefined
+    ? T
+    : never;
+
+  const onDelete = (record: ColumnType) => {
     modals.openConfirmModal({
       ...DeleteConfirmModalConfig,
       children: (
         <Text size="sm">
-          คุณแน่ใจหรือไม่ว่าต้องการลบ <Badge>pawin.bu@ku.th</Badge>
+          คุณแน่ใจหรือไม่ว่าต้องการลบ <Badge>{record.name}</Badge>
         </Text>
       ),
       onConfirm: () => console.log("Confirmed"),
@@ -65,18 +73,11 @@ export default function SupplierList() {
             รายการซัพพลายเออร์
           </Text>
           <Link href="/supplier/create">
-            <Button leftSection={<IconPlus size={15} />}>สร้าง Supplier</Button>
+            <Button leftSection={<IconPlus size={15} />}>สร้างซัพพลายเออร์</Button>
           </Link>
         </div>
         <DataTable
-          records={[
-            {
-              name: "พาวิน บุญก่อสร้าง",
-              email: "pawin.bu@ku.th",
-              phone: "086-3453-446",
-            },
-          ]}
-          // define columns
+          records={GetSuppliersApi.data?.data.suppliers ?? []}
           columns={[
             {
               accessor: "name",
@@ -87,7 +88,7 @@ export default function SupplierList() {
               title: "อีเมล",
             },
             {
-              accessor: "phone",
+              accessor: "tel",
               title: "เบอร์โทรติดต่อ",
             },
             {
@@ -110,7 +111,7 @@ export default function SupplierList() {
 
                   <Menu.Dropdown>
                     <Menu.Label>การดำเนินการ</Menu.Label>
-                    <Link href={"/supplier/edit/" + "tesss"}>
+                    <Link href={"/supplier/edit/" + record.id}>
                       <Menu.Item
                         leftSection={
                           <IconPencil

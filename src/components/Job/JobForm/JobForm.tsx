@@ -80,7 +80,7 @@ export default function JobForm(props: Props) {
         <InputLabel>เลือกวัสดุ</InputLabel>
         <div className="flex flex-col gap-3">
           {fields.map((field, index) => (
-            <div key={field.id} className="flex gap-2">
+            <div key={field.id} className="flex items-center gap-2">
               <ControlledSelect
                 control={control}
                 name={`material.${index}.material_id`}
@@ -96,13 +96,23 @@ export default function JobForm(props: Props) {
                   className: "w-full",
                 }}
               />
-              <Button
-                onClick={() => remove(index)}
-                variant="outline"
-                color="red"
-              >
-                ลบ
-              </Button>
+              <ControlledInputNumber
+                control={control}
+                name={`material.${index}.quantity`}
+                props={{
+                  placeholder: "จำนวน",
+                  withAsterisk: true,
+                }}
+              />
+              <div>
+                <Button
+                  onClick={() => remove(index)}
+                  variant="outline"
+                  color="red"
+                >
+                  ลบ
+                </Button>
+              </div>
             </div>
           ))}
         </div>
@@ -112,6 +122,7 @@ export default function JobForm(props: Props) {
             onClick={() =>
               append({
                 material_id: "",
+                quantity: 0,
               })
             }
             leftSection={<IconPlus />}

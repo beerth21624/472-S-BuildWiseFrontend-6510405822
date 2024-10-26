@@ -1,3 +1,6 @@
+import useGetProject from "@/hooks/queries/project/useGetProject";
+import { Project } from "@/services/project/getProjects.service";
+import { getProjectStatusMap } from "@/utils/projectStatusMap";
 import {
   ActionIcon,
   Card,
@@ -17,14 +20,18 @@ import {
 } from "@tabler/icons-react";
 import Link from "next/link";
 
-export default function ProjectCard() {
+interface Props {
+  project: Project;
+}
+
+export default function ProjectCard(props: Props) {
   return (
     <Card withBorder className="flex flex-col gap-3">
       <div className="flex flex-col">
         <div className="flex justify-between">
-          <Link href={"/project/" + "LK687678"}>
+          <Link href={"/project/" + props.project.id}>
             <Text size="md" fw={500}>
-              โครงการคอนโด 30 ชั้น
+              {props.project.name}
             </Text>
           </Link>
           <Menu
@@ -42,21 +49,6 @@ export default function ProjectCard() {
             </Menu.Target>
 
             <Menu.Dropdown>
-              {/* <Menu.Label>การดำเนินการ</Menu.Label>
-              <Menu.Item
-                leftSection={
-                  <IconEdit style={{ width: rem(14), height: rem(14) }} />
-                }
-              >
-                แก้ไข
-              </Menu.Item>
-              <Menu.Item
-                leftSection={
-                  <IconEye style={{ width: rem(14), height: rem(14) }} />
-                }
-              >
-                ดูรายละเอียด
-              </Menu.Item> */}
               <Menu.Item
                 leftSection={
                   <IconTrash style={{ width: rem(14), height: rem(14) }} />
@@ -69,14 +61,14 @@ export default function ProjectCard() {
           </Menu>
         </div>
         <Text c="dimmed" size="xs" fw={500}>
-          บริษัท มี.คอนสตรัคชั่น จำกัด
+          {props.project.description}
         </Text>
       </div>
       <div className="flex flex-col">
         <div className="flex items-center gap-1">
-          <IconClock className="text-blue-400" size={15} />
+          {getProjectStatusMap(props.project.status)?.icon}
           <Text c="dimmed" size="xs">
-            กำลังดำเนินการ
+            {getProjectStatusMap(props.project.status)?.label}
           </Text>
         </div>
         <div className="flex items-center gap-1">

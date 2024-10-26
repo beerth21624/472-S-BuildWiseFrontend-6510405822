@@ -20,19 +20,31 @@ import React from "react";
 import Link from "next/link";
 import { modals } from "@mantine/modals";
 import { DeleteConfirmModalConfig } from "@/config/ConfirmModalConfig/ConfirmModalConfig";
+import useGetClients from "@/hooks/queries/client/useGetClients";
+import useDeleteClient from "@/hooks/mutates/client/useDeleteClient";
 
-export default function BOQ() {
+export default function ClientList() {
   const [opened, { open, close }] = useDisclosure(false);
+  const getClientsApi = useGetClients();
+  const deleteClientApi = useDeleteClient();
 
-  const onDelete = (client: unknown) => {
+  type ColumnType = NonNullable<
+    typeof getClientsApi.data
+  >["data"]["clients"] extends (infer T)[] | null | undefined
+    ? T
+    : never;
+
+  const onDelete = (record: ColumnType) => {
     modals.openConfirmModal({
       ...DeleteConfirmModalConfig,
       children: (
         <Text size="sm">
-          คุณแน่ใจหรือไม่ว่าต้องการลบ <Badge>pawin.bu@ku.th</Badge>
+          คุณแน่ใจหรือไม่ว่าต้องการลบ <Badge>{record.name}</Badge>
         </Text>
       ),
-      onConfirm: () => console.log("Confirmed"),
+      onConfirm: () => {
+        deleteClientApi.mutate({ client_id: record.id! });
+      },
     });
   };
 
@@ -64,15 +76,7 @@ export default function BOQ() {
           </Link>
         </div>
         <DataTable
-          records={[
-            {
-              name: "พาวิน บุญก่อสร้าง",
-              email: "pawin.bu@ku.th",
-              phone: "086-3453-446",
-              tax_id: "11xxxxxxxxxxxxx",
-            },
-          ]}
-          // define columns
+          records={getClientsApi.data?.data.clients ?? []}
           columns={[
             {
               accessor: "name",
@@ -83,7 +87,7 @@ export default function BOQ() {
               title: "อีเมล",
             },
             {
-              accessor: "phone",
+              accessor: "tel",
               title: "เบอร์โทรติดต่อ",
             },
             {
@@ -110,7 +114,7 @@ export default function BOQ() {
 
                   <Menu.Dropdown>
                     <Menu.Label>การดำเนินการ</Menu.Label>
-                    <Link href={"/client/edit/" + "tesss"}>
+                    <Link href={"/client/edit/" + record.id}>
                       <Menu.Item
                         leftSection={
                           <IconPencil

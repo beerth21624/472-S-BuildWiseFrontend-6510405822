@@ -11,6 +11,7 @@ export const jobSchema = z.object({
   material: z.array(
     z.object({
       material_id: z.string({ required_error: "กรุณาเลือกวัสดุ" }),
+      quantity: z.number({ required_error: "กรุณากรอกจํานวน" }).min(0),
     }), 
   ),
 });
