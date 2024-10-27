@@ -11,9 +11,13 @@ import Link from "next/link";
 import { modals } from "@mantine/modals";
 import { DeleteConfirmModalConfig } from "@/config/ConfirmModalConfig/ConfirmModalConfig";
 import useGetJobs from "@/hooks/queries/job/useGetJobs";
+import useDeleteJob from "@/hooks/mutates/job/useDeleteJob";
+import { notifications } from "@mantine/notifications";
+import { AxiosError } from "axios";
 
 export default function Job() {
   const getJobsApi = useGetJobs();
+  const deleteJob = useDeleteJob();
 
   type ColumnType = NonNullable<typeof getJobsApi.data>["data"]["jobs"] extends
     | (infer T)[]
@@ -30,7 +34,27 @@ export default function Job() {
           คุณแน่ใจหรือไม่ว่าต้องการลบ <Badge>{record.name}</Badge>
         </Text>
       ),
-      onConfirm: () => console.log("Confirmed"),
+      onConfirm: () => {
+        deleteJob.mutate({ job_id: record.job_id }, {
+          onSuccess: () => {
+            notifications.show({
+              title: "สําเร็จ",
+              message: "ลบงานสําเร็จ",
+              color: "green",
+            })
+            getJobsApi.refetch();
+          },
+          onError: (error) => {
+            if (error instanceof AxiosError) {
+              notifications.show({
+                title: "เกิดข้อผิดพลาด",
+                message: error.response?.data.error,
+                color: "red",
+              });
+            }
+          }
+        });
+      },
     });
   };
 

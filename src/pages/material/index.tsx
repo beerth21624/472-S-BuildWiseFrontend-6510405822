@@ -1,23 +1,16 @@
 import {
   Badge,
   Button,
-  Drawer,
   Menu,
-  MultiSelect,
   rem,
   Text,
-  TextInput,
   UnstyledButton,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { format } from "date-fns";
 import {
   IconDotsVertical,
-  IconEdit,
-  IconFilter,
   IconPencil,
   IconPlus,
-  IconSearch,
   IconTrash,
 } from "@tabler/icons-react";
 import { DataTable } from "mantine-datatable";
@@ -27,6 +20,8 @@ import { modals } from "@mantine/modals";
 import { DeleteConfirmModalConfig } from "@/config/ConfirmModalConfig/ConfirmModalConfig";
 import useGetMaterials from "@/hooks/queries/material/useGetMaterials";
 import useDeleteMaterial from "@/hooks/mutates/material/useDeleteMaterial";
+import { notifications } from "@mantine/notifications";
+import { AxiosError } from "axios";
 
 export default function Material() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -52,7 +47,21 @@ export default function Material() {
           { material_id: record.material_id! },
           {
             onSuccess: () => {
+              notifications.show({
+                title: "สําเร็จ",
+                message: "ลบวัสดุสําเร็จ",
+                color: "green",
+              });
               getMaterials.refetch();
+            },
+            onError: (error) => {
+              if (error instanceof AxiosError) {
+                notifications.show({
+                  title: "เกิดข้อผิดพลาด",
+                  message: error.response?.data.error,
+                  color: "red",
+                });
+              }
             },
           },
         );
