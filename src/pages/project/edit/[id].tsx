@@ -23,7 +23,6 @@ export default function ProjectEdit(
       title: "กำลังโหลด",
       message: "กำลังแก้ไขโครงการ กรุณารอสักครู่...",
       color: "green",
-      autoClose: 3000,
       loading: true,
     });
     updateProjectApi.mutate(
@@ -46,7 +45,6 @@ export default function ProjectEdit(
             title: "สําเร็จ",
             message: "แก้ไขโครงการ สําเร็จ",
             color: "green",
-            autoClose: 3000,
             id: keyNotification,
             loading: false,
           });
@@ -57,7 +55,6 @@ export default function ProjectEdit(
             title: "เกิดข้อผิดพลาด",
             message: error.message,
             color: "red",
-            autoClose: 3000,
             loading: false,
             id: keyNotification,
           });

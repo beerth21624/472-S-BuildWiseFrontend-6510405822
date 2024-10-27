@@ -15,7 +15,6 @@ export default function MaterialCreate() {
       title: "กำลังโหลด",
       message: "กำลังสร้างวัดสุ กรุณารอสักครู่...",
       color: "green",
-      autoClose: 3000,
       loading: true,
     });
     createMaterialApi.mutate(
@@ -29,7 +28,6 @@ export default function MaterialCreate() {
             title: "สําเร็จ",
             message: "สร้างวัดสุ สําเร็จ",
             color: "green",
-            autoClose: 3000,
             id: keyNotification,
             loading: false,
           });
@@ -40,7 +38,6 @@ export default function MaterialCreate() {
             title: "เกิดข้อผิดพลาด",
             message: error.message,
             color: "red",
-            autoClose: 3000,
             id: keyNotification,
             loading: false,
           });

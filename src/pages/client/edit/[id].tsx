@@ -23,7 +23,6 @@ export default function ClientEdit(
       title: "กำลังโหลด",
       message: "กำลังแก้ไขลูกค้า กรุณารอสักครู่...",
       color: "green",
-      autoClose: 3000,
       loading: true,
     });
     updateClientApi.mutate(
@@ -47,7 +46,6 @@ export default function ClientEdit(
             title: "สําเร็จ",
             message: "แก้ไขลูกค้า สําเร็จ",
             color: "green",
-            autoClose: 3000,
             id: keyNotification,
             loading: false,
           });
@@ -58,7 +56,6 @@ export default function ClientEdit(
             title: "เกิดข้อผิดพลาด",
             message: error.message,
             color: "red",
-            autoClose: 3000,
             loading: false,
             id: keyNotification,
           });

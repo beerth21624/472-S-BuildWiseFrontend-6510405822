@@ -23,7 +23,6 @@ export default function SupplierEdit(
       title: "กำลังโหลด",
       message: "กำลังแก้ไขซัพพลายเออร์ กรุณารอสักครู่...",
       color: "green",
-      autoClose: 3000,
       loading: true,
     });
     updateSupplier.mutate(
@@ -46,7 +45,6 @@ export default function SupplierEdit(
             title: "สําเร็จ",
             message: "แก้ไขซัพพลายเออร์ สําเร็จ",
             color: "green",
-            autoClose: 3000,
             id: keyNotification,
             loading: false,
           });
@@ -57,7 +55,6 @@ export default function SupplierEdit(
             title: "เกิดข้อผิดพลาด",
             message: error.message,
             color: "red",
-            autoClose: 3000,
             loading: false,
             id: keyNotification,
           });

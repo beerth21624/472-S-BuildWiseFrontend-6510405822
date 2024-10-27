@@ -10,6 +10,14 @@ export interface Data {
   name: string;
   description: string;
   unit: string;
+  materials: Material[];
+}
+
+export interface Material {
+  material_id: string;
+  name: string;
+  unit: string;
+  quantity: number;
 }
 
 export type GetJobProps = {

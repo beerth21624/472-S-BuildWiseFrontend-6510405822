@@ -54,14 +54,21 @@ export default function Project(
             <Button variant="white">BOQ</Button>
           </Link>
           <Button variant="white">ใบเสนอราคา</Button>
-          <Button variant="white">วัสดุ</Button>
-          {/* <Button variant="white">ซัพพลายเออร์</Button>x */}
+          <Link href={`/project/${props.id}/material`}>
+            <Button variant="white">วัสดุ</Button>
+          </Link>
           <Button variant="white">ค่าใช้จ่ายทั่วไป</Button>
           <Button variant="white">เอกสาร</Button>
           <Button variant="white">สรุป</Button>
         </div>
       </div>
       <div className="mt-5 flex flex-col gap-3">
+        <div className="flex gap-3">
+          <Button size="xs">เปลี่ยนสถานะ</Button>
+          <Button size="xs" color="red">
+            ยกเลิกโครงการ
+          </Button>
+        </div>
         <Card withBorder className="flex gap-3">
           <div className="flex items-end justify-between">
             <div className="flex flex-col gap-3">
@@ -73,13 +80,19 @@ export default function Project(
                   {getProjectApi.data?.data.name}
                 </FieldLabel>
                 <FieldLabel labelClass="min-w-[5.4rem]" label="สถานที่">
-                  {getProjectApi.data?.data.address.address}, {getProjectApi.data?.data.address.district}, {getProjectApi.data?.data.address.province}, {getProjectApi.data?.data.address.postal_code}
+                  {getProjectApi.data?.data.address.address},{" "}
+                  {getProjectApi.data?.data.address.district},{" "}
+                  {getProjectApi.data?.data.address.province},{" "}
+                  {getProjectApi.data?.data.address.postal_code}
                 </FieldLabel>
                 <FieldLabel labelClass="min-w-[5.4rem]" label="ลูกค้า">
                   {getProjectApi.data?.data.client.name}
                 </FieldLabel>
                 <FieldLabel labelClass="min-w-[5.4rem]" label="สถานะ">
-                {getProjectStatusMap(getProjectApi.data?.data.status ?? "")?.label}
+                  {
+                    getProjectStatusMap(getProjectApi.data?.data.status ?? "")
+                      ?.label
+                  }
                 </FieldLabel>
               </div>
             </div>

@@ -6,15 +6,7 @@ import {
   type JobSchemaType,
   type MaterialJobSchemaType,
 } from "@/schemas/job/job.schema";
-import sha256 from "crypto-js/sha256";
-import {
-  Badge,
-  Button,
-  InputLabel,
-  NumberInput,
-  Select,
-  Text,
-} from "@mantine/core";
+import { Badge, Button, Card, InputLabel, Modal, Text } from "@mantine/core";
 import { notifications } from "@mantine/notifications";
 import {
   type GetServerSidePropsContext,
@@ -22,8 +14,15 @@ import {
 } from "next";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { modals } from "@mantine/modals";
+import { DataTable } from "mantine-datatable";
+import { useDisclosure } from "@mantine/hooks";
+import MaterialJobForm from "@/components/Job/MaterialJobForm/MaterialJobForm";
+import useUpdateMaterialJob from "@/hooks/mutates/job/useUpdateMaterialJob";
+import useDeleteMaterialJob from "@/hooks/mutates/job/useDeleteMaterialJob";
+import useAddMaterialJob from "@/hooks/mutates/job/useAddMaterialJob";
 import { DeleteConfirmModalConfig } from "@/config/ConfirmModalConfig/ConfirmModalConfig";
+import { modals } from "@mantine/modals";
+import { AxiosError } from "axios";
 
 export default function ClientEdit(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
@@ -32,12 +31,15 @@ export default function ClientEdit(
   const getJobApi = useGetJob({ job_id: props.id! });
   const updateJobApi = useUpdateJob();
 
+  const updateMaterialJob = useUpdateMaterialJob();
+  const deleteMaterialJob = useDeleteMaterialJob();
+  const addMaterialJob = useAddMaterialJob();
+
   const onEdit = (data: JobSchemaType) => {
     const keyNotification = notifications.show({
       title: "กำลังโหลด",
       message: "กำลังแก้ไขงาน กรุณารอสักครู่...",
       color: "green",
-      autoClose: 3000,
       loading: true,
     });
     updateJobApi.mutate(
@@ -53,7 +55,6 @@ export default function ClientEdit(
             title: "สําเร็จ",
             message: "แก้ไขงาน สําเร็จ",
             color: "green",
-            autoClose: 3000,
             id: keyNotification,
             loading: false,
           });
@@ -64,7 +65,6 @@ export default function ClientEdit(
             title: "เกิดข้อผิดพลาด",
             message: error.message,
             color: "red",
-            autoClose: 3000,
             loading: false,
             id: keyNotification,
           });
@@ -73,133 +73,195 @@ export default function ClientEdit(
     );
   };
 
-  const [Materials, setMaterials] = useState<MaterialJobSchemaType[]>([
-    {
-      material_id: "PAINT001",
-      quantity: 5.5,
-    },
-    {
-      material_id: "PRIMER001",
-      quantity: 2.0,
-    },
-  ]);
+  const [openedAdd, { open: openAdd, close: closeAdd }] = useDisclosure(false);
+  const [openedEdit, { open: openEdit, close: closeEdit }] =
+    useDisclosure(false);
+  const [EditMaterial, SetEditMaterial] = useState<MaterialJobSchemaType>();
 
-  return (
-    <div className="flex flex-col">
-      <div>
-        <BackButton label="ย้อนกลับไปหน้ารายการงาน" href="/job" />
-      </div>
-      <div className="flex justify-between">
-        <Text size="xl" fw={700}>
-          แก้ไขงาน
+  const onAddMeterialJob = (data: MaterialJobSchemaType) => {
+    addMaterialJob.mutate(
+      {
+        job_id: props.id!,
+        materials: [data],
+      },
+      {
+        onSuccess: () => {
+          notifications.show({
+            title: "สําเร็จ",
+            message: "เพิ่มวัสดุเข้างาน สําเร็จ",
+            color: "green",
+            loading: false,
+          });
+          closeAdd();
+          getJobApi.refetch();
+        },
+      },
+    );
+  };
+
+  const onEditMeterialJob = (data: MaterialJobSchemaType) => {
+    updateMaterialJob.mutate(
+      {
+        job_id: props.id!,
+        material_id: data.material_id,
+        quantity: data.quantity,
+      },
+      {
+        onSuccess: () => {
+          notifications.show({
+            title: "สําเร็จ",
+            message: "แก้ไขจำนวน สําเร็จ",
+            color: "green",
+            loading: false,
+          });
+          closeEdit();
+          getJobApi.refetch();
+        },
+      },
+    );
+  };
+
+  const onDeleteMaterialJob = (data: MaterialJobSchemaType) => {
+    modals.openConfirmModal({
+      ...DeleteConfirmModalConfig,
+      children: (
+        <Text size="sm">
+          คุณต้องการลบวัสดุออกจากงาน <b>{data.material_id}</b> ใช่หรือไม่ ?
         </Text>
-      </div>
-      <JobForm
-        data={{
-          name: getJobApi.data?.data.name ?? "",
-          description: getJobApi.data?.data.description ?? "",
-          unit: getJobApi.data?.data.unit ?? "",
-        }}
-        onFinish={onEdit}
-        type="edit"
-      />
-      <div className="mt-3 flex flex-col">
-        <InputLabel>เลือกวัสดุ</InputLabel>
-        <div className="flex flex-col gap-2">
-          {Materials.map((material, index) => (
-            <Material key={index} data={material} />
-          ))}
-        </div>
-        <div className="mt-3 flex justify-center">
-          <Button variant="outline">เพิ่มวัสดุ</Button>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-type MaterialProps = {
-  data: MaterialJobSchemaType;
-  onSave?: (data: MaterialJobSchemaType) => void;
-  onDelete?: (data: MaterialJobSchemaType) => void;
-};
-
-function Material(props: MaterialProps) {
-  const [data, setData] = useState<MaterialJobSchemaType>(props.data);
-
-  const old_hash = sha256(JSON.stringify(props.data)).toString();
-  const new_hash = sha256(JSON.stringify(data)).toString();
-  const isChange = old_hash !== new_hash;
+      ),
+      onConfirm: () => {
+        deleteMaterialJob.mutate(
+          {
+            job_id: props.id!,
+            material_id: data.material_id,
+          },
+          {
+            onSuccess: () => {
+              notifications.show({
+                title: "สําเร็จ",
+                message: "ลบวัสดุออกจากงาน สําเร็จ",
+                color: "green",
+              });
+              getJobApi.refetch();
+            },
+            onError: (error) => {
+              if (error instanceof AxiosError) {
+                notifications.show({
+                  title: "เกิดข้อผิดพลาด",
+                  message: error.response?.data.error,
+                  color: "red",
+                });
+              }
+            },
+          },
+        );
+      },
+    });
+  };
 
   return (
-    <div className="flex gap-2">
-      <Select
-        className="w-full"
-        defaultValue={data.material_id}
-        data={[
-          {
-            value: "PAINT001",
-            label: "PAINT001",
-          },
-          {
-            value: "PRIMER001",
-            label: "PRIMER001",
-          },
-        ]}
-        onChange={(data) => {
-          setData((pre) => ({
-            ...pre,
-            material_id: data?.toString() ?? "",
-          }));
-        }}
-        placeholder="เลือกวัสดุ"
-        searchable
-      />
-      <NumberInput
-        defaultValue={data.quantity}
-        className="w-full"
-        onChange={(value) => {
-          setData((pre) => ({
-            ...pre,
-            quantity: (value as number) ?? 0,
-          }));
-        }}
-      />
-      <div className="min-w-[100px]">
-        {isChange ? (
-          <Button
-            onClick={() => {
-              props.onSave?.(data);
+    <>
+      <Modal
+        opened={openedAdd}
+        onClose={closeAdd}
+        title="เพิ่มวัสดุเข้างาน"
+        centered
+      >
+        <MaterialJobForm type="create" onFinish={onAddMeterialJob} />
+      </Modal>
+      <Modal
+        opened={openedEdit}
+        onClose={closeEdit}
+        title="แก้ไขจำนวน"
+        centered
+      >
+        <MaterialJobForm
+          data={EditMaterial}
+          type="edit"
+          onFinish={onEditMeterialJob}
+        />
+      </Modal>
+      <div className="flex flex-col gap-3">
+        <div>
+          <BackButton label="ย้อนกลับไปหน้ารายการงาน" href="/job" />
+        </div>
+        <Card withBorder>
+          <div className="flex justify-between">
+            <Text size="xl" fw={700}>
+              แก้ไขงาน
+            </Text>
+          </div>
+          <JobForm
+            data={{
+              name: getJobApi.data?.data.name ?? "",
+              description: getJobApi.data?.data.description ?? "",
+              unit: getJobApi.data?.data.unit ?? "",
             }}
-            color="green"
-            fullWidth
-          >
-            บันทึก
-          </Button>
-        ) : (
-          <Button
-            onClick={() => {
-              modals.openConfirmModal({
-                ...DeleteConfirmModalConfig,
-                children: (
-                  <Text size="sm">
-                    คุณแน่ใจหรือไม่ว่าต้องการลบ{" "}
-                    <Badge>{data.material_id}</Badge>
-                  </Text>
-                ),
-                onConfirm: () => {
-                  props.onDelete?.(data);
+            onFinish={onEdit}
+            type="edit"
+          />
+        </Card>
+        <Card withBorder>
+          <div className="mt-3 flex flex-col">
+            <InputLabel>เลือกวัสดุ</InputLabel>
+            <DataTable
+              records={getJobApi.data?.data.materials}
+              columns={[
+                {
+                  accessor: "material_id",
+                  title: "รหัสวัสดุ",
+                  render: (data) => <Badge>{data.material_id}</Badge>,
                 },
-              });
-            }}
-            fullWidth
-            color="red"
-          >
-            ลบ
-          </Button>
-        )}
+                {
+                  accessor: "name",
+                  title: "ชื่อวัสดุ",
+                },
+                {
+                  accessor: "unit",
+                  title: "หน่วย",
+                  render: (data) => (
+                    <Badge variant="outline">{data.unit}</Badge>
+                  ),
+                },
+                {
+                  accessor: "quantity",
+                  title: "จำนวน",
+                },
+                {
+                  accessor: "material_id",
+                  title: "",
+                  render: (data) => (
+                    <div className="flex gap-2">
+                      <Button
+                        onClick={() => {
+                          SetEditMaterial(data);
+                          openEdit();
+                        }}
+                        size="compact-xs"
+                      >
+                        แก้ไข
+                      </Button>
+                      <Button
+                        onClick={() => onDeleteMaterialJob(data)}
+                        color="red"
+                        size="compact-xs"
+                      >
+                        ลบ
+                      </Button>
+                    </div>
+                  ),
+                },
+              ]}
+            />
+            <div className="mt-3 flex justify-center">
+              <Button variant="outline" onClick={openAdd}>
+                เพิ่มวัสดุ
+              </Button>
+            </div>
+          </div>
+        </Card>
       </div>
-    </div>
+    </>
   );
 }
 

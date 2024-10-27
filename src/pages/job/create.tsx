@@ -15,7 +15,6 @@ export default function JobCreate() {
       title: "กำลังโหลด",
       message: "กำลังสร้างงาน กรุณารอสักครู่...",
       color: "green",
-      autoClose: 3000,
       loading: true,
     });
     createJobApi.mutate(
@@ -30,7 +29,6 @@ export default function JobCreate() {
             title: "สําเร็จ",
             message: "สร้างงาน สําเร็จ",
             color: "green",
-            autoClose: 3000,
             id: keyNotification,
             loading: false,
           });
@@ -41,7 +39,6 @@ export default function JobCreate() {
             title: "เกิดข้อผิดพลาด",
             message: error.message,
             color: "red",
-            autoClose: 3000,
             id: keyNotification,
             loading: false,
           });

@@ -15,7 +15,6 @@ export default function CreateProject() {
       title: "กำลังโหลด",
       message: "กำลังสร้างโครงการ กรุณารอสักครู่...",
       color: "green",
-      autoClose: 3000,
       loading: true,
     });
     createProjectApi.mutate(
@@ -37,7 +36,6 @@ export default function CreateProject() {
             title: "สําเร็จ",
             message: "สร้างโครงการ สําเร็จ",
             color: "green",
-            autoClose: 3000,
             id: keyNotification,
             loading: false,
           });
@@ -48,7 +46,6 @@ export default function CreateProject() {
             title: "เกิดข้อผิดพลาด",
             message: error.message,
             color: "red",
-            autoClose: 3000,
             id: keyNotification,
             loading: false,
           });

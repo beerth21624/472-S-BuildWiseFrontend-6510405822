@@ -15,7 +15,6 @@ export default function SupplierCreate() {
       title: "กำลังโหลด",
       message: "กำลังสร้างซัพพลายเออร์ กรุณารอสักครู่...",
       color: "green",
-      autoClose: 3000,
       loading: true,
     });
     createSupplierApi.mutate(
@@ -37,7 +36,6 @@ export default function SupplierCreate() {
             title: "สําเร็จ",
             message: "สร้างซัพพลายเออร์ สําเร็จ",
             color: "green",
-            autoClose: 3000,
             id: keyNotification,
             loading: false,
           });
@@ -48,7 +46,6 @@ export default function SupplierCreate() {
             title: "เกิดข้อผิดพลาด",
             message: error.message,
             color: "red",
-            autoClose: 3000,
             id: keyNotification,
             loading: false,
           });

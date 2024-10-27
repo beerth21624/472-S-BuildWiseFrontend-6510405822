@@ -1,6 +1,6 @@
 import ControlledInputText from "@/components/Controlled/ControlledInputText";
 import ControlledInputTextarea from "@/components/Controlled/ControlledInputTextarea";
-import { jobSchema, JobSchemaType } from "@/schemas/job/job.schema";
+import { jobSchema, type JobSchemaType } from "@/schemas/job/job.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@mantine/core";
 import { useEffect } from "react";

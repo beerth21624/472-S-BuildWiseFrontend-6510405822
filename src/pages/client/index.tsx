@@ -58,7 +58,6 @@ export default function ClientList() {
                   title: "เกิดข้อผิดพลาด",
                   message: error.response?.data.error,
                   color: "red",
-                  autoClose: 3000,
                   loading: false,
                 });
               }

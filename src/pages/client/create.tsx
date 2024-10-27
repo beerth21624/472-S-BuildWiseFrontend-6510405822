@@ -15,7 +15,6 @@ export default function ClientCreate() {
       title: "กำลังโหลด",
       message: "กำลังสร้างลูกค้า กรุณารอสักครู่...",
       color: "green",
-      autoClose: 3000,
       loading: true,
     });
     createClientApi.mutate(
@@ -38,7 +37,6 @@ export default function ClientCreate() {
             title: "สําเร็จ",
             message: "สร้างลูกค้า สําเร็จ",
             color: "green",
-            autoClose: 3000,
             id: keyNotification,
             loading: false,
           });
@@ -49,7 +47,6 @@ export default function ClientCreate() {
             title: "เกิดข้อผิดพลาด",
             message: error.message,
             color: "red",
-            autoClose: 3000,
             id: keyNotification,
             loading: false,
           });
