@@ -117,6 +117,8 @@ export default function JobBoq(props: Props) {
     });
   };
 
+  const isApproved = getBoqFromProject.data?.data.status === "approved";
+
   return (
     <>
       <Modal
@@ -137,7 +139,9 @@ export default function JobBoq(props: Props) {
         <div className="flex items-center justify-between">
           <Text fw={700}>งานทั้งหมด</Text>
           <div>
-            <Button onClick={openAdd}>เพิ่มงาน</Button>
+            <Button disabled={isApproved} onClick={openAdd}>
+              เพิ่มงาน
+            </Button>
           </div>
         </div>
         <DataTable
@@ -177,10 +181,16 @@ export default function JobBoq(props: Props) {
                       //   });
                       openEdit();
                     }}
+                    disabled={isApproved}
                   >
                     แก้ไข
                   </Button>
-                  <Button onClick={() => onDeleteJobBoq(data)}>ลบ</Button>
+                  <Button
+                    disabled={isApproved}
+                    onClick={() => onDeleteJobBoq(data)}
+                  >
+                    ลบ
+                  </Button>
                 </div>
               ),
             },
