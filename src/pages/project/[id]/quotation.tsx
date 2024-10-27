@@ -130,7 +130,7 @@ export default function Quotation(
           />
         </Card>
         <Card className="flex flex-col gap-3">
-          <div className="flex items-center gap-5 justify-between">
+          <div className="flex items-center justify-between gap-5">
             <div className="flex flex-col">
               <div className="flex gap-2">
                 <TextInput placeholder="กรอกราคาขายค่าใช้จ่ายทั่วไป" />
@@ -161,6 +161,9 @@ export default function Quotation(
             </div>
           </div>
         </Card>
+        <div className="flex justify-end">
+          <Button className="w-full">บันทึก</Button>
+        </div>
       </div>
     </>
   );

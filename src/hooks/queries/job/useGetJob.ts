@@ -1,4 +1,4 @@
-import getJob, { GetJobProps } from "@/services/job/getJob.service";
+import getJob, { type GetJobProps } from "@/services/job/getJob.service";
 import { useQuery } from "@tanstack/react-query";
 
 const useGetJob = (props: GetJobProps) => {
