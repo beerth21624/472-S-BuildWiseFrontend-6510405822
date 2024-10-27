@@ -1,4 +1,5 @@
 import { axiosAPI } from "@/utils/axios";
+import { AxiosError } from "axios";
 
 export interface DeleteClientResponse {
   message: string;

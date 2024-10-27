@@ -22,6 +22,8 @@ import { modals } from "@mantine/modals";
 import { DeleteConfirmModalConfig } from "@/config/ConfirmModalConfig/ConfirmModalConfig";
 import useGetClients from "@/hooks/queries/client/useGetClients";
 import useDeleteClient from "@/hooks/mutates/client/useDeleteClient";
+import { AxiosError } from "axios";
+import { notifications } from "@mantine/notifications";
 
 export default function ClientList() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -48,6 +50,18 @@ export default function ClientList() {
           {
             onSuccess: () => {
               getClientsApi.refetch();
+            },
+            onError: (error) => {
+              if (error instanceof AxiosError) {
+                console.log(error);
+                notifications.show({
+                  title: "เกิดข้อผิดพลาด",
+                  message: error.response?.data.error,
+                  color: "red",
+                  autoClose: 3000,
+                  loading: false,
+                });
+              }
             },
           },
         );

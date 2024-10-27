@@ -1,13 +1,10 @@
-import ControlledInputNumber from "@/components/Controlled/ControlledInputNumber";
 import ControlledInputText from "@/components/Controlled/ControlledInputText";
 import ControlledInputTextarea from "@/components/Controlled/ControlledInputTextarea";
-import ControlledSelect from "@/components/Controlled/ControlledSelect";
 import { jobSchema, JobSchemaType } from "@/schemas/job/job.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ActionIcon, Button, InputLabel, Table } from "@mantine/core";
-import { IconPlus } from "@tabler/icons-react";
+import { Button } from "@mantine/core";
 import { useEffect } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 interface Props {
   type: "create" | "edit";
@@ -26,13 +23,6 @@ export default function JobForm(props: Props) {
     resolver: zodResolver(jobSchema),
   });
 
-  const { fields, append, prepend, remove, swap, move, insert } = useFieldArray(
-    {
-      control,
-      name: "material",
-    },
-  );
-
   const onFinish = (data: JobSchemaType) => {
     console.log(data);
     props.onFinish?.(data);
@@ -43,7 +33,6 @@ export default function JobForm(props: Props) {
       setValue("name", props.data.name);
       setValue("description", props.data.description);
       setValue("unit", props.data.unit);
-      setValue("material", props.data.material);
     }
   }, [props.data, setValue]);
 
@@ -76,7 +65,7 @@ export default function JobForm(props: Props) {
           withAsterisk: true,
         }}
       />
-      <div className="flex flex-col">
+      {/* <div className="flex flex-col">
         <InputLabel>เลือกวัสดุ</InputLabel>
         <div className="flex flex-col gap-3">
           {fields.map((field, index) => (
@@ -130,7 +119,7 @@ export default function JobForm(props: Props) {
             เพิ่มรายการวัสดุ
           </Button>
         </div>
-      </div>
+      </div> */}
       {props.type === "create" ? (
         <Button type="submit">บันทึก</Button>
       ) : (

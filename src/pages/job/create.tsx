@@ -1,8 +1,54 @@
 import BackButton from "@/components/BackButton/BackButton";
 import JobForm from "@/components/Job/JobForm/JobForm";
+import useCreateJob from "@/hooks/mutates/job/useCreateJob";
+import { JobSchemaType } from "@/schemas/job/job.schema";
 import { Text } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
+import { useRouter } from "next/navigation";
 
 export default function JobCreate() {
+  const navigate = useRouter();
+  const createJobApi = useCreateJob();
+
+  const onCreate = (data: JobSchemaType) => {
+    const keyNotification = notifications.show({
+      title: "กำลังโหลด",
+      message: "กำลังสร้างงาน กรุณารอสักครู่...",
+      color: "green",
+      autoClose: 3000,
+      loading: true,
+    });
+    createJobApi.mutate(
+      {
+        description: data.description,
+        name: data.name,
+        unit: data.unit,
+      },
+      {
+        onSuccess: () => {
+          notifications.update({
+            title: "สําเร็จ",
+            message: "สร้างงาน สําเร็จ",
+            color: "green",
+            autoClose: 3000,
+            id: keyNotification,
+            loading: false,
+          });
+          navigate.push("/job");
+        },
+        onError: (error) => {
+          notifications.update({
+            title: "เกิดข้อผิดพลาด",
+            message: error.message,
+            color: "red",
+            autoClose: 3000,
+            id: keyNotification,
+            loading: false,
+          });
+        },
+      },
+    );
+  };
   return (
     <div className="flex flex-col">
       <div>
@@ -13,7 +59,7 @@ export default function JobCreate() {
           เพิ่มงาน
         </Text>
       </div>
-      <JobForm type="create" />
+      <JobForm onFinish={onCreate} type="create" />
     </div>
   );
 }

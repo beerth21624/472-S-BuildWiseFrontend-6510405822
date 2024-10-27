@@ -10,14 +10,24 @@ import React from "react";
 import Link from "next/link";
 import { modals } from "@mantine/modals";
 import { DeleteConfirmModalConfig } from "@/config/ConfirmModalConfig/ConfirmModalConfig";
+import useGetJobs from "@/hooks/queries/job/useGetJobs";
 
 export default function Job() {
-  const onDelete = (client: unknown) => {
+  const getJobsApi = useGetJobs();
+
+  type ColumnType = NonNullable<typeof getJobsApi.data>["data"]["jobs"] extends
+    | (infer T)[]
+    | null
+    | undefined
+    ? T
+    : never;
+
+  const onDelete = (record: ColumnType) => {
     modals.openConfirmModal({
       ...DeleteConfirmModalConfig,
       children: (
         <Text size="sm">
-          คุณแน่ใจหรือไม่ว่าต้องการลบ <Badge>pawin.bu@ku.th</Badge>
+          คุณแน่ใจหรือไม่ว่าต้องการลบ <Badge>{record.name}</Badge>
         </Text>
       ),
       onConfirm: () => console.log("Confirmed"),
@@ -36,31 +46,20 @@ export default function Job() {
           </Link>
         </div>
         <DataTable
-          records={[
-            {
-              name: "พาวิน บุญก่อสร้าง",
-              email: "pawin.bu@ku.th",
-              phone: "086-3453-446",
-              tax_id: "11xxxxxxxxxxxxx",
-            },
-          ]}
-          // define columns
+          records={getJobsApi.data?.data.jobs ?? []}
           columns={[
             {
               accessor: "name",
               title: "ชื่องาน",
             },
             {
-              accessor: "email",
+              accessor: "description",
               title: "รายละเอียดงาน",
             },
             {
-              accessor: "phone",
+              accessor: "unit",
               title: "หน่วยของงาน",
-            },
-            {
-              accessor: "tax_id",
-              title: "วัสดุ",
+              render: (record) => <Badge>{record.unit}</Badge>,
             },
             {
               accessor: "id",
@@ -79,10 +78,9 @@ export default function Job() {
                       <IconDotsVertical size={15} color="gray" />
                     </UnstyledButton>
                   </Menu.Target>
-
                   <Menu.Dropdown>
                     <Menu.Label>การดำเนินการ</Menu.Label>
-                    <Link href={"/job/edit/" + "tesss"}>
+                    <Link href={"/job/edit/" + record.job_id}>
                       <Menu.Item
                         leftSection={
                           <IconPencil
