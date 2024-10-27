@@ -18,6 +18,8 @@ interface Job {
   name: string;
   description: string;
   unit: string;
+  quantity: number;
+  labor_cost: number;
 }
 
 export type GetBoqFromProjectProps = {

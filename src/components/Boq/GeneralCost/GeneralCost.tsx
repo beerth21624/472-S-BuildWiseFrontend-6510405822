@@ -1,4 +1,4 @@
-import { Button, Menu, Modal, Text, UnstyledButton, rem } from "@mantine/core";
+import { Menu, Modal, Text, UnstyledButton, rem } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { IconDotsVertical, IconPencil, IconTrash } from "@tabler/icons-react";
 import { DataTable } from "mantine-datatable";
@@ -15,13 +15,11 @@ export default function GeneralCost() {
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <Text fw={700}>ค่าใช้จ่ายทั่วไปของ BOQ</Text>
-          <Button onClick={open}>เพิ่มค่าใช้จ่าย</Button>
         </div>
         <DataTable
           records={[
             {
               type: "ค่าใช้จ่ายทั่วไป",
-              name: "ค่าโทรศัพท์",
               estimated_price: "100 บาท",
             },
           ]}
@@ -30,10 +28,6 @@ export default function GeneralCost() {
             {
               accessor: "type",
               title: "ประเภท",
-            },
-            {
-              accessor: "name",
-              title: "ชื่อรายการ",
             },
             {
               accessor: "estimated_price",

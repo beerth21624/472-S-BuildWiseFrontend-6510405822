@@ -11,6 +11,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { AxiosError } from "axios";
 import JobBoqForm from "../JobBoqForm/JobBoqForm";
 import { useState } from "react";
+import useUpdateJobBoq from "@/hooks/mutates/boq/useUpdateJobBoq";
 
 interface Props {
   project_id: string;
@@ -22,6 +23,7 @@ export default function JobBoq(props: Props) {
   });
   const addJobBoq = useAddJobBoq();
   const deleteJobBoq = useDeleteJobBoq();
+  const updateJobBoq = useUpdateJobBoq();
 
   const [openedAdd, { open: openAdd, close: closeAdd }] = useDisclosure(false);
   const [openedEdit, { open: openEdit, close: closeEdit }] =
@@ -51,27 +53,28 @@ export default function JobBoq(props: Props) {
     );
   };
 
-  //   const onEditJobBoq = (data: JobBoqSchemaType) => {
-  //     updateMaterialJob.mutate(
-  //       {
-  //         job_id: props.id!,
-  //         material_id: data.material_id,
-  //         quantity: data.quantity,
-  //       },
-  //       {
-  //         onSuccess: () => {
-  //           notifications.show({
-  //             title: "สําเร็จ",
-  //             message: "แก้ไขจำนวน สําเร็จ",
-  //             color: "green",
-  //             loading: false,
-  //           });
-  //           closeEdit();
-  //           getJobApi.refetch();
-  //         },
-  //       },
-  //     );
-  //   };
+  const onEditJobBoq = (data: JobBoqSchemaType) => {
+    updateJobBoq.mutate(
+      {
+        boq_id: getBoqFromProject.data?.data.id!,
+        job_id: data.job_id,
+        labor_cost: data.labor_cost,
+        quantity: data.quantity,
+      },
+      {
+        onSuccess: () => {
+          notifications.show({
+            title: "สําเร็จ",
+            message: "แก้ไขงาน สําเร็จ",
+            color: "green",
+            loading: false,
+          });
+          closeEdit();
+          getBoqFromProject.refetch();
+        },
+      },
+    );
+  };
 
   type ColumnType = NonNullable<
     typeof getBoqFromProject.data
@@ -97,7 +100,7 @@ export default function JobBoq(props: Props) {
             onSuccess: () => {
               notifications.show({
                 title: "สําเร็จ",
-                message: "ลบวัสดุออกจากงาน สําเร็จ",
+                message: "ลบงานออกจากโครงการ สําเร็จ",
                 color: "green",
               });
               getBoqFromProject.refetch();
@@ -130,10 +133,7 @@ export default function JobBoq(props: Props) {
         <JobBoqForm type="create" onFinish={onAddJobBoq} />
       </Modal>
       <Modal opened={openedEdit} onClose={closeEdit} title="แก้ไขงาน" centered>
-        <JobBoqForm
-          //   data={EditMaterial}
-          type="edit"
-        />
+        <JobBoqForm data={EditJobBoq} type="edit" onFinish={onEditJobBoq} />
       </Modal>
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
@@ -174,11 +174,7 @@ export default function JobBoq(props: Props) {
                 <div className="flex gap-1">
                   <Button
                     onClick={() => {
-                      //   setEditJobBoq({
-                      //     job_id: data.job_id,
-                      //     labor_cost: data.,
-                      //     quantity: data.quantity,
-                      //   });
+                      setEditJobBoq(data);
                       openEdit();
                     }}
                     disabled={isApproved}
@@ -188,6 +184,7 @@ export default function JobBoq(props: Props) {
                   <Button
                     disabled={isApproved}
                     onClick={() => onDeleteJobBoq(data)}
+                    color="red"
                   >
                     ลบ
                   </Button>

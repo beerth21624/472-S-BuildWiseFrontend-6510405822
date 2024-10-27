@@ -101,8 +101,12 @@ export default function Quotation(
                 title: "จำนวนของงาน",
               },
               {
-                accessor: "labor_cost",
-                title: "ค่าแรง",
+                accessor: "total_labor_cost",
+                title: "ราคาค่าแรงรวม",
+              },
+              {
+                accessor: "total_material_price",
+                title: "ราคาค่าวัสดุรวม",
               },
               {
                 accessor: "total_estimated_price",
