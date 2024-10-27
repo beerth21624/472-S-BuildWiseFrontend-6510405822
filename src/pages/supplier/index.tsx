@@ -27,6 +27,7 @@ import { modals } from "@mantine/modals";
 import { DeleteConfirmModalConfig } from "@/config/ConfirmModalConfig/ConfirmModalConfig";
 import useGetSuppliers from "@/hooks/queries/supplier/useGetSuppliers";
 import useDeleteSupplier from "@/hooks/mutates/supplier/useDeleteSupplier";
+import { AxiosError } from "axios";
 
 export default function SupplierList() {
   const [opened, { open, close }] = useDisclosure(false);
@@ -56,6 +57,10 @@ export default function SupplierList() {
             },
           },
         );
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+        }
       },
     });
   };

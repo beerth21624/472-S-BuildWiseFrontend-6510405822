@@ -1,5 +1,6 @@
 import { Button, Text } from "@mantine/core";
 import BoqForm from "../BoqForm/BoqForm";
+import { DataTable } from "mantine-datatable";
 
 export default function Boq() {
   return (
@@ -7,7 +8,15 @@ export default function Boq() {
       <div className="flex items-center justify-between">
         <Text fw={700}>งานทั้งหมด</Text>
       </div>
-      <BoqForm type="create" />
+      <DataTable
+        columns={[
+          {
+            accessor: "name",
+            title: "ชื่องาน",
+          },
+        ]}
+      />
+      {/* <BoqForm type="create" /> */}
     </div>
   );
 }

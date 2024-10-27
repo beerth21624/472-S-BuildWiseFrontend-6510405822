@@ -9,12 +9,12 @@ import {
 import { useDisclosure } from "@mantine/hooks";
 import Link from "next/link";
 import { IconMoon, IconSun } from "@tabler/icons-react";
-import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { Menu } from "@/components/Menu/Menu";
+import { useRouter } from "next/router";
 
 export default function AppLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
+  const router = useRouter();
   const { setColorScheme, colorScheme } = useMantineColorScheme();
   const [mobileOpened, { toggle: toggleMobile }] = useDisclosure();
   const [desktopOpened, { toggle: toggleDesktop }] = useDisclosure(true);
@@ -23,11 +23,16 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     if (mobileOpened) {
       toggleMobile();
     }
-  }, [pathname]);
+  }, [router.pathname]);
 
-  const excludeStartPathname = ["/login", "/pdf"];
+  const excludeStartPathname = [
+    "/login",
+    "/pdf/quotation/[id]",
+    "/pdf/boq/[id]",
+    "/pdf",
+  ];
 
-  if (excludeStartPathname.includes(pathname)) {
+  if (excludeStartPathname.includes(router.pathname)) {
     return <>{children}</>;
   }
 

@@ -53,7 +53,9 @@ export default function Project(
           <Link href={`/project/${props.id}/boq`}>
             <Button variant="white">BOQ</Button>
           </Link>
-          <Button variant="white">ใบเสนอราคา</Button>
+          <Link href={`/project/${props.id}/quotation`}>
+            <Button variant="white">ใบเสนอราคา</Button>
+          </Link>
           <Link href={`/project/${props.id}/material`}>
             <Button variant="white">วัสดุ</Button>
           </Link>

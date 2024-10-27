@@ -1,6 +1,6 @@
 import BackButton from "@/components/BackButton/BackButton";
 import useGetProject from "@/hooks/queries/project/useGetProject";
-import { Button, Modal, Text } from "@mantine/core";
+import { Badge, Button, Modal, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { DataTable } from "mantine-datatable";
 import {
@@ -25,10 +25,10 @@ export default function Material(
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
             <Text size="xl" fw={700}>
-              {getProjectApi.data?.data.name}
+              วัสดุ
             </Text>
-            <Text size="lg" fw={400}>
-              รายการของวัสดุในโครงการ
+            <Text size="md" fw={700}>
+              {getProjectApi.data?.data.name}
             </Text>
           </div>
         </div>
@@ -45,11 +45,6 @@ export default function Material(
             },
           ]}
           columns={[
-            {
-              accessor: "name",
-              title: "",
-              render: (value) => <Button onClick={open}>แก้ไข</Button>,
-            },
             {
               accessor: "name",
               title: "วัสดุ",
@@ -89,6 +84,11 @@ export default function Material(
               accessor: "total_actual_price",
               title: "ราคาจริงรวม",
               render: (value) => <Text>{value.actual_price * value.qty}</Text>,
+            },
+            {
+              accessor: "name",
+              title: "ดำเนินการ",
+              render: (value) => <Button onClick={open}>แก้ไข</Button>,
             },
           ]}
         />
