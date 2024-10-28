@@ -1,5 +1,8 @@
 import BackButton from "@/components/BackButton/BackButton";
+import MaterialProjectForm from "@/components/Project/MaterialProject/MaterialProjectForm/MaterialProjectForm";
+import useGetMaterialsProject from "@/hooks/queries/project/MaterialProject/useGetMaterialsProject";
 import useGetProject from "@/hooks/queries/project/useGetProject";
+import { MaterialProjectSchemaType } from "@/schemas/project/materialProject/material-project.schama";
 import { Badge, Button, Modal, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { DataTable } from "mantine-datatable";
@@ -7,6 +10,7 @@ import {
   type GetServerSidePropsContext,
   type InferGetServerSidePropsType,
 } from "next";
+import { useState } from "react";
 
 export default function Material(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
@@ -14,11 +18,18 @@ export default function Material(
   const getProjectApi = useGetProject({
     id: props.id ?? "",
   });
+
+  const getMaterialsProject = useGetMaterialsProject({
+    project_id: props.id ?? "",
+  });
+  const [EditMaterialProject, setEditMaterialProject] =
+    useState<MaterialProjectSchemaType>();
   const [opened, { open, close }] = useDisclosure(false);
+
   return (
     <>
       <Modal opened={opened} onClose={close} title="แก้ไขราคา">
-        adsf
+        <MaterialProjectForm project_id={props.id!} type="edit" data={EditMaterialProject} />
       </Modal>
       <div className="flex flex-col">
         <BackButton label="ย้อนกลับไปหน้ารายละเอียดโครงการ" />
@@ -33,25 +44,15 @@ export default function Material(
           </div>
         </div>
         <DataTable
-          records={[
-            {
-              name: "ทราย",
-              qty: 18,
-              unit: "ถุง",
-              estimated_price: 200,
-              reference_price: 190,
-              actual_price: 195,
-              supplier: "ชื่อซัพพลายเออร์",
-            },
-          ]}
+          records={getMaterialsProject.data?.data.materials ?? []}
           columns={[
             {
               accessor: "name",
               title: "วัสดุ",
             },
             {
-              accessor: "qty",
-              title: "QTY",
+              accessor: "name",
+              title: "จำนวนรวม",
             },
             {
               accessor: "unit",
@@ -62,7 +63,7 @@ export default function Material(
               title: "ราคาประเมินต่อหน่วย",
             },
             {
-              accessor: "reference_price",
+              accessor: "avg_actual_price",
               title: "ราคาอ้างอิงต่อหน่วย",
             },
             {
@@ -70,25 +71,38 @@ export default function Material(
               title: "ราคาซื้อจริงต่อหน่วย",
             },
             {
-              accessor: "supplier",
+              accessor: "supplier_name",
               title: "ซัพพลายเออร์",
             },
             {
               accessor: "total_estimated_price",
               title: "ราคาประเมินรวม",
-              render: (value) => (
-                <Text>{value.estimated_price * value.qty}</Text>
-              ),
+              render: (value) => <Text>{value.estimated_price}</Text>,
             },
             {
               accessor: "total_actual_price",
               title: "ราคาจริงรวม",
-              render: (value) => <Text>{value.actual_price * value.qty}</Text>,
+              render: (value) => <Text>{value.actual_price}</Text>,
             },
             {
               accessor: "name",
               title: "ดำเนินการ",
-              render: (value) => <Button onClick={open}>แก้ไข</Button>,
+              render: (value) => (
+                <Button
+                  onClick={() => {
+                    setEditMaterialProject({
+                      material_id: value.material_id!,
+                      name: value.name!,
+                      supplier_id: "asdfsdf",
+                      estimated_price: 100,
+                      actual_price: 120,
+                    });
+                    open();
+                  }}
+                >
+                  แก้ไข
+                </Button>
+              ),
             },
           ]}
         />

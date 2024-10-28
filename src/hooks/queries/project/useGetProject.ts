@@ -1,4 +1,4 @@
-import getProject, { GetProjectProps } from "@/services/project/getProject.service";
+import getProject, { type GetProjectProps } from "@/services/project/getProject.service";
 import { useQuery } from "@tanstack/react-query";
 
 const useGetProject = (props: GetProjectProps) => {
