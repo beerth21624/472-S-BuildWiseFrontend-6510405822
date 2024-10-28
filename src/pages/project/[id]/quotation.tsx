@@ -131,11 +131,11 @@ export default function Quotation(
                 title: "ราคาค่าแรงต่อหน่วย",
               },
               {
-                accessor: "material_cost",
+                accessor: "total_material_price",
                 title: "ราคาวัดสุประเมินต่อหน่วย",
               },
               {
-                accessor: "total_estimated_price_per_unit",
+                accessor: "overall_cost",
                 title: "ราคาประเมินรวมต่อหน่วย",
               },
 
@@ -144,33 +144,28 @@ export default function Quotation(
                 title: "ราคาขายต่อหน่วย",
               },
               {
-                accessor: "total_estimated_price",
+                accessor: "total",
                 title: "ราคาประเมินรวม",
               },
               {
-                accessor: "selling_price",
+                accessor: "total_selling_price",
                 title: "ราคาขายรวม",
-                render: (record) => (
-                  <div className="text-right">
-                    {(record?.selling_price ?? 0) * record?.quantity}
-                  </div>
-                ),
               },
-              {
-                accessor: "name",
-                title: "",
-                render: () => (
-                  <div className="flex gap-2">
-                    <Button
-                      disabled={isDisable}
-                      variant="light"
-                      leftSection={<IconPencil size={15} />}
-                    >
-                      แก้ไขราคาขาย
-                    </Button>
-                  </div>
-                ),
-              },
+            //   {
+            //     accessor: "name",
+            //     title: "",
+            //     render: () => (
+            //       <div className="flex gap-2">
+            //         <Button
+            //           disabled={isDisable}
+            //           variant="light"
+            //           leftSection={<IconPencil size={15} />}
+            //         >
+            //           แก้ไขราคาขาย
+            //         </Button>
+            //       </div>
+            //     ),
+            //   },
             ]}
           />
         </Card>
@@ -199,13 +194,13 @@ export default function Quotation(
                 <div className="flex justify-start">
                   <div className="flex flex-col">
                     <div>
-                      <NumberFormatter
+                      {/* <NumberFormatter
                         value={
                           getQuotationByProject.data?.data.summary
                             .total_general_cost
                         }
                         thousandSeparator
-                      />
+                      /> */}
                     </div>
                     <div>7%</div>
                   </div>
@@ -225,22 +220,22 @@ export default function Quotation(
               <div className="flex justify-start">
                 <div className="flex flex-col">
                   <div>
-                    <NumberFormatter
+                    {/* <NumberFormatter
                       value={getQuotationByProject.data?.data.summary.subtotal}
                       thousandSeparator
-                    />
+                    /> */}
                   </div>
                   <div>
-                    <NumberFormatter
+                    {/* <NumberFormatter
                       value={getQuotationByProject.data?.data.summary.tax}
                       thousandSeparator
-                    />
+                    /> */}
                   </div>
                   <div>
-                    <NumberFormatter
+                    {/* <NumberFormatter
                       value={getQuotationByProject.data?.data.summary.total}
                       thousandSeparator
-                    />
+                    /> */}
                   </div>
                 </div>
               </div>

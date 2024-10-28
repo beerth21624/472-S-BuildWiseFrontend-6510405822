@@ -1,7 +1,21 @@
 import BackButton from "@/components/BackButton/BackButton";
+import DocumentForm from "@/components/Document/DocumentForm/DocumentForm";
+import { DeleteConfirmModalConfig } from "@/config/ConfirmModalConfig/ConfirmModalConfig";
 import useGetProject from "@/hooks/queries/project/useGetProject";
-import { Button, Menu, Modal, rem, Text, UnstyledButton } from "@mantine/core";
+import { DocumentSchemaType } from "@/schemas/document/document.schema";
+import {
+  ActionIcon,
+  Button,
+  Card,
+  InputLabel,
+  Menu,
+  Modal,
+  rem,
+  Text,
+  UnstyledButton,
+} from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { modals } from "@mantine/modals";
 import {
   IconCertificate,
   IconDotsVertical,
@@ -9,6 +23,7 @@ import {
   IconReceipt,
   IconTrash,
   IconUpload,
+  IconX,
 } from "@tabler/icons-react";
 import { DataTable } from "mantine-datatable";
 import {
@@ -26,17 +41,45 @@ export default function Document(
     openedAddContract,
     { open: openAddContract, close: closeAddContract },
   ] = useDisclosure(false);
-  const [
-    openedEditContract,
-    { open: openEditContract, close: closeEditContract },
-  ] = useDisclosure(false);
 
   const [openedAddInvoice, { open: openAddInvoice, close: closeAddInvoice }] =
     useDisclosure(false);
-  const [
-    openedEditInvoice,
-    { open: openEditInvoice, close: closeEditInvoice },
-  ] = useDisclosure(false);
+
+  const onAddContract = (data: DocumentSchemaType) => {
+    console.log(data);
+  };
+
+  const onAddInvoice = (data: DocumentSchemaType) => {
+    console.log(data);
+  };
+
+  const onDeleteContract = (data: DocumentSchemaType) => {
+    modals.openConfirmModal({
+      ...DeleteConfirmModalConfig,
+      children: (
+        <Text size="sm">
+          คุณต้องการลบสัญญา <b>{data.file_url}</b> ใช่หรือไม่ ?
+        </Text>
+      ),
+      onConfirm: () => {
+        console.log(data);
+      },
+    });
+  };
+
+  const onDeleteInvoice = (data: DocumentSchemaType) => {
+    modals.openConfirmModal({
+      ...DeleteConfirmModalConfig,
+      children: (
+        <Text size="sm">
+          คุณต้องการลบใบแจ้งหนี้ <b>{data.file_url}</b> ใช่หรือไม่ ?
+        </Text>
+      ),
+      onConfirm: () => {
+        console.log(data);
+      },
+    });
+  };
 
   return (
     <>
@@ -44,23 +87,25 @@ export default function Document(
         opened={openedAddContract}
         onClose={closeAddContract}
         title="เพิ่มสัญญา"
-      ></Modal>
-      <Modal
-        opened={openedEditContract}
-        onClose={closeEditContract}
-        title="แก้ไขสัญญา"
-      ></Modal>
+      >
+        <DocumentForm
+          type="create"
+          data={{ project_id: props.id!, file_url: "" }}
+          onFinish={onAddContract}
+        />
+      </Modal>
 
       <Modal
         opened={openedAddInvoice}
         onClose={closeAddInvoice}
         title="เพิ่มใบแจ้งหนี้"
-      ></Modal>
-      <Modal
-        opened={openedEditInvoice}
-        onClose={closeEditInvoice}
-        title="แก้ไขใบแจ้งหนี้"
-      ></Modal>
+      >
+        <DocumentForm
+          type="create"
+          data={{ project_id: props.id!, file_url: "" }}
+          onFinish={onAddInvoice}
+        />
+      </Modal>
       <div className="flex flex-col gap-3">
         <BackButton label="ย้อนกลับไปหน้ารายละเอียดโครงการ" />
         <div className="flex items-center justify-between">
@@ -73,87 +118,46 @@ export default function Document(
             </Text>
           </div>
         </div>
-
-        <div className="flex items-center gap-2">
-          <Button
-            size="compact-sm"
-            onClick={openAddContract}
-            leftSection={<IconCertificate size={15} />}
-          >
-            เพิ่มใบสัญญา
-          </Button>
-          <Button
-            size="compact-sm"
-            onClick={openAddInvoice}
-            leftSection={<IconReceipt size={15} />}
-          >
-            เพิ่มใบแจ้งหนี้
-          </Button>
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <InputLabel size="md">สัญญา</InputLabel>
+            <Button onClick={openAddContract} size="compact-xs">
+              เพิ่ม
+            </Button>
+          </div>
+          <Card withBorder>
+            <div className="flex justify-between">
+              <div className="flex items-center gap-2">
+                <IconCertificate />
+                <div>ใบสัญญา</div>
+              </div>
+              <ActionIcon color="red" variant="transparent">
+                <IconX />
+              </ActionIcon>
+            </div>
+          </Card>
         </div>
-        <DataTable
-          records={[
-            {
-              type: "ค่าใช้จ่ายทั่วไป",
-              estimated_price: "100 บาท",
-            },
-          ]}
-          // define columns
-          columns={[
-            {
-              accessor: "type",
-              title: "ประเภท",
-            },
-            {
-              accessor: "estimated_price",
-              title: "ราคาประมาณการ",
-            },
-            {
-              accessor: "id",
-              title: "ดำเนินการ",
-              textAlign: "center",
-              render: (record) => (
-                <Menu
-                  shadow="md"
-                  width={200}
-                  position="bottom-end"
-                  trigger="hover"
-                  withArrow
-                >
-                  <Menu.Target>
-                    <UnstyledButton variant="transparent">
-                      <IconDotsVertical size={15} color="gray" />
-                    </UnstyledButton>
-                  </Menu.Target>
-
-                  <Menu.Dropdown>
-                    <Menu.Label>การดำเนินการ</Menu.Label>
-                    <Link href={"/client/edit/" + "tesss"}>
-                      <Menu.Item
-                        leftSection={
-                          <IconPencil
-                            style={{ width: rem(14), height: rem(14) }}
-                          />
-                        }
-                      >
-                        แก้ไข
-                      </Menu.Item>
-                    </Link>
-                    <Menu.Item
-                      leftSection={
-                        <IconTrash
-                          style={{ width: rem(14), height: rem(14) }}
-                        />
-                      }
-                      color="red"
-                    >
-                      ลบ
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
-              ),
-            },
-          ]}
-        />
+        <div className="mt-5 flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <InputLabel size="md">ใบแจ้งหนี้</InputLabel>
+            <Button onClick={openAddInvoice} size="compact-xs">
+              เพิ่ม
+            </Button>
+          </div>
+          {[...new Array(5)].map((_, index) => (
+            <Card withBorder key={index}>
+              <div className="flex justify-between">
+                <div className="flex items-center gap-2">
+                  <IconReceipt />
+                  <div>ใบแจ้งหนี้</div>
+                </div>
+                <ActionIcon color="red" variant="transparent">
+                  <IconX />
+                </ActionIcon>
+              </div>
+            </Card>
+          ))}
+        </div>
       </div>
     </>
   );

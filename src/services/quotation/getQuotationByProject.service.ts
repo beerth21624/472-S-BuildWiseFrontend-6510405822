@@ -7,16 +7,6 @@ interface Data {
   valid_date: string;
   jobs: Job[];
   general_costs: Generalcost[];
-  summary: Summary;
-}
-
-interface Summary {
-  total_labor_cost: number;
-  total_material_cost: number;
-  total_general_cost: number;
-  subtotal: number;
-  tax: number;
-  total: number;
 }
 
 interface Generalcost {
@@ -29,9 +19,11 @@ interface Job {
   unit: string;
   quantity: number;
   labor_cost: number;
-  material_cost: number;
-  total_cost: number;
-  selling_price?: number;
+  selling_price: number;
+  total_material_price: number;
+  total: number;
+  overall_cost: number;
+  total_selling_price: number;
 }
 
 export type GetQuotationByProjectProps = {
