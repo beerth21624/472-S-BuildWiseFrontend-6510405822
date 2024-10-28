@@ -58,12 +58,20 @@ export default function Project(
           <Link href={`/project/${props.id}/boq`}>
             <Button variant="white">BOQ</Button>
           </Link>
-          <Link href={`/project/${props.id}/quotation`}>
-            <Button variant="white">ใบเสนอราคา</Button>
-          </Link>
+
+          {getBoqFromProject.data?.data.status === "approved" ? (
+            <Link href={`/project/${props.id}/quotation`}>
+              <Button variant="white">ใบเสนอราคา</Button>
+            </Link>
+          ) : (
+            <Button disabled variant="white">
+              ใบเสนอราคา
+            </Button>
+          )}
           <Link href={`/project/${props.id}/material`}>
             <Button variant="white">วัสดุ</Button>
           </Link>
+
           <Link href={`/project/${props.id}/general-cost`}>
             <Button variant="white">ค่าใช้จ่ายทั่วไป</Button>
           </Link>
