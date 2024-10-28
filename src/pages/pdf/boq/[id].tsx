@@ -1,5 +1,8 @@
-import { Text } from "@mantine/core";
+import useGetBoqFromProject from "@/hooks/queries/boq/useGetBoqFromProject";
+import useGetExportBoqFromProject from "@/hooks/queries/boq/useGetExportBoqFromProject";
+import { NumberFormatter, Text } from "@mantine/core";
 import { format } from "date-fns";
+import _ from "lodash";
 import {
   type GetServerSidePropsContext,
   type InferGetServerSidePropsType,
@@ -8,6 +11,14 @@ import {
 export default function BoqReport(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
+  const getExportBoqFromProject = useGetExportBoqFromProject({
+    project_id: props.id ?? "",
+  });
+
+  const getBoqFromProject = useGetBoqFromProject({
+    project_id: props.id ?? "",
+  });
+
   return (
     <div className="a4-horizontal relative flex flex-col p-5 text-[14px]">
       <div>
@@ -22,7 +33,7 @@ export default function BoqReport(
               <span className="font-semibold">Issued Date:</span>{" "}
               {format(new Date(), "dd-MMM-yyyy")}
             </div>
-            <div>be5e5e3a-618c-438c-94c4-aa1e3fe26c8a</div>
+            <div>{props.id}</div>
           </div>
         </div>
         {/* Project Info */}
@@ -30,13 +41,36 @@ export default function BoqReport(
           <div>
             <p>
               <span className="font-semibold">โครงการ :</span>{" "}
-              โครงการคอนโดมิเนียม ริเวอร์วิว เฟส 5
+              {getExportBoqFromProject.data?.data.project_info.project_name}
             </p>
           </div>
           <div>
             <p>
-              <span className="font-semibold">สถานที่ :</span> 123 ถนนเจริญกรุง,
-              บางคอแหลม, กรุงเทพมหานคร, 10120
+              <span className="font-semibold">สถานที่ :</span>{" "}
+              {
+                getExportBoqFromProject.data?.data.project_info.project_address
+                  .address
+              }
+              ,{" "}
+              {
+                getExportBoqFromProject.data?.data.project_info.project_address
+                  .subdistrict
+              }
+              ,{" "}
+              {
+                getExportBoqFromProject.data?.data.project_info.project_address
+                  .district
+              }
+              ,{" "}
+              {
+                getExportBoqFromProject.data?.data.project_info.project_address
+                  .province
+              }
+              ,{" "}
+              {
+                getExportBoqFromProject.data?.data.project_info.project_address
+                  .postal_code
+              }
             </p>
           </div>
         </div>
@@ -82,120 +116,67 @@ export default function BoqReport(
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="border px-2 py-1 text-center">1</td>
-              <td className="border px-2 py-1">
-                งานเตรียมพื้นที่และการเตรียมงาน (PREPARATION ON SITE)
-              </td>
-              <td className="border px-2 py-1 text-center">1</td>
-              <td className="border px-2 py-1 text-center">หลัง</td>
-              <td className="border px-2 py-1 text-right">18,795.00</td>
-              <td className="border px-2 py-1 text-right">34,946.90</td>
-              <td className="border px-2 py-1 text-right">53,741.90</td>
-            </tr>
-            <tr>
-              <td className="border px-2 py-1 text-center">1</td>
-              <td className="border px-2 py-1">
-                งานเตรียมพื้นที่และการเตรียมงาน (PREPARATION ON SITE)
-              </td>
-              <td className="border px-2 py-1 text-center">1</td>
-              <td className="border px-2 py-1 text-center">หลัง</td>
-              <td className="border px-2 py-1 text-right">18,795.00</td>
-              <td className="border px-2 py-1 text-right">34,946.90</td>
-              <td className="border px-2 py-1 text-right">53,741.90</td>
-            </tr>
-            <tr>
-              <td className="border px-2 py-1 text-center">1</td>
-              <td className="border px-2 py-1">
-                งานเตรียมพื้นที่และการเตรียมงาน (PREPARATION ON SITE)
-              </td>
-              <td className="border px-2 py-1 text-center">1</td>
-              <td className="border px-2 py-1 text-center">หลัง</td>
-              <td className="border px-2 py-1 text-right">18,795.00</td>
-              <td className="border px-2 py-1 text-right">34,946.90</td>
-              <td className="border px-2 py-1 text-right">53,741.90</td>
-            </tr>
-            <tr>
-              <td className="border px-2 py-1 text-center">1</td>
-              <td className="border px-2 py-1">
-                งานเตรียมพื้นที่และการเตรียมงาน (PREPARATION ON SITE)
-              </td>
-              <td className="border px-2 py-1 text-center">1</td>
-              <td className="border px-2 py-1 text-center">หลัง</td>
-              <td className="border px-2 py-1 text-right">18,795.00</td>
-              <td className="border px-2 py-1 text-right">34,946.90</td>
-              <td className="border px-2 py-1 text-right">53,741.90</td>
-            </tr>
-            <tr>
-              <td className="border px-2 py-1 text-center">1</td>
-              <td className="border px-2 py-1">
-                งานเตรียมพื้นที่และการเตรียมงาน (PREPARATION ON SITE)
-              </td>
-              <td className="border px-2 py-1 text-center">1</td>
-              <td className="border px-2 py-1 text-center">หลัง</td>
-              <td className="border px-2 py-1 text-right">18,795.00</td>
-              <td className="border px-2 py-1 text-right">34,946.90</td>
-              <td className="border px-2 py-1 text-right">53,741.90</td>
-            </tr>
-            <tr>
-              <td className="border px-2 py-1 text-center">1</td>
-              <td className="border px-2 py-1">
-                งานเตรียมพื้นที่และการเตรียมงาน (PREPARATION ON SITE)
-              </td>
-              <td className="border px-2 py-1 text-center">1</td>
-              <td className="border px-2 py-1 text-center">หลัง</td>
-              <td className="border px-2 py-1 text-right">18,795.00</td>
-              <td className="border px-2 py-1 text-right">34,946.90</td>
-              <td className="border px-2 py-1 text-right">53,741.90</td>
-            </tr>
-            <tr>
-              <td className="border px-2 py-1 text-center">2</td>
-              <td className="border px-2 py-1">งานโครงสร้าง (Construction)</td>
-              <td className="border px-2 py-1 text-center">1</td>
-              <td className="border px-2 py-1 text-center">หลัง</td>
-              <td className="border px-2 py-1 text-right">397,318.24</td>
-              <td className="border px-2 py-1 text-right">183,748.50</td>
-              <td className="border px-2 py-1 text-right">581,066.74</td>
-            </tr>
-            <tr>
-              <td className="border px-2 py-1 text-center">3</td>
-              <td className="border px-2 py-1">
-                งานสถาปัตยกรรม (Architecture)
-              </td>
-              <td className="border px-2 py-1 text-center">1</td>
-              <td className="border px-2 py-1 text-center">หลัง</td>
-              <td className="border px-2 py-1 text-right">535,777.70</td>
-              <td className="border px-2 py-1 text-right">174,903.20</td>
-              <td className="border px-2 py-1 text-right">710,680.90</td>
-            </tr>
-            <tr>
-              <td className="border px-2 py-1 text-center">4</td>
-              <td className="border px-2 py-1">
-                งานระบบไฟฟ้า (Electrical system)
-              </td>
-              <td className="border px-2 py-1 text-center">1</td>
-              <td className="border px-2 py-1 text-center">หลัง</td>
-              <td className="border px-2 py-1 text-right">54,100.00</td>
-              <td className="border px-2 py-1 text-right">38,850.00</td>
-              <td className="border px-2 py-1 text-right">92,950.00</td>
-            </tr>
-            <tr>
-              <td className="border px-2 py-1 text-center">5</td>
-              <td className="border px-2 py-1">งานระบบสุขาภิบาล (Sanitary)</td>
-              <td className="border px-2 py-1 text-center">1</td>
-              <td className="border px-2 py-1 text-center">หลัง</td>
-              <td className="border px-2 py-1 text-right">40,480.00</td>
-              <td className="border px-2 py-1 text-right">15,000.00</td>
-              <td className="border px-2 py-1 text-right">55,480.00</td>
-            </tr>
+            {getExportBoqFromProject.data?.data.jobs.map((job, index) => (
+              <tr key={index}>
+                <td className="border px-2 py-1 text-center">{index + 1}</td>
+                <td className="border px-2 py-1">{job.job_name}</td>
+                <td className="border px-2 py-1 text-center">
+                  <NumberFormatter value={job.quantity} thousandSeparator />
+                </td>
+                <td className="border px-2 py-1 text-center">{job.unit}</td>
+                <td className="border px-2 py-1 text-right">
+                  <NumberFormatter
+                    value={job.total_estimated_price.toFixed(2)}
+                    thousandSeparator
+                  />
+                </td>
+                <td className="border px-2 py-1 text-right">
+                  <NumberFormatter
+                    value={job.total_labor_cost.toFixed(2)}
+                    thousandSeparator
+                  />
+                </td>
+                <td className="border px-2 py-1 text-right">
+                  <NumberFormatter
+                    value={(
+                      job.total_labor_cost + job.total_estimated_price
+                    ).toFixed(2)}
+                    thousandSeparator
+                  />
+                </td>
+              </tr>
+            ))}
+
             <tr className="font-semibold">
               <td className="border px-2 py-1 text-right" colSpan={4}>
                 รวมค่าวัสดุและค่าแรง
               </td>
-              <td className="border px-2 py-1 text-right">1,046,470.94</td>
-              <td className="border px-2 py-1 text-right">447,448.60</td>
+              <td className="border px-2 py-1 text-right">
+                <NumberFormatter
+                  value={(
+                    getExportBoqFromProject.data?.data.summary_metrics
+                      .total_estimated_price ?? 0
+                  ).toFixed(2)}
+                  thousandSeparator
+                />
+              </td>
+              <td className="border px-2 py-1 text-right">
+                <NumberFormatter
+                  value={(
+                    getExportBoqFromProject.data?.data.summary_metrics
+                      .total_labor_cost ?? 0
+                  ).toFixed(2)}
+                  thousandSeparator
+                />
+              </td>
               <td className="border px-2 py-1 text-right text-red-600">
-                1,493,919.54
+                <NumberFormatter
+                  value={(
+                    getExportBoqFromProject.data?.data.summary_metrics
+                      .total_amount ?? 0
+                  ).toFixed(2)}
+                  thousandSeparator
+                />
               </td>
             </tr>
 
@@ -204,17 +185,23 @@ export default function BoqReport(
                 รวมเป็นเงินทั้งสิ้น
               </td>
               <td className="border px-2 py-1 text-right text-red-600">
-                1,718,007.47
+                <NumberFormatter
+                  value={(
+                    getExportBoqFromProject.data?.data.summary_metrics
+                      .grand_total ?? 0
+                  ).toFixed(2)}
+                  thousandSeparator
+                />
               </td>
             </tr>
           </tbody>
         </table>
       </div>
 
-      {...new Array(10).fill(0).map((_, index) => (
+      {getExportBoqFromProject.data?.data.jobs.map((job, index) => (
         <div key={index} className="page-break relative mt-5 flex flex-col">
           <Text fw={700} my={3}>
-            {index + 1}. งานเตรียมพื้นที่และการเตรียมงาน (PREPARATION ON SITE)
+            {index + 1}. {job.job_name}
           </Text>
           <table className="w-full" key={index}>
             <thead className="bg-gray-100">
@@ -237,27 +224,21 @@ export default function BoqReport(
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td className="border px-2 py-1">- ขุดดิน - ถมดิน</td>
-                <td className="border px-2 py-1 text-right">51</td>
-                <td className="border px-2 py-1">ลบ.ม.</td>
-                <td className="border px-2 py-1 text-right">-</td>
-                <td className="border px-2 py-1 text-right">-</td>
-              </tr>
-              <tr>
-                <td className="border px-2 py-1">- ทรายหยาบรองพื้น</td>
-                <td className="border px-2 py-1 text-right">1.58</td>
-                <td className="border px-2 py-1">ลบ.ม.</td>
-                <td className="border px-2 py-1 text-right">450.00</td>
-                <td className="border px-2 py-1 text-right">712.80</td>
-              </tr>
-              <tr>
-                <td className="border px-2 py-1">- คอนกรีตหยาบรองพื้น</td>
-                <td className="border px-2 py-1 text-right">1.58</td>
-                <td className="border px-2 py-1">ลบ.ม.</td>
-                <td className="border px-2 py-1 text-right">1,200.00</td>
-                <td className="border px-2 py-1 text-right">1,900.80</td>
-              </tr>
+              {job.materials.map((material, index) => (
+                <tr key={index}>
+                  <td className="border px-2 py-1">{material.material_name}</td>
+                  <td className="border px-2 py-1 text-right">
+                    {material.quantity}
+                  </td>
+                  <td className="border px-2 py-1">{material.unit}</td>
+                  <td className="border px-2 py-1 text-right">
+                    {material.estimated_price}
+                  </td>
+                  <td className="border px-2 py-1 text-right">
+                    {material.total}
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>

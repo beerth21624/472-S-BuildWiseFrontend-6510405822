@@ -90,10 +90,7 @@ export default function BOQ(
             </Text>
           </div>
           <div className="flex items-center gap-2">
-            <a
-              target="_blank"
-              href={`/api/report/boq/${getBoqFromProject.data?.data.id}`}
-            >
+            <a target="_blank" href={`/api/report/boq/${props.id}`}>
               <Button
                 variant="default"
                 leftSection={<IconFileText size={15} />}
