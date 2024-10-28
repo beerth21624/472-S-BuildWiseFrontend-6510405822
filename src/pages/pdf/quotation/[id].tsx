@@ -82,28 +82,19 @@ export default function Quotation(
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td className="px-4 py-2">
-                <p className="font-semibold">งานผนัง</p>
-              </td>
-              <td className="px-4 py-2 text-center">
-                <Badge variant="light">ตร.ม.</Badge>
-              </td>
-              <td className="px-4 py-2 text-center">5.00</td>
-              <td className="px-4 py-2 text-right">20,000.00</td>
-              <td className="px-4 py-2 text-right">100,000.00</td>
-            </tr>
-            <tr>
-              <td className="px-4 py-2">
-                <p className="font-semibold">งานประตู-หน้าต่าง</p>
-              </td>
-              <td className="px-4 py-2 text-center">
-                <Badge variant="light">ตร.ม.</Badge>
-              </td>
-              <td className="px-4 py-2 text-center">5.00</td>
-              <td className="px-4 py-2 text-right">20,000.00</td>
-              <td className="px-4 py-2 text-right">100,000.00</td>
-            </tr>
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item,index) => (
+              <tr key={index}>
+                <td className="px-4">
+                  <p className="font-semibold">งานผนัง</p>
+                </td>
+                <td className="px-4 text-center">
+                  <Badge variant="light">ตร.ม.</Badge>
+                </td>
+                <td className="px-4 text-center">5.00</td>
+                <td className="px-4 text-right">20,000.00</td>
+                <td className="px-4 text-right">100,000.00</td>
+              </tr>
+            ))}
           </tbody>
         </table>
         <Divider my={10} />

@@ -36,7 +36,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await page.close();
   await browser.close();
 
-  res.setHeader("Content-Disposition", `inline; filename="test.pdf"`);
+  res.setHeader("Content-Disposition", `inline; filename="${quotation_id}_quotation.pdf"`);
   res.setHeader("Content-Type", "application/pdf");
   res.setHeader("Content-Length", buffer.length);
   res.send(buffer);

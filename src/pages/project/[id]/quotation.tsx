@@ -87,6 +87,7 @@ export default function Quotation(
                 name: "ทราย",
                 unit: "ถุง",
                 quantity: "50",
+                price_per_unit: "100",
                 labor_cost: "40",
                 total_estimated_price: "2500",
                 sell_price: "2700",
@@ -98,28 +99,37 @@ export default function Quotation(
                 title: "ชื่องาน",
               },
               {
-                accessor: "unit",
-                title: "หน่วยของงาน",
-              },
-              {
                 accessor: "quantity",
                 title: "จำนวนของงาน",
               },
               {
-                accessor: "total_labor_cost",
-                title: "ราคาค่าแรงรวม",
+                accessor: "unit",
+                title: "หน่วยของงาน",
               },
               {
-                accessor: "total_material_price",
-                title: "ราคาค่าวัสดุรวม",
+                accessor: "price_per_unit",
+                title: "ราคาค่าแรงต่อหน่วย",
+              },
+              {
+                accessor: "estimated_material_price_per_unit",
+                title: "ราคาวัดสุประเมินต่อหน่วย",
+              },
+              {
+                accessor: "total_estimated_price_per_unit",
+                title: "ราคาประเมินรวมต่อหน่วย",
+              },
+
+              {
+                accessor: "sell_price_per_unit",
+                title: "ราคาขายต่อหน่วย",
               },
               {
                 accessor: "total_estimated_price",
                 title: "ราคาประเมินรวม",
               },
               {
-                accessor: "sell_price",
-                title: "ราคาขาย",
+                accessor: "total_sell_price",
+                title: "ราคาขายรวม",
               },
               {
                 accessor: "name",
@@ -138,39 +148,52 @@ export default function Quotation(
             ]}
           />
         </Card>
-        <Card className="flex flex-col gap-3">
-          <div className="flex items-center justify-between gap-5">
-            <div className="flex flex-col">
+        <div className="mt-3 grid grid-cols-3 gap-3">
+          <Card withBorder className="col-span-2 h-full w-full">
+            <div className="flex flex-col gap-5">
               <div className="flex gap-2">
-                <TextInput placeholder="กรอกราคาขายค่าใช้จ่ายทั่วไป" />
-                <Button>บันทึก</Button>
+                <TextInput
+                  placeholder="กรอกราคาขายค่าใช้จ่ายทั่วไป"
+                  label="กรอกราคาขายค่าใช้จ่ายทั่วไป"
+                />
+                <TextInput placeholder="กรอกภาษี" label="กรอกภาษี" />
               </div>
-              <div className="mt-3 flex gap-2">
-                <TextInput placeholder="กรอกภาษี" />
-                <Button>บันทึก</Button>
-              </div>
-            </div>
-            <div className="flex flex-col items-end">
               <div className="flex gap-5">
                 <div className="flex justify-end">
                   <div className="flex flex-col items-end font-bold">
-                    <div>ราคารวม</div>
-                    <div>ภาษี</div>
-                    <div>ภาษีรวม</div>
+                    <div>ค่าใช้จ่ายทั่วไป</div>
+                    <div>ต้นทุน</div>
                   </div>
                 </div>
                 <div className="flex justify-start">
                   <div className="flex flex-col">
                     <div>200,000</div>
                     <div>7%</div>
-                    <div>205,0000</div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </Card>
-        <div className="flex justify-end">
+          </Card>
+          <Card withBorder className="flex h-full items-end">
+            <div className="flex gap-5">
+              <div className="flex justify-end">
+                <div className="flex flex-col items-end font-bold">
+                  <div>ราคารวม</div>
+                  <div>ภาษี</div>
+                  <div>ภาษีรวม</div>
+                </div>
+              </div>
+              <div className="flex justify-start">
+                <div className="flex flex-col">
+                  <div>200,000</div>
+                  <div>7%</div>
+                  <div>205,0000</div>
+                </div>
+              </div>
+            </div>
+          </Card>
+        </div>
+        <div className="mt-5 flex justify-end">
           <Button className="w-full">บันทึก</Button>
         </div>
       </div>

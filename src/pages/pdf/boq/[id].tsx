@@ -1,3 +1,5 @@
+import { Text } from "@mantine/core";
+import { format } from "date-fns";
 import {
   type GetServerSidePropsContext,
   type InferGetServerSidePropsType,
@@ -10,24 +12,31 @@ export default function BoqReport(
     <div className="a4-horizontal flex flex-col p-5 text-[14px]">
       <div>
         {/* Header */}
-        <div className="rounded-md bg-blue-200 p-4">
-          <h1 className="text-center text-xl font-bold">รายการประมาณราคา</h1>
-          <h2 className="text-center text-lg">(BILL OF QUANTITY)</h2>
+        <div className="flex justify-between">
+          <div className="px-2 py-1">
+            <h1 className="text-xl font-bold">รายการประมาณราคา</h1>
+            <h2 className="text-lg">(BILL OF QUANTITY)</h2>
+          </div>
+          <div className="px-2 py-1 text-right">
+            <div>
+              <span className="font-semibold">Issued Date:</span>{" "}
+              {format(new Date(), "dd-MMM-yyyy")}
+            </div>
+            <div>be5e5e3a-618c-438c-94c4-aa1e3fe26c8a</div>
+          </div>
         </div>
         {/* Project Info */}
-        <div className="grid grid-cols-2 gap-4 border-b p-4">
+        <div className="grid grid-cols-2 border-b p-4">
           <div>
             <p>
-              <span className="font-semibold">โครงการ :</span> แบบบ้านปั้นหยา 3
-              ห้องนอน 2 ห้องน้ำ
+              <span className="font-semibold">โครงการ :</span>{" "}
+              โครงการคอนโดมิเนียม ริเวอร์วิว เฟส 5
             </p>
           </div>
           <div>
             <p>
-              <span className="font-semibold">เจ้าของ :</span>
-            </p>
-            <p>
-              <span className="font-semibold">สถานที่ :</span>
+              <span className="font-semibold">สถานที่ :</span> 123 ถนนเจริญกรุง,
+              บางคอแหลม, กรุงเทพมหานคร, 10120
             </p>
           </div>
         </div>
@@ -202,91 +211,57 @@ export default function BoqReport(
         </table>
       </div>
 
-      <table className="page-break mt-5 w-full">
-        <thead className="bg-gray-100">
-          <tr>
-            <th className="border px-2 py-1" rowSpan={2}>
-              ลำดับที่
-            </th>
-            <th className="border px-2 py-1" rowSpan={2}>
-              รายการ
-            </th>
-            <th className="border px-2 py-1 text-center" colSpan={2}>
-              ปริมาณวัสดุ
-            </th>
-            <th className="border px-2 py-1 text-center" colSpan={2}>
-              ค่าวัสดุ
-            </th>
-          </tr>
-          <tr>
-            <th className="border px-2 py-1">จำนวนรวม</th>
-            <th className="border px-2 py-1">หน่วย</th>
-            <th className="border px-2 py-1">ต่อหน่วย</th>
-            <th className="border px-2 py-1">รวม</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td className="border px-2 py-1" colSpan={7}>
-              1. งานโครงสร้าง คสล.
-            </td>
-          </tr>
-          <tr>
-            <td className="border px-2 py-1" />
-            <td className="border px-2 py-1">- ขุดดิน - ถมดิน</td>
-            <td className="border px-2 py-1 text-right">51</td>
-            <td className="border px-2 py-1">ลบ.ม.</td>
-            <td className="border px-2 py-1 text-right">-</td>
-            <td className="border px-2 py-1 text-right">-</td>
-          </tr>
-          <tr>
-            <td className="border px-2 py-1" />
-            <td className="border px-2 py-1">- ทรายหยาบรองพื้น</td>
-            <td className="border px-2 py-1 text-right">1.58</td>
-            <td className="border px-2 py-1">ลบ.ม.</td>
-            <td className="border px-2 py-1 text-right">450.00</td>
-            <td className="border px-2 py-1 text-right">712.80</td>
-          </tr>
-          <tr>
-            <td className="border px-2 py-1" />
-            <td className="border px-2 py-1">- คอนกรีตหยาบรองพื้น</td>
-            <td className="border px-2 py-1 text-right">1.58</td>
-            <td className="border px-2 py-1">ลบ.ม.</td>
-            <td className="border px-2 py-1 text-right">1,200.00</td>
-            <td className="border px-2 py-1 text-right">1,900.80</td>
-          </tr>
-
-          <tr>
-            <td className="border px-2 py-1" colSpan={7}>
-              2. งานโครงสร้าง คสล.
-            </td>
-          </tr>
-          <tr>
-            <td className="border px-2 py-1" />
-            <td className="border px-2 py-1">- ขุดดิน - ถมดิน</td>
-            <td className="border px-2 py-1 text-right">51</td>
-            <td className="border px-2 py-1">ลบ.ม.</td>
-            <td className="border px-2 py-1 text-right">-</td>
-            <td className="border px-2 py-1 text-right">-</td>
-          </tr>
-          <tr>
-            <td className="border px-2 py-1" />
-            <td className="border px-2 py-1">- ทรายหยาบรองพื้น</td>
-            <td className="border px-2 py-1 text-right">1.58</td>
-            <td className="border px-2 py-1">ลบ.ม.</td>
-            <td className="border px-2 py-1 text-right">450.00</td>
-            <td className="border px-2 py-1 text-right">712.80</td>
-          </tr>
-          <tr>
-            <td className="border px-2 py-1" />
-            <td className="border px-2 py-1">- คอนกรีตหยาบรองพื้น</td>
-            <td className="border px-2 py-1 text-right">1.58</td>
-            <td className="border px-2 py-1">ลบ.ม.</td>
-            <td className="border px-2 py-1 text-right">1,200.00</td>
-            <td className="border px-2 py-1 text-right">1,900.80</td>
-          </tr>
-        </tbody>
-      </table>
+      {...new Array(10).fill(0).map((_, index) => (
+        <div key={index} className="page-break mt-5 flex flex-col">
+          <Text fw={700} my={3}>
+            {index + 1}. งานเตรียมพื้นที่และการเตรียมงาน (PREPARATION ON SITE)
+          </Text>
+          <table className="w-full" key={index}>
+            <thead className="bg-gray-100">
+              <tr>
+                <th className="border" rowSpan={2}>
+                  รายการ
+                </th>
+                <th className="border text-center" colSpan={2}>
+                  ปริมาณวัสดุ
+                </th>
+                <th className="border text-center" colSpan={2}>
+                  ค่าวัสดุ
+                </th>
+              </tr>
+              <tr>
+                <th className="border">จำนวนรวม</th>
+                <th className="border">หน่วย</th>
+                <th className="border">ต่อหน่วย</th>
+                <th className="border">รวม</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td className="border px-2 py-1">- ขุดดิน - ถมดิน</td>
+                <td className="border px-2 py-1 text-right">51</td>
+                <td className="border px-2 py-1">ลบ.ม.</td>
+                <td className="border px-2 py-1 text-right">-</td>
+                <td className="border px-2 py-1 text-right">-</td>
+              </tr>
+              <tr>
+                <td className="border px-2 py-1">- ทรายหยาบรองพื้น</td>
+                <td className="border px-2 py-1 text-right">1.58</td>
+                <td className="border px-2 py-1">ลบ.ม.</td>
+                <td className="border px-2 py-1 text-right">450.00</td>
+                <td className="border px-2 py-1 text-right">712.80</td>
+              </tr>
+              <tr>
+                <td className="border px-2 py-1">- คอนกรีตหยาบรองพื้น</td>
+                <td className="border px-2 py-1 text-right">1.58</td>
+                <td className="border px-2 py-1">ลบ.ม.</td>
+                <td className="border px-2 py-1 text-right">1,200.00</td>
+                <td className="border px-2 py-1 text-right">1,900.80</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      ))}
     </div>
   );
 }

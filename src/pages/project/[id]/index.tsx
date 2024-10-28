@@ -59,9 +59,13 @@ export default function Project(
           <Link href={`/project/${props.id}/material`}>
             <Button variant="white">วัสดุ</Button>
           </Link>
-          <Button variant="white">ค่าใช้จ่ายทั่วไป</Button>
-          <Button variant="white">เอกสาร</Button>
-          <Button variant="white">สรุป</Button>
+          <Link href={`/project/${props.id}/general-cost`}>
+            <Button variant="white">ค่าใช้จ่ายทั่วไป</Button>
+          </Link>
+          <Link href={`/project/${props.id}/document`}>
+            <Button variant="white">เอกสาร</Button>
+          </Link>
+          <Button disabled variant="white">สรุป</Button>
         </div>
       </div>
       <div className="mt-5 flex flex-col gap-3">
@@ -113,9 +117,6 @@ export default function Project(
                 <div className="flex flex-col">
                   <FieldLabel labelClass="min-w-[8rem]" label="สถานะ BOQ">
                     โครงการคอนโด 30 ชั้น
-                  </FieldLabel>
-                  <FieldLabel labelClass="min-w-[8rem]" label="ต้นทุนประกัน">
-                    500,000 บาท
                   </FieldLabel>
                   <FieldLabel labelClass="min-w-[8rem]" label="Quotation สถานะ">
                     โครงการคอนโด 30 ชั้น
