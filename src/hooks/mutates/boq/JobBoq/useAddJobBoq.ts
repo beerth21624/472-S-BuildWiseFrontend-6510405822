@@ -1,4 +1,4 @@
-import addJobBoq from "@/services/boq/addJobBoq.service";
+import addJobBoq from "@/services/boq/JobBoq/addJobBoq.service";
 import { useMutation } from "@tanstack/react-query";
 
 const useAddJobBoq = () => {

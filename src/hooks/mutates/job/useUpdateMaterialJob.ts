@@ -1,4 +1,4 @@
-import updateMaterialJob from "@/services/job/updateMaterialJob.service";
+import updateMaterialJob from "@/services/job/material-job/updateMaterialJob.service";
 import { useMutation } from "@tanstack/react-query";
 
 const useUpdateMaterialJob = () => {

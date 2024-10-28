@@ -1,5 +1,7 @@
 import BackButton from "@/components/BackButton/BackButton";
+import useGetBoqFromProject from "@/hooks/queries/boq/useGetBoqFromProject";
 import useGetProject from "@/hooks/queries/project/useGetProject";
+import { getBoqStatusMap } from "@/utils/boqStatusMap";
 import { getProjectStatusMap } from "@/utils/projectStatusMap";
 import { Button, Card, Text } from "@mantine/core";
 import clsx from "clsx";
@@ -39,6 +41,9 @@ export default function Project(
   const getProjectApi = useGetProject({
     id: props.id ?? "",
   });
+  const getBoqFromProject = useGetBoqFromProject({
+    project_id: props.id ?? "",
+  });
 
   return (
     <div className="flex flex-col">
@@ -65,7 +70,9 @@ export default function Project(
           <Link href={`/project/${props.id}/document`}>
             <Button variant="white">เอกสาร</Button>
           </Link>
-          <Button disabled variant="white">สรุป</Button>
+          <Button disabled variant="white">
+            สรุป
+          </Button>
         </div>
       </div>
       <div className="mt-5 flex flex-col gap-3">
@@ -116,7 +123,10 @@ export default function Project(
               <div className="flex justify-between gap-10">
                 <div className="flex flex-col">
                   <FieldLabel labelClass="min-w-[8rem]" label="สถานะ BOQ">
-                    โครงการคอนโด 30 ชั้น
+                    {
+                      getBoqStatusMap(getBoqFromProject.data?.data.status!)
+                        ?.label
+                    }
                   </FieldLabel>
                   <FieldLabel labelClass="min-w-[8rem]" label="Quotation สถานะ">
                     โครงการคอนโด 30 ชั้น

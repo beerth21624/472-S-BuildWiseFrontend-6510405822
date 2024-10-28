@@ -1,4 +1,4 @@
-import deleteJobBoq from "@/services/boq/deleteJobBoq.service";
+import deleteJobBoq from "@/services/boq/JobBoq/deleteJobBoq.service";
 import { useMutation } from "@tanstack/react-query";
 
 const useDeleteJobBoq = () => {

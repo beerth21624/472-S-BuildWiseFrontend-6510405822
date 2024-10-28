@@ -49,7 +49,7 @@ export default function Quotation(
                 variant="default"
                 leftSection={<IconFileText size={15} />}
               >
-                ใบเสนอราคา
+                Export
               </Button>
             </a>
             <Button>เปลี่ยนสถานะ</Button>

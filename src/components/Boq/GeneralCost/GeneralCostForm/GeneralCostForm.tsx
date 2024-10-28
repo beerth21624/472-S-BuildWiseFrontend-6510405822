@@ -1,11 +1,10 @@
-import ControlledInputText from "@/components/Controlled/ControlledInputText";
-import ControlledSelect from "@/components/Controlled/ControlledSelect";
+import ControlledInputNumber from "@/components/Controlled/ControlledInputNumber";
 import {
   boqGeneralCostSchema,
-  BoqGeneralCostSchemaType,
+  type BoqGeneralCostSchemaType,
 } from "@/schemas/boq/boq-general-cost.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@mantine/core";
+import { Badge, Button } from "@mantine/core";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 
@@ -33,38 +32,26 @@ export default function GeneralCostForm(props: Props) {
 
   useEffect(() => {
     if (props.data) {
+      setValue("g_id", props.data.g_id);
+      setValue("type_name", props.data.type_name);
+      setValue("estimated_cost", props.data.estimated_cost);
     }
   }, [props.data, setValue]);
+  
 
   return (
     <form className="flex flex-col gap-3" onSubmit={handleSubmit(onFinish)}>
-      <ControlledSelect
+      <Badge variant="light">{watch("type_name")}</Badge>
+      <ControlledInputNumber
         control={control}
-        name="type_name"
+        name="estimated_cost"
         props={{
-          label: "ประเภทค่าใช้จ่าย",
-          placeholder: "กรอกประเภทค่าใช้จ่าย",
+          label: "ราคาประเมิน",
+          placeholder: "กรอกราคาประเมิน",
           withAsterisk: true,
         }}
       />
-      <ControlledInputText
-        control={control}
-        name="name"
-        props={{
-          label: "ชื่อค่าใช้จ่าย",
-          placeholder: "กรอกชื่อค่าใช้จ่าย",
-          withAsterisk: true,
-        }}
-      />
-      <ControlledInputText
-        control={control}
-        name="cost"
-        props={{
-          label: "ราคาประมาณการ",
-          placeholder: "กรอกราคาประมาณการ",
-          withAsterisk: true,
-        }}
-      />
+
       {props.type === "create" ? (
         <Button type="submit">บันทึก</Button>
       ) : (

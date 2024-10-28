@@ -1,4 +1,3 @@
-import WaterMark from "@/components/WaterMark/WaterMark";
 import { Badge, Divider, Table } from "@mantine/core";
 import {
   IconMail,

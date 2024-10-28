@@ -4,14 +4,14 @@ import useGetBoqFromProject from "@/hooks/queries/boq/useGetBoqFromProject";
 import { type JobBoqSchemaType } from "@/schemas/boq/jobboq.schema";
 import { modals } from "@mantine/modals";
 import { DeleteConfirmModalConfig } from "@/config/ConfirmModalConfig/ConfirmModalConfig";
-import useAddJobBoq from "@/hooks/mutates/boq/useAddJobBoq";
-import useDeleteJobBoq from "@/hooks/mutates/boq/useDeleteJobBoq";
+import useDeleteJobBoq from "@/hooks/mutates/boq/JobBoq/useDeleteJobBoq";
 import { notifications } from "@mantine/notifications";
 import { useDisclosure } from "@mantine/hooks";
 import { AxiosError } from "axios";
 import JobBoqForm from "../JobBoqForm/JobBoqForm";
 import { useState } from "react";
-import useUpdateJobBoq from "@/hooks/mutates/boq/useUpdateJobBoq";
+import useUpdateJobBoq from "@/hooks/mutates/boq/JobBoq/useUpdateJobBoq";
+import useAddJobBoq from "@/hooks/mutates/boq/JobBoq/useAddJobBoq";
 
 interface Props {
   project_id: string;

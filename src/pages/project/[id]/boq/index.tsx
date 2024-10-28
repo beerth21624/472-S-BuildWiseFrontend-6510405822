@@ -72,25 +72,33 @@ export default function BOQ(
     <div className="flex flex-col gap-3">
       <div className="flex flex-col">
         <BackButton href={`/project/${props.id}`} />
-        <div className="flex justify-between">
-          <div className="flex items-center gap-2">
-            <Text fz={"xl"} fw={700}>
-              BOQ - {getProject.data?.data.name}
+        <div className="flex items-center justify-between">
+          <div className="flex flex-col">
+            <Text size="xl" fw={700}>
+              <div className="flex items-center gap-2">
+                BOQ{" "}
+                <Badge variant="dot">
+                  {
+                    getBoqStatusMap(getBoqFromProject.data?.data.status ?? "")
+                      ?.label
+                  }
+                </Badge>
+              </div>
             </Text>
-            <Badge variant="dot">
-              {
-                getBoqStatusMap(getBoqFromProject.data?.data.status ?? "")
-                  ?.label
-              }
-            </Badge>
+            <Text size="md" fw={700}>
+              {getProject.data?.data.name}
+            </Text>
           </div>
-          <div className="flex gap-3">
-            <a target="_blank" href={`/api/report/boq/${getBoqFromProject.data?.data.id}`}>
+          <div className="flex items-center gap-2">
+            <a
+              target="_blank"
+              href={`/api/report/boq/${getBoqFromProject.data?.data.id}`}
+            >
               <Button
                 variant="default"
                 leftSection={<IconFileText size={15} />}
               >
-                BOQ
+                Export
               </Button>
             </a>
             <Button disabled={isApproved} onClick={onChangeStatus}>
@@ -102,14 +110,22 @@ export default function BOQ(
 
       <Tabs defaultValue="job">
         <Tabs.List>
-          <Tabs.Tab value="job">งานทั้งหมด</Tabs.Tab>
-          <Tabs.Tab value="general_cost">ค่าใช้จ่ายทั่วไปของ BOQ</Tabs.Tab>
+          <Tabs.Tab value="job">
+            <div>งานทั้งหมด</div>
+          </Tabs.Tab>
+          <Tabs.Tab value="general_cost">
+            <div>ค่าใช้จ่ายทั่วไปของ BOQ</div>
+          </Tabs.Tab>
         </Tabs.List>
         <Tabs.Panel value="job" className="py-3">
-          <JobBoq project_id={props.id!} />
+          <div>
+            <JobBoq project_id={props.id!} />
+          </div>
         </Tabs.Panel>
         <Tabs.Panel value="general_cost" className="py-3">
-          <GeneralCost />
+          <div>
+            <GeneralCost project_id={props.id!} />
+          </div>
         </Tabs.Panel>
       </Tabs>
     </div>

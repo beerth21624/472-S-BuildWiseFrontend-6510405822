@@ -1,4 +1,4 @@
-import updateJobBoq from "@/services/boq/updateJobBoq.service";
+import updateJobBoq from "@/services/boq/JobBoq/updateJobBoq.service";
 import { useMutation } from "@tanstack/react-query";
 
 const useUpdateJobBoq = () => {

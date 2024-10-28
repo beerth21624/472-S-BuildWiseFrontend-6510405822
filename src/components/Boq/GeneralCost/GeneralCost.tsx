@@ -1,81 +1,82 @@
-import { Menu, Modal, Text, UnstyledButton, rem } from "@mantine/core";
+import { Badge, Button, Modal, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconDotsVertical, IconPencil, IconTrash } from "@tabler/icons-react";
 import { DataTable } from "mantine-datatable";
-import Link from "next/link";
 import GeneralCostForm from "./GeneralCostForm/GeneralCostForm";
+import useGetGeneralCostBoq from "@/hooks/queries/boq/GeneralCostBoq/useGetGeneralCostBoq";
+import { useState } from "react";
+import { type BoqGeneralCostSchemaType } from "@/schemas/boq/boq-general-cost.schema";
+import useUpdateGeneralCost from "@/hooks/mutates/boq/GeneralCostBoq/useUpdateGeneralCost";
+import { notifications } from "@mantine/notifications";
+import useGetBoqFromProject from "@/hooks/queries/boq/useGetBoqFromProject";
 
-export default function GeneralCost() {
+interface Props {
+  project_id: string;
+}
+
+export default function GeneralCost(props: Props) {
   const [opened, { open, close }] = useDisclosure(false);
+  const getGeneralCostBoq = useGetGeneralCostBoq({
+    project_id: props.project_id,
+  });
+  const updateGeneralCost = useUpdateGeneralCost();
+  const getBoqFromProject = useGetBoqFromProject({
+    project_id: props.project_id,
+  });
+
+  const [EditGeneralCost, setEditGeneralCost] =
+    useState<BoqGeneralCostSchemaType>();
+
+  const onEdit = (data: BoqGeneralCostSchemaType) => {
+    updateGeneralCost.mutate(data, {
+      onSuccess: () => {
+        notifications.show({
+          title: "สําเร็จ",
+          message: "แก้ไขค่าใช้จ่ายทั่วไปสําเร็จ",
+          color: "green",
+        });
+        getGeneralCostBoq.refetch();
+        close();
+      },
+    });
+  };
+
   return (
     <>
-      <Modal opened={opened} onClose={close} title="เพิ่มค่าใช้จ่าย">
-        <GeneralCostForm type="create" />
+      <Modal opened={opened} onClose={close} title="แก้ไขค่าใช้จ่ายทั่วไป">
+        <GeneralCostForm onFinish={onEdit} type="edit" data={EditGeneralCost} />
       </Modal>
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between">
           <Text fw={700}>ค่าใช้จ่ายทั่วไปของ BOQ</Text>
         </div>
         <DataTable
-          records={[
-            {
-              type: "ค่าใช้จ่ายทั่วไป",
-              estimated_price: "100 บาท",
-            },
-          ]}
-          // define columns
+          records={getGeneralCostBoq.data?.data.general_costs}
           columns={[
             {
-              accessor: "type",
+              accessor: "type_name",
               title: "ประเภท",
+              render: (record) => (
+                <Badge variant="light">{record.type_name}</Badge>
+              ),
             },
             {
-              accessor: "estimated_price",
-              title: "ราคาประมาณการ",
+              accessor: "estimated_cost",
+              title: "ราคาประเมิน",
             },
             {
               accessor: "id",
               title: "ดำเนินการ",
               textAlign: "center",
               render: (record) => (
-                <Menu
-                  shadow="md"
-                  width={200}
-                  position="bottom-end"
-                  trigger="hover"
-                  withArrow
+                <Button
+                  disabled={getBoqFromProject.data?.data.status === "approved"}
+                  onClick={() => {
+                    open();
+                    setEditGeneralCost(record);
+                  }}
                 >
-                  <Menu.Target>
-                    <UnstyledButton variant="transparent">
-                      <IconDotsVertical size={15} color="gray" />
-                    </UnstyledButton>
-                  </Menu.Target>
-
-                  <Menu.Dropdown>
-                    <Menu.Label>การดำเนินการ</Menu.Label>
-                    <Link href={"/client/edit/" + "tesss"}>
-                      <Menu.Item
-                        leftSection={
-                          <IconPencil
-                            style={{ width: rem(14), height: rem(14) }}
-                          />
-                        }
-                      >
-                        แก้ไข
-                      </Menu.Item>
-                    </Link>
-                    <Menu.Item
-                      leftSection={
-                        <IconTrash
-                          style={{ width: rem(14), height: rem(14) }}
-                        />
-                      }
-                      color="red"
-                    >
-                      ลบ
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
+                  แก้ไขราคาประเมิน
+                </Button>
               ),
             },
           ]}

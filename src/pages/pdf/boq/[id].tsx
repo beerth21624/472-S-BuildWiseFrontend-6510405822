@@ -1,4 +1,3 @@
-import WaterMark from "@/components/WaterMark/WaterMark";
 import { Text } from "@mantine/core";
 import { format } from "date-fns";
 import {

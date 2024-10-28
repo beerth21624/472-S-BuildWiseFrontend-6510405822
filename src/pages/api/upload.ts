@@ -24,11 +24,8 @@ const handler = nc<FileUploadRequest, NextApiResponse>({
   .use(fileUpload())
   .post(async (req, res) => {
     const file = req.files.file as fileUpload.UploadedFile;
-
-    const fileTypes = /pdf/;
-    const extName = fileTypes.test(
-      file.name.substring(file.name.lastIndexOf(".") + 1),
-    );
+    
+    const extName = file.name.substring(file.name.lastIndexOf(".") + 1).includes('pdf');
     if (!extName) {
       res.status(400).end("Only image files are allowed!");
       return;
