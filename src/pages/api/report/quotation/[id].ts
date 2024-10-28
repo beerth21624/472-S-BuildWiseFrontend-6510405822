@@ -23,7 +23,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   await page.setViewport({ width: 1000, height: 0 });
 
-  await page.goto(`${process.env.NEXTAUTH_URL}/pdf/quotation/${quotation_id}`);
+  await page.goto(`${process.env.NEXTAUTH_URL}/pdf/quotation/${quotation_id}`, {
+    waitUntil: "networkidle2",
+  });
 
   const pdfOption: PDFOptions = {
     printBackground: true,
@@ -36,7 +38,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await page.close();
   await browser.close();
 
-  res.setHeader("Content-Disposition", `inline; filename="${quotation_id}_quotation.pdf"`);
+  res.setHeader(
+    "Content-Disposition",
+    `inline; filename="${quotation_id}_quotation.pdf"`,
+  );
   res.setHeader("Content-Type", "application/pdf");
   res.setHeader("Content-Length", buffer.length);
   res.send(buffer);

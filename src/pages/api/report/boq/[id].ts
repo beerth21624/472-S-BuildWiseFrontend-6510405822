@@ -23,7 +23,9 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   await page.setViewport({ width: 1000, height: 0 });
 
-  await page.goto(`${process.env.NEXTAUTH_URL}/pdf/boq/${boq_id}`);
+  await page.goto(`${process.env.NEXTAUTH_URL}/pdf/boq/${boq_id}`, {
+    waitUntil: "networkidle2",
+  });
 
   const pdfOption: PDFOptions = {
     printBackground: true,
