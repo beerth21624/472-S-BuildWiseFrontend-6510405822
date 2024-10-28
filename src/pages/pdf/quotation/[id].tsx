@@ -1,3 +1,4 @@
+import WaterMark from "@/components/WaterMark/WaterMark";
 import { Badge, Divider, Table } from "@mantine/core";
 import {
   IconMail,
@@ -16,9 +17,8 @@ export default function Quotation(
 ) {
   // const
   return (
-    <div className="a4-vertical flex flex-col p-7 text-[14px]">
+    <div className="a4-vertical relative flex flex-col p-7 text-[14px]">
       <div>
-        {/* Header */}
         <div className="flex items-start justify-between">
           <div>
             <h2 className="mb-1 font-semibold">ผู้ทำใบเสนอราคา</h2>
@@ -82,7 +82,7 @@ export default function Quotation(
             </tr>
           </thead>
           <tbody>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item,index) => (
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => (
               <tr key={index}>
                 <td className="px-4">
                   <p className="font-semibold">งานผนัง</p>

@@ -1,3 +1,4 @@
+import WaterMark from "@/components/WaterMark/WaterMark";
 import { Text } from "@mantine/core";
 import { format } from "date-fns";
 import {
@@ -9,7 +10,7 @@ export default function BoqReport(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
   return (
-    <div className="a4-horizontal flex flex-col p-5 text-[14px]">
+    <div className="a4-horizontal relative flex flex-col p-5 text-[14px]">
       <div>
         {/* Header */}
         <div className="flex justify-between">
@@ -85,7 +86,7 @@ export default function BoqReport(
             <tr>
               <td className="border px-2 py-1 text-center">1</td>
               <td className="border px-2 py-1">
-                งานเตรียมพื้นที่และการเตรียมงาน (PREPARATION ON SITE) 
+                งานเตรียมพื้นที่และการเตรียมงาน (PREPARATION ON SITE)
               </td>
               <td className="border px-2 py-1 text-center">1</td>
               <td className="border px-2 py-1 text-center">หลัง</td>
@@ -212,7 +213,7 @@ export default function BoqReport(
       </div>
 
       {...new Array(10).fill(0).map((_, index) => (
-        <div key={index} className="page-break mt-5 flex flex-col">
+        <div key={index} className="page-break relative mt-5 flex flex-col">
           <Text fw={700} my={3}>
             {index + 1}. งานเตรียมพื้นที่และการเตรียมงาน (PREPARATION ON SITE)
           </Text>
