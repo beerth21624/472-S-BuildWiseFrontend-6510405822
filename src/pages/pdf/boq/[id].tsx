@@ -85,7 +85,7 @@ export default function BoqReport(
             <tr>
               <td className="border px-2 py-1 text-center">1</td>
               <td className="border px-2 py-1">
-                งานเตรียมพื้นที่และการเตรียมงาน (PREPARATION ON SITE)
+                งานเตรียมพื้นที่และการเตรียมงาน (PREPARATION ON SITE) 
               </td>
               <td className="border px-2 py-1 text-center">1</td>
               <td className="border px-2 py-1 text-center">หลัง</td>

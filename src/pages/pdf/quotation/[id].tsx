@@ -16,7 +16,7 @@ export default function Quotation(
 ) {
   // const
   return (
-    <div className="a4-vertical flex flex-col p-5 text-[14px]">
+    <div className="a4-vertical flex flex-col p-7 text-[14px]">
       <div>
         {/* Header */}
         <div className="flex items-start justify-between">
