@@ -40,7 +40,7 @@ export type GetQuotationByProjectProps = {
 
 const getQuotationByProject = async (props: GetQuotationByProjectProps) => {
   try {
-    const res = await axiosAPI.get<BaseResponse<Data>>(
+    const res = await axiosAPI.post<BaseResponse<Data>>(
       `/quotations/projects/${props.project_id}`,
     );
     return res.data;

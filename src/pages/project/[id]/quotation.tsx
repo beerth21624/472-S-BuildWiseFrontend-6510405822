@@ -1,17 +1,23 @@
 import BackButton from "@/components/BackButton/BackButton";
+import useApproveQuotationByProject from "@/hooks/mutates/quotation/useApproveQuotationByProject";
 import useGetProject from "@/hooks/queries/project/useGetProject";
+import useGetQuotationByProject from "@/hooks/queries/quotation/useGetQuotationByProject";
+import { getQuotationStatusMap } from "@/utils/quotationStatusMap";
 import {
   Badge,
   Button,
   Card,
   InputLabel,
   Modal,
-  Table,
+  NumberFormatter,
   Text,
   TextInput,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
+import { modals } from "@mantine/modals";
+import { notifications } from "@mantine/notifications";
 import { IconFileText, IconPencil } from "@tabler/icons-react";
+import { AxiosError } from "axios";
 import { DataTable } from "mantine-datatable";
 import {
   type GetServerSidePropsContext,
@@ -24,7 +30,46 @@ export default function Quotation(
   const getProjectApi = useGetProject({
     id: props.id ?? "",
   });
+  const getQuotationByProject = useGetQuotationByProject({
+    project_id: props.id ?? "",
+  });
   const [opened, { open, close }] = useDisclosure(false);
+  const approveQuotationByProject = useApproveQuotationByProject();
+
+  const onChangeStatus = () => {
+    modals.openConfirmModal({
+      title: "ยืนยันการเปลี่ยนสถานะ",
+      centered: true,
+      children: <Text>ยืนยันการเปลี่ยนสถานะ</Text>,
+      labels: { confirm: "ยืนยัน", cancel: "ยกเลิก" },
+      onConfirm: () => {
+        approveQuotationByProject.mutate(
+          { project_id: getProjectApi.data?.data.id! },
+          {
+            onSuccess: () => {
+              notifications.show({
+                title: "สําเร็จ",
+                message: "อนุมัติใบเสนอราคาสําเร็จ",
+                color: "green",
+              });
+            },
+            onError: (error) => {
+              if (error instanceof AxiosError) {
+                notifications.show({
+                  title: "เกิดข้อผิดพลาด",
+                  message: error.response?.data.error,
+                  color: "red",
+                });
+              }
+            },
+          },
+        );
+      },
+    });
+  };
+
+  const isDisable = getQuotationByProject.data?.data.status === "approved";
+
   return (
     <>
       <Modal opened={opened} onClose={close} title="แก้ไขราคา">
@@ -36,7 +81,14 @@ export default function Quotation(
           <div className="flex flex-col">
             <div className="text-xl font-bold">
               <div className="flex items-center gap-2">
-                ใบเสนอราคา <Badge variant="dot">ทราย</Badge>
+                ใบเสนอราคา{" "}
+                <Badge variant="dot">
+                  {
+                    getQuotationStatusMap(
+                      getQuotationByProject.data?.data.status ?? "",
+                    )?.label
+                  }
+                </Badge>
               </div>
             </div>
             <Text size="md" fw={700}>
@@ -44,7 +96,7 @@ export default function Quotation(
             </Text>
           </div>
           <div className="flex items-center gap-2">
-            <a target="_blank" href={`/api/report/quotation/asdsdf`}>
+            <a target="_blank" href={`/api/report/quotation/${props.id}`}>
               <Button
                 variant="default"
                 leftSection={<IconFileText size={15} />}
@@ -52,23 +104,15 @@ export default function Quotation(
                 Export
               </Button>
             </a>
-            <Button>เปลี่ยนสถานะ</Button>
+            <Button disabled={isDisable} onClick={onChangeStatus}>
+              เปลี่ยนสถานะ
+            </Button>
           </div>
         </div>
         <Card withBorder className="mt-3 flex flex-col gap-3">
           <InputLabel size="md">รายการวัสดุ</InputLabel>
           <DataTable
-            records={[
-              {
-                name: "ทราย",
-                unit: "ถุง",
-                quantity: "50",
-                price_per_unit: "100",
-                labor_cost: "40",
-                total_estimated_price: "2500",
-                sell_price: "2700",
-              },
-            ]}
+            records={getQuotationByProject.data?.data.jobs ?? []}
             columns={[
               {
                 accessor: "name",
@@ -83,11 +127,11 @@ export default function Quotation(
                 title: "หน่วยของงาน",
               },
               {
-                accessor: "price_per_unit",
+                accessor: "labor_cost",
                 title: "ราคาค่าแรงต่อหน่วย",
               },
               {
-                accessor: "estimated_material_price_per_unit",
+                accessor: "material_cost",
                 title: "ราคาวัดสุประเมินต่อหน่วย",
               },
               {
@@ -96,7 +140,7 @@ export default function Quotation(
               },
 
               {
-                accessor: "sell_price_per_unit",
+                accessor: "selling_price",
                 title: "ราคาขายต่อหน่วย",
               },
               {
@@ -104,8 +148,13 @@ export default function Quotation(
                 title: "ราคาประเมินรวม",
               },
               {
-                accessor: "total_sell_price",
+                accessor: "selling_price",
                 title: "ราคาขายรวม",
+                render: (record) => (
+                  <div className="text-right">
+                    {(record?.selling_price ?? 0) * record?.quantity}
+                  </div>
+                ),
               },
               {
                 accessor: "name",
@@ -113,6 +162,7 @@ export default function Quotation(
                 render: () => (
                   <div className="flex gap-2">
                     <Button
+                      disabled={isDisable}
                       variant="light"
                       leftSection={<IconPencil size={15} />}
                     >
@@ -129,10 +179,15 @@ export default function Quotation(
             <div className="flex flex-col gap-5">
               <div className="flex gap-2">
                 <TextInput
+                  disabled={isDisable}
                   placeholder="กรอกราคาขายค่าใช้จ่ายทั่วไป"
                   label="กรอกราคาขายค่าใช้จ่ายทั่วไป"
                 />
-                <TextInput placeholder="กรอกภาษี" label="กรอกภาษี" />
+                <TextInput
+                  disabled={isDisable}
+                  placeholder="กรอกภาษี"
+                  label="กรอกภาษี"
+                />
               </div>
               <div className="flex gap-5">
                 <div className="flex justify-end">
@@ -143,7 +198,15 @@ export default function Quotation(
                 </div>
                 <div className="flex justify-start">
                   <div className="flex flex-col">
-                    <div>200,000</div>
+                    <div>
+                      <NumberFormatter
+                        value={
+                          getQuotationByProject.data?.data.summary
+                            .total_general_cost
+                        }
+                        thousandSeparator
+                      />
+                    </div>
                     <div>7%</div>
                   </div>
                 </div>
@@ -155,22 +218,39 @@ export default function Quotation(
               <div className="flex justify-end">
                 <div className="flex flex-col items-end font-bold">
                   <div>ราคารวม</div>
-                  <div>ภาษี</div>
-                  <div>ภาษีรวม</div>
+                  <div>ภาษี (7%)</div>
+                  <div>ราคาสุทธิ</div>
                 </div>
               </div>
               <div className="flex justify-start">
                 <div className="flex flex-col">
-                  <div>200,000</div>
-                  <div>7%</div>
-                  <div>205,0000</div>
+                  <div>
+                    <NumberFormatter
+                      value={getQuotationByProject.data?.data.summary.subtotal}
+                      thousandSeparator
+                    />
+                  </div>
+                  <div>
+                    <NumberFormatter
+                      value={getQuotationByProject.data?.data.summary.tax}
+                      thousandSeparator
+                    />
+                  </div>
+                  <div>
+                    <NumberFormatter
+                      value={getQuotationByProject.data?.data.summary.total}
+                      thousandSeparator
+                    />
+                  </div>
                 </div>
               </div>
             </div>
           </Card>
         </div>
         <div className="mt-5 flex justify-end">
-          <Button className="w-full">บันทึก</Button>
+          <Button className="w-full" disabled={isDisable}>
+            บันทึก
+          </Button>
         </div>
       </div>
     </>

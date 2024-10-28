@@ -1,4 +1,6 @@
-import { Badge, Divider, Table } from "@mantine/core";
+import useGetExportQuotationByProject from "@/hooks/queries/quotation/useGetExportQuotationByProject";
+import useGetQuotationByProject from "@/hooks/queries/quotation/useGetQuotationByProject";
+import { Badge, Divider, NumberFormatter, Table } from "@mantine/core";
 import {
   IconMail,
   IconPhone,
@@ -14,7 +16,12 @@ import {
 export default function Quotation(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
-  // const
+  const getExportQuotationByProject = useGetExportQuotationByProject({
+    project_id: props.id ?? "",
+  });
+
+  console.log(getExportQuotationByProject.data?.data);
+
   return (
     <div className="a4-vertical relative flex flex-col p-7 text-[14px]">
       <div>
@@ -35,12 +42,9 @@ export default function Quotation(
             </div>
           </div>
           <div className="text-right">
-            <h1 className="mb-4 text-2xl font-bold">ใบเสนอราคา</h1>
+            <h1 className="text-2xl font-bold">ใบเสนอราคา</h1>
+            <div>{getExportQuotationByProject.data?.data.ProjectName}</div>
             <div>
-              <div>
-                <span className="font-semibold">Quotation No:</span>{" "}
-                QO-2024010014
-              </div>
               <div>
                 <span className="font-semibold">Issued Date:</span>{" "}
                 {format(new Date(), "dd-MMM-yyyy")}
@@ -54,18 +58,26 @@ export default function Quotation(
         </div>
         <Divider my={10} />
         {/* Customer Info */}
-        <div className="mb-8">
-          <h2 className="mb-1 font-semibold">ลูกค้า</h2>
-          <p>บริษัท พัฒนาคอนโด จำกัด (มหาชน)</p>
-          <p>123 ถนนเจริญกรุง ทุ่งมหาเมฆ สาทร กรุงเทพมหานคร 10120</p>
-          <div className="flex gap-5">
-            <div className="flex items-center gap-1">
-              <IconPhone size={15} />
-              <div>0234567891</div>
-            </div>
-            <div className="flex items-center gap-1">
-              <IconMail size={15} />
-              <div>contact234@pattana.co.th</div>
+        <div>
+          <div className="mb-8">
+            <h2 className="mb-1 font-semibold">ลูกค้า</h2>
+            <p>{getExportQuotationByProject.data?.data.ClientName}</p>
+            <p>
+              {getExportQuotationByProject.data?.data.ClientAddress.address},{" "}
+              {getExportQuotationByProject.data?.data.ClientAddress.subdistrict}
+              , {getExportQuotationByProject.data?.data.ClientAddress.district},{" "}
+              {getExportQuotationByProject.data?.data.ClientAddress.province},{" "}
+              {getExportQuotationByProject.data?.data.ClientAddress.postal_code}
+            </p>
+            <div className="flex gap-5">
+              <div className="flex items-center gap-1">
+                <IconPhone size={15} />
+                <div>{getExportQuotationByProject.data?.data.ClientTel}</div>
+              </div>
+              <div className="flex items-center gap-1">
+                <IconMail size={15} />
+                <div>{getExportQuotationByProject.data?.data.ClientEmail}</div>
+              </div>
             </div>
           </div>
         </div>
@@ -81,19 +93,38 @@ export default function Quotation(
             </tr>
           </thead>
           <tbody>
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((item, index) => (
-              <tr key={index}>
-                <td className="px-4">
-                  <p className="font-semibold">งานผนัง</p>
-                </td>
-                <td className="px-4 text-center">
-                  <Badge variant="light">ตร.ม.</Badge>
-                </td>
-                <td className="px-4 text-center">5.00</td>
-                <td className="px-4 text-right">20,000.00</td>
-                <td className="px-4 text-right">100,000.00</td>
-              </tr>
-            ))}
+            {getExportQuotationByProject.data?.data.JobDetails.map(
+              (job, index) => (
+                <tr key={index}>
+                  <td className="px-4">
+                    <p className="font-semibold">{job.Name}</p>
+                  </td>
+                  <td className="px-4 text-center">
+                    <Badge variant="light">{job.Unit}</Badge>
+                  </td>
+                  <td className="px-4 text-center">
+                    <NumberFormatter
+                      value={job.Amount.Float64.toFixed(2)}
+                      thousandSeparator
+                    />
+                  </td>
+                  <td className="px-4 text-right">
+                    <NumberFormatter
+                      value={job.SellingPrice.Float64.toFixed(2)}
+                      thousandSeparator
+                    />
+                  </td>
+                  <td className="px-4 text-right">
+                    <NumberFormatter
+                      value={(
+                        job.SellingPrice.Float64 * job.Amount.Float64
+                      ).toFixed(2)}
+                      thousandSeparator
+                    />
+                  </td>
+                </tr>
+              ),
+            )}
           </tbody>
         </table>
         <Divider my={10} />
@@ -105,13 +136,17 @@ export default function Quotation(
               <span>200,000.00 บาท</span>
             </div>
             <div className="flex justify-between">
-              <span>ภาษี</span>
+              <span>
+                ภาษี {getExportQuotationByProject.data?.data.TaxPercentage}%
+              </span>
               <span>7 %</span>
             </div>
 
             <div className="flex justify-between font-bold">
               <span>ราคาสุทธิ</span>
-              <span>205,000.00 บาท</span>
+              <span>
+                {getExportQuotationByProject.data?.data.FinalAmount.Float64} บาท
+              </span>
             </div>
           </div>
         </div>
