@@ -1,10 +1,7 @@
-import { AddressSchemaType } from "@/schemas/address.schema";
+import { type AddressSchemaType } from "@/schemas/address.schema";
+import { type BaseResponse } from "@/types/BaseResponse.type";
 import { axiosAPI } from "@/utils/axios";
 import _ from "lodash";
-
-export interface UpdateProjectResponse {
-  message: string;
-}
 
 export type UpdateProjectProps = {
   id?: string;
@@ -17,7 +14,7 @@ export type UpdateProjectProps = {
 const updateProject = async (props?: UpdateProjectProps) => {
   try {
     const data = _.omit(props, ["id"]);
-    const res = await axiosAPI.put<UpdateProjectResponse>(
+    const res = await axiosAPI.put<BaseResponse<object>>(
       "/projects/" + props?.id,
       data,
     );

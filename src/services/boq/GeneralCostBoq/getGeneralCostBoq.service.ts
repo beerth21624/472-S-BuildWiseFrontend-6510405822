@@ -1,9 +1,5 @@
+import { BaseResponse } from "@/types/BaseResponse.type";
 import { axiosAPI } from "@/utils/axios";
-
-export interface GetGeneralCostBoqResponse {
-  data: Data;
-  message: string;
-}
 
 interface Data {
   general_costs: Generalcost[];
@@ -23,7 +19,7 @@ export type GetGeneralCostBoqProps = {
 
 const getGeneralCostBoq = async (props?: GetGeneralCostBoqProps) => {
   try {
-    const res = await axiosAPI.get<GetGeneralCostBoqResponse>(
+    const res = await axiosAPI.get<BaseResponse<Data>>(
       `/general-costs/project/${props?.project_id}`,
     );
     return res.data;

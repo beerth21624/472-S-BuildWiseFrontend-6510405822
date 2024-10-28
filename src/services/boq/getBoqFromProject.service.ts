@@ -1,9 +1,5 @@
+import { BaseResponse } from "@/types/BaseResponse.type";
 import { axiosAPI } from "@/utils/axios";
-
-export interface GetBoqFromProjectResponse {
-  data: Data;
-  message: string;
-}
 
 interface Data {
   id: string;
@@ -28,7 +24,7 @@ export type GetBoqFromProjectProps = {
 
 const getBoqFromProject = async (props?: GetBoqFromProjectProps) => {
   try {
-    const res = await axiosAPI.get<GetBoqFromProjectResponse>(
+    const res = await axiosAPI.get<BaseResponse<Data>>(
       `/boqs/project/${props?.project_id}`,
     );
     return res.data;

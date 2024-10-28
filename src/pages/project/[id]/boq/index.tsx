@@ -74,7 +74,7 @@ export default function BOQ(
         <BackButton href={`/project/${props.id}`} />
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
-            <Text size="xl" fw={700}>
+            <div className="text-xl font-bold">
               <div className="flex items-center gap-2">
                 BOQ{" "}
                 <Badge variant="dot">
@@ -84,7 +84,7 @@ export default function BOQ(
                   }
                 </Badge>
               </div>
-            </Text>
+            </div>
             <Text size="md" fw={700}>
               {getProject.data?.data.name}
             </Text>

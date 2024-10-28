@@ -1,4 +1,4 @@
-import updateGeneralCostBoq from "@/services/boq/GeneralCostBoq/updateGeneralCostBoq";
+import updateGeneralCostBoq from "@/services/boq/GeneralCostBoq/updateGeneralCostBoq.service";
 import { useMutation } from "@tanstack/react-query";
 
 const useUpdateGeneralCost = () => {

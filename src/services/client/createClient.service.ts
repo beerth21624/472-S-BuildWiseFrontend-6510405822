@@ -1,10 +1,6 @@
 import { AddressSchemaType } from "@/schemas/address.schema";
+import { BaseResponse } from "@/types/BaseResponse.type";
 import { axiosAPI } from "@/utils/axios";
-
-export interface CreateClientResponse {
-  data: Data;
-  message: string;
-}
 
 export interface Data {
   id: string;
@@ -24,7 +20,7 @@ export type CreateClientProps = {
 
 const createClient = async (props?: CreateClientProps) => {
   try {
-    const res = await axiosAPI.post<CreateClientResponse>("/clients", props);
+    const res = await axiosAPI.post<BaseResponse<Data>>("/clients", props);
     return res.data;
   } catch (error) {
     throw error;

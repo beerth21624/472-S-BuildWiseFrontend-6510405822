@@ -34,11 +34,11 @@ export default function Quotation(
         <BackButton label="ย้อนกลับไปหน้ารายละเอียดโครงการ" />
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
-            <Text size="xl" fw={700}>
+            <div className="text-xl font-bold">
               <div className="flex items-center gap-2">
                 ใบเสนอราคา <Badge variant="dot">ทราย</Badge>
               </div>
-            </Text>
+            </div>
             <Text size="md" fw={700}>
               {getProjectApi.data?.data.name}
             </Text>
@@ -55,30 +55,6 @@ export default function Quotation(
             <Button>เปลี่ยนสถานะ</Button>
           </div>
         </div>
-        {/* <Table withTableBorder className="mt-3">
-          <Table.Thead>
-            <Table.Tr>
-              <Table.Th>ชื่องาน</Table.Th>
-              <Table.Th>หน่วยของงาน</Table.Th>
-              <Table.Th>จำนวนของงาน</Table.Th>
-              <Table.Th>ค่าแรง</Table.Th>
-              <Table.Th>ราคาประเมินรวม</Table.Th>
-              <Table.Th>ราคาขาย</Table.Th>
-            </Table.Tr>
-          </Table.Thead>
-          <Table.Tbody>
-            <Table.Tr>
-              <Table.Td>position</Table.Td>
-              <Table.Td>name</Table.Td>
-              <Table.Td>symbol</Table.Td>
-              <Table.Td>mass</Table.Td>
-              <Table.Td>mass</Table.Td>
-              <Table.Td>
-                <TextInput />
-              </Table.Td>
-            </Table.Tr>
-          </Table.Tbody>
-        </Table> */}
         <Card withBorder className="mt-3 flex flex-col gap-3">
           <InputLabel size="md">รายการวัสดุ</InputLabel>
           <DataTable

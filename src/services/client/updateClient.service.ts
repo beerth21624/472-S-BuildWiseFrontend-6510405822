@@ -1,10 +1,7 @@
 import { AddressSchemaType } from "@/schemas/address.schema";
+import { BaseResponse } from "@/types/BaseResponse.type";
 import { axiosAPI } from "@/utils/axios";
 import _ from "lodash";
-
-export interface UpdateClientResponse {
-  message: string;
-}
 
 export type UpdateClientProps = {
   id: string;
@@ -18,7 +15,7 @@ export type UpdateClientProps = {
 const updateClient = async (props?: UpdateClientProps) => {
   try {
     const data = _.omit(props, ["id"]);
-    const res = await axiosAPI.put<UpdateClientResponse>(
+    const res = await axiosAPI.put<BaseResponse<object>>(
       "/clients/" + props?.id,
       data,
     );

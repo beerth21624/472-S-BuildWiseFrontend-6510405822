@@ -1,8 +1,5 @@
+import { BaseResponse } from "@/types/BaseResponse.type";
 import { axiosAPI } from "@/utils/axios";
-
-export interface DeleteJobResponse {
-  message: string;
-}
 
 export type DeleteJobProps = {
   job_id: string;
@@ -10,7 +7,7 @@ export type DeleteJobProps = {
 
 const deleteJob = async (props?: DeleteJobProps) => {
   try {
-    const res = await axiosAPI.delete<DeleteJobResponse>(
+    const res = await axiosAPI.delete<BaseResponse<object>>(
       `/jobs/${props?.job_id}`,
     );
     return res.data;

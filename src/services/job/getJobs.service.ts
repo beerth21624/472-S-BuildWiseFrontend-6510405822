@@ -1,10 +1,5 @@
+import { BaseResponse } from "@/types/BaseResponse.type";
 import { axiosAPI } from "@/utils/axios";
-
-interface GetJobsResponse {
-  data: Data;
-  message: string;
-}
-
 interface Data {
   jobs: Job[];
 }
@@ -20,7 +15,7 @@ export type GetJobsProps = {};
 
 const getJobs = async (props?: GetJobsProps) => {
   try {
-    const res = await axiosAPI.get<GetJobsResponse>("/jobs");
+    const res = await axiosAPI.get<BaseResponse<Data>>("/jobs");
     return res.data;
   } catch (error) {
     throw error;

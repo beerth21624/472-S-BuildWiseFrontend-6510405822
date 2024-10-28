@@ -1,9 +1,6 @@
+import { type BaseResponse } from "@/types/BaseResponse.type";
 import { axiosAPI } from "@/utils/axios";
 import _ from "lodash";
-
-export interface UpdateMaterialResponse {
-  message: string;
-}
 
 export type UpdateMaterialProps = {
   id?: string;
@@ -14,7 +11,7 @@ export type UpdateMaterialProps = {
 const updateMaterial = async (props?: UpdateMaterialProps) => {
   try {
     const data = _.omit(props, ["id"]);
-    const res = await axiosAPI.put<UpdateMaterialResponse>(
+    const res = await axiosAPI.put<BaseResponse<object>>(
       "/materials/" + props?.id,
       data,
     );

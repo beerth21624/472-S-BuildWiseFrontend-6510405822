@@ -1,9 +1,5 @@
+import { BaseResponse } from "@/types/BaseResponse.type";
 import { axiosAPI } from "@/utils/axios";
-
-export interface CreateJobResponse {
-  data: Data;
-  message: string;
-}
 
 export interface Data {
   job_id: string;
@@ -20,7 +16,7 @@ export type CreateJobProps = {
 
 const createJob = async (props?: CreateJobProps) => {
   try {
-    const res = await axiosAPI.post<CreateJobResponse>("/jobs", props);
+    const res = await axiosAPI.post<BaseResponse<Data>>("/jobs", props);
     return res.data;
   } catch (error) {
     throw error;

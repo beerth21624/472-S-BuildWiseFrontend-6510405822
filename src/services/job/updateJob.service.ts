@@ -1,9 +1,6 @@
+import { BaseResponse } from "@/types/BaseResponse.type";
 import { axiosAPI } from "@/utils/axios";
 import _ from "lodash";
-
-export interface UpdateJobResponse {
-  message: string;
-}
 
 export type UpdateJobProps = {
   id?: string;
@@ -15,7 +12,7 @@ export type UpdateJobProps = {
 const updateJob = async (props?: UpdateJobProps) => {
   try {
     const data = _.omit(props, ["id"]);
-    const res = await axiosAPI.put<UpdateJobResponse>(
+    const res = await axiosAPI.put<BaseResponse<object>>(
       "/jobs/" + props?.id,
       data,
     );

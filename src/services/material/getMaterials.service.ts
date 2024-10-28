@@ -1,9 +1,5 @@
+import { type BaseResponse } from "@/types/BaseResponse.type";
 import { axiosAPI } from "@/utils/axios";
-
-export interface GetMaterialsResponse {
-  data: Data;
-  message: string;
-}
 
 export interface Data {
   materials: Material[];
@@ -19,7 +15,7 @@ export type GetMaterialsProps = {};
 
 const getMaterials = async (props?: GetMaterialsProps) => {
   try {
-    const res = await axiosAPI.get<GetMaterialsResponse>("/materials");
+    const res = await axiosAPI.get<BaseResponse<Data>>("/materials");
     return res.data;
   } catch (error) {
     throw error;

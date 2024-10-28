@@ -1,10 +1,6 @@
-import { AddressSchemaType } from "@/schemas/address.schema";
+import { type AddressSchemaType } from "@/schemas/address.schema";
+import { BaseResponse } from "@/types/BaseResponse.type";
 import { axiosAPI } from "@/utils/axios";
-
-export interface GetSupplierResponse {
-  data: Data;
-  message: string;
-}
 
 export interface Data {
   id: string;
@@ -19,7 +15,7 @@ export type GetSupplierProps = {
 
 const getSupplier = async (props: GetSupplierProps) => {
   try {
-    const res = await axiosAPI.get<GetSupplierResponse>(
+    const res = await axiosAPI.get<BaseResponse<Data>>(
       "/suppliers/" + props?.supplier_id,
     );
     return res.data;

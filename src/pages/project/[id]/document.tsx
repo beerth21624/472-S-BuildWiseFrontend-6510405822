@@ -66,7 +66,7 @@ export default function Document(
         <div className="flex items-center justify-between">
           <div className="flex flex-col">
             <Text size="xl" fw={700}>
-              <div className="flex items-center gap-2">จัดการเอกสาร</div>
+              จัดการเอกสาร
             </Text>
             <Text size="md" fw={700}>
               {getProject.data?.data.name}

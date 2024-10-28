@@ -1,8 +1,5 @@
+import { BaseResponse } from "@/types/BaseResponse.type";
 import { axiosAPI } from "@/utils/axios";
-
-export interface ApproveBoqResponse {
-  message: string;
-}
 
 export type ApproveBoqProps = {
   boq_id: string;
@@ -10,7 +7,7 @@ export type ApproveBoqProps = {
 
 const approveBoq = async (props?: ApproveBoqProps) => {
   try {
-    const res = await axiosAPI.post<ApproveBoqResponse>(
+    const res = await axiosAPI.post<BaseResponse<object>>(
       "/boqs/" + props?.boq_id + "/approve",
     );
     return res.data;

@@ -1,10 +1,6 @@
-import { AddressSchemaType } from "@/schemas/address.schema";
+import { type AddressSchemaType } from "@/schemas/address.schema";
+import { type BaseResponse } from "@/types/BaseResponse.type";
 import { axiosAPI } from "@/utils/axios";
-
-export interface GetProjectsResponse {
-  data: Data;
-  message: string;
-}
 
 export interface Data {
   projects: Project[];
@@ -38,7 +34,7 @@ export type GetProjectsProps = {};
 
 const getProjects = async (props?: GetProjectsProps) => {
   try {
-    const res = await axiosAPI.get<GetProjectsResponse>("/projects");
+    const res = await axiosAPI.get<BaseResponse<Data>>("/projects");
     return res.data;
   } catch (error) {
     throw error;
