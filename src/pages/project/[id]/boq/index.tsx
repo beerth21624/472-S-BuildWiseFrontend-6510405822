@@ -85,10 +85,17 @@ export default function BOQ(
             </Badge>
           </div>
           <div className="flex gap-3">
-            <Button variant="default" leftSection={<IconFileText size={15} />}>
-              BOQ
+            <a target="_blank" href={`/api/report/boq/${getBoqFromProject.data?.data.id}`}>
+              <Button
+                variant="default"
+                leftSection={<IconFileText size={15} />}
+              >
+                BOQ
+              </Button>
+            </a>
+            <Button disabled={isApproved} onClick={onChangeStatus}>
+              เปลี่ยนสถานะ
             </Button>
-            <Button disabled={isApproved} onClick={onChangeStatus}>เปลี่ยนสถานะ</Button>
           </div>
         </div>
       </div>

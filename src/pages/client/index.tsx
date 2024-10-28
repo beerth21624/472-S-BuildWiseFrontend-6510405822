@@ -49,6 +49,12 @@ export default function ClientList() {
           { client_id: record.id! },
           {
             onSuccess: () => {
+              notifications.show({
+                title: "สําเร็จ",
+                message: "ลบข้อมูลสําเร็จ",
+                color: "green",
+                loading: false,
+              })
               getClientsApi.refetch();
             },
             onError: (error) => {

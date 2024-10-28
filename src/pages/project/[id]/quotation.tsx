@@ -44,9 +44,14 @@ export default function Quotation(
             </Text>
           </div>
           <div className="flex items-center gap-2">
-            <Button variant="default" leftSection={<IconFileText size={15} />}>
-              ใบเสนอราคา
-            </Button>
+            <a target="_blank" href={`/api/report/quotation/asdsdf`}>
+              <Button
+                variant="default"
+                leftSection={<IconFileText size={15} />}
+              >
+                ใบเสนอราคา
+              </Button>
+            </a>
             <Button>เปลี่ยนสถานะ</Button>
           </div>
         </div>
