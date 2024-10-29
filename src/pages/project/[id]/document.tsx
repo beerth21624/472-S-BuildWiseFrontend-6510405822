@@ -1,40 +1,37 @@
 import BackButton from "@/components/BackButton/BackButton";
 import DocumentForm from "@/components/Document/DocumentForm/DocumentForm";
 import { DeleteConfirmModalConfig } from "@/config/ConfirmModalConfig/ConfirmModalConfig";
+import useCreateContractByProject from "@/hooks/mutates/contract/useCreateContractByProject";
+import useDeleteContractByProject from "@/hooks/mutates/contract/useDeleteContractByProject";
+import useCreateInvoiceByProject from "@/hooks/mutates/invoice/useCreateInvoiceByProject";
+import useDeleteInvoiceByProject from "@/hooks/mutates/invoice/useDeleteInvoiceByProject";
+import useGetContractByProject from "@/hooks/queries/contract/useGetContractByProject";
+import useGetInvoicesByProject from "@/hooks/queries/invoice/useGetInvoicesByProject";
 import useGetProject from "@/hooks/queries/project/useGetProject";
-import { DocumentSchemaType } from "@/schemas/document/document.schema";
+import { type DocumentSchemaType } from "@/schemas/document/document.schema";
 import {
   ActionIcon,
   Button,
   Card,
   InputLabel,
-  Menu,
   Modal,
-  rem,
   Text,
-  UnstyledButton,
 } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
 import { modals } from "@mantine/modals";
-import {
-  IconCertificate,
-  IconDotsVertical,
-  IconPencil,
-  IconReceipt,
-  IconTrash,
-  IconUpload,
-  IconX,
-} from "@tabler/icons-react";
-import { DataTable } from "mantine-datatable";
+import { notifications } from "@mantine/notifications";
+import { IconCertificate, IconReceipt, IconX } from "@tabler/icons-react";
+import { AxiosError } from "axios";
 import {
   type GetServerSidePropsContext,
   type InferGetServerSidePropsType,
 } from "next";
-import Link from "next/link";
+import { useState } from "react";
 
 export default function Document(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
+  const [Counter, setCounter] = useState(0);
   const getProject = useGetProject({ id: props.id ?? "" });
 
   const [
@@ -42,15 +39,72 @@ export default function Document(
     { open: openAddContract, close: closeAddContract },
   ] = useDisclosure(false);
 
+  const getContractByProject = useGetContractByProject(
+    {
+      project_id: props.id ?? "",
+    },
+    Counter,
+  );
+
+  const createContractByProject = useCreateContractByProject();
+  const deleteContractByProject = useDeleteContractByProject();
+
+  const getInvoicesByProject = useGetInvoicesByProject(
+    {
+      project_id: props.id ?? "",
+    },
+    Counter,
+  );
+  const createInvoiceByProject = useCreateInvoiceByProject();
+  const deleteInvoiceByProject = useDeleteInvoiceByProject();
+
   const [openedAddInvoice, { open: openAddInvoice, close: closeAddInvoice }] =
     useDisclosure(false);
 
   const onAddContract = (data: DocumentSchemaType) => {
-    console.log(data);
+    createContractByProject.mutate(data, {
+      onSuccess: () => {
+        notifications.show({
+          title: "สร้างสัญญาเรียบร้อย",
+          message: "สร้างสัญญาเรียบร้อย",
+          color: "green",
+        });
+        closeAddContract();
+        getContractByProject.refetch();
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          notifications.show({
+            title: "เกิดข้อผิดพลาด",
+            message: error.response?.data.error,
+            color: "red",
+          });
+        }
+      },
+    });
   };
 
   const onAddInvoice = (data: DocumentSchemaType) => {
-    console.log(data);
+    createInvoiceByProject.mutate(data, {
+      onSuccess: () => {
+        notifications.show({
+          title: "สร้างใบแจ้งหนี้เรียบร้อย",
+          message: "สร้างใบแจ้งหนี้เรียบร้อย",
+          color: "green",
+        });
+        closeAddInvoice();
+        getInvoicesByProject.refetch();
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          notifications.show({
+            title: "เกิดข้อผิดพลาด",
+            message: error.response?.data.error,
+            color: "red",
+          });
+        }
+      },
+    });
   };
 
   const onDeleteContract = (data: DocumentSchemaType) => {
@@ -62,12 +116,40 @@ export default function Document(
         </Text>
       ),
       onConfirm: () => {
-        console.log(data);
+        deleteContractByProject.mutate(
+          { project_id: props.id! },
+          {
+            onSuccess: () => {
+              notifications.show({
+                title: "สําเร็จ",
+                message: "ลบสัญญา สําเร็จ",
+                color: "green",
+              });
+              setCounter((pre) => pre + 1);
+              getContractByProject.refetch();
+            },
+            onError: (error) => {
+              if (error instanceof AxiosError) {
+                notifications.show({
+                  title: "เกิดข้อผิดพลาด",
+                  message: error.response?.data.error,
+                  color: "red",
+                });
+              }
+            },
+          },
+        );
       },
     });
   };
 
-  const onDeleteInvoice = (data: DocumentSchemaType) => {
+  type DeleteInvoiceProps = NonNullable<
+    typeof getInvoicesByProject.data
+  >["data"] extends (infer T)[] | null | undefined
+    ? T
+    : never;
+
+  const onDeleteInvoice = (data: DeleteInvoiceProps) => {
     modals.openConfirmModal({
       ...DeleteConfirmModalConfig,
       children: (
@@ -76,7 +158,32 @@ export default function Document(
         </Text>
       ),
       onConfirm: () => {
-        console.log(data);
+        deleteInvoiceByProject.mutate(
+          {
+            project_id: props.id!,
+            invoice_id: data.invoice_id,
+          },
+          {
+            onSuccess: () => {
+              notifications.show({
+                title: "สําเร็จ",
+                message: "ลบใบแจ้งหนี้ สําเร็จ",
+                color: "green",
+              });
+              setCounter((pre) => pre + 1);
+              getInvoicesByProject.refetch();
+            },
+            onError: (error) => {
+              if (error instanceof AxiosError) {
+                notifications.show({
+                  title: "เกิดข้อผิดพลาด",
+                  message: error.response?.data.error,
+                  color: "red",
+                });
+              }
+            },
+          },
+        );
       },
     });
   };
@@ -121,21 +228,43 @@ export default function Document(
         <div className="flex flex-col gap-3">
           <div className="flex items-center justify-between">
             <InputLabel size="md">สัญญา</InputLabel>
-            <Button onClick={openAddContract} size="compact-xs">
-              เพิ่ม
-            </Button>
+            {!getContractByProject.data?.data && (
+              <Button onClick={openAddContract} size="compact-xs">
+                เพิ่ม
+              </Button>
+            )}
           </div>
-          <Card withBorder>
-            <div className="flex justify-between">
-              <div className="flex items-center gap-2">
-                <IconCertificate />
-                <div>ใบสัญญา</div>
+          {getContractByProject.data?.data && (
+            <Card withBorder>
+              <div className="flex justify-between">
+                <div className="flex items-center gap-2">
+                  <IconCertificate />
+                  <a
+                    href={getContractByProject.data.data.file_url}
+                    target="_blank"
+                  >
+                    ใบสัญญา -{" "}
+                    {getContractByProject.data.data.file_url.replace(
+                      "https://assets.teerut.com/build-wise/",
+                      "",
+                    )}
+                  </a>
+                </div>
+                <ActionIcon
+                  onClick={() =>
+                    onDeleteContract({
+                      file_url: getContractByProject.data.data.file_url,
+                      project_id: props.id!,
+                    })
+                  }
+                  color="red"
+                  variant="transparent"
+                >
+                  <IconX />
+                </ActionIcon>
               </div>
-              <ActionIcon color="red" variant="transparent">
-                <IconX />
-              </ActionIcon>
-            </div>
-          </Card>
+            </Card>
+          )}
         </div>
         <div className="mt-5 flex flex-col gap-3">
           <div className="flex items-center justify-between">
@@ -144,14 +273,24 @@ export default function Document(
               เพิ่ม
             </Button>
           </div>
-          {[...new Array(5)].map((_, index) => (
+          {getInvoicesByProject.data?.data.map((invoice, index) => (
             <Card withBorder key={index}>
               <div className="flex justify-between">
                 <div className="flex items-center gap-2">
                   <IconReceipt />
-                  <div>ใบแจ้งหนี้</div>
+                  <a href={invoice.file_url} target="_blank">
+                    ใบแจ้งหนี้ -{" "}
+                    {invoice.file_url.replace(
+                      "https://assets.teerut.com/build-wise/",
+                      "",
+                    )}
+                  </a>
                 </div>
-                <ActionIcon color="red" variant="transparent">
+                <ActionIcon
+                  onClick={() => onDeleteInvoice(invoice)}
+                  color="red"
+                  variant="transparent"
+                >
                   <IconX />
                 </ActionIcon>
               </div>
