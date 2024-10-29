@@ -75,7 +75,7 @@ export default function SupplierEdit(
       </div>
       <SupplierForm
         data={{
-          address: getSupplierApi.data?.data.address.address,
+          address: getSupplierApi.data?.data.address.address ?? "",
           district: getSupplierApi.data?.data.address.district ?? "",
           email: getSupplierApi.data?.data.email ?? "",
           name: getSupplierApi.data?.data.name ?? "",

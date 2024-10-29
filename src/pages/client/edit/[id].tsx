@@ -76,7 +76,7 @@ export default function ClientEdit(
       </div>
       <ClientForm
         data={{
-          address: getClient.data?.data.address.address,
+          address: getClient.data?.data.address.address! ?? "",
           district: getClient.data?.data.address.district ?? "",
           email: getClient.data?.data.email ?? "",
           name: getClient.data?.data.name ?? "",
