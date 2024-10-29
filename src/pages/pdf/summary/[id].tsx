@@ -1,21 +1,32 @@
-import BackButton from "@/components/BackButton/BackButton";
+import useGetBoqFromProject from "@/hooks/queries/boq/useGetBoqFromProject";
+import useGetCompanyByUser from "@/hooks/queries/company/useGetCompanyByUser";
+import useGetOverviewProject from "@/hooks/queries/project/useGetOverviewProject";
 import useGetProject from "@/hooks/queries/project/useGetProject";
-import { Button, Card, NumberFormatter, Text } from "@mantine/core";
-import { IconFileText } from "@tabler/icons-react";
+import useGetSummaryProject from "@/hooks/queries/project/useGetSummaryProject";
+import useGetExportQuotationByProject from "@/hooks/queries/quotation/useGetExportQuotationByProject";
+import useGetQuotationByProject from "@/hooks/queries/quotation/useGetQuotationByProject";
+import {
+  Badge,
+  Card,
+  Divider,
+  NumberFormatter,
+  Table,
+  Text,
+} from "@mantine/core";
+import {
+  IconMail,
+  IconPhone,
+  IconPhoneCall,
+  IconRecordMail,
+} from "@tabler/icons-react";
+import { format, addMonths } from "date-fns";
+import { DataTable } from "mantine-datatable";
 import {
   type GetServerSidePropsContext,
   type InferGetServerSidePropsType,
 } from "next";
-import { BarChart } from "@mantine/charts";
-import { FieldLabel } from "@/components/FieldLabel/FieldLabel";
-import useGetBoqFromProject from "@/hooks/queries/boq/useGetBoqFromProject";
-import useGetQuotationByProject from "@/hooks/queries/quotation/useGetQuotationByProject";
-import useGetOverviewProject from "@/hooks/queries/project/useGetOverviewProject";
-import useGetSummaryProject from "@/hooks/queries/project/useGetSummaryProject";
-import { DataTable } from "mantine-datatable";
-import Link from "next/link";
 
-export default function Summary(
+export default function Quotation(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
   const getProject = useGetProject({ id: props.id! });
@@ -27,28 +38,9 @@ export default function Summary(
   });
   const getOverviewProject = useGetOverviewProject({ id: props.id ?? "" });
   const getSummaryProject = useGetSummaryProject({ id: props.id ?? "" });
-
   return (
-    <div className="flex flex-col">
-      <BackButton label="ย้อนกลับไปหน้ารายละเอียดโครงการ" />
-      <div className="flex items-center justify-between">
-        <div className="flex flex-col">
-          <div className="text-xl font-bold">
-            <div className="flex items-center gap-2">สรุป</div>
-          </div>
-          <Text size="md" fw={700}>
-            {getProject.data?.data.name}
-          </Text>
-        </div>
-        <div className="flex items-center gap-2">
-          <a href={`/api/report/summary/${props.id}`} target="_blank">
-            <Button variant="default" leftSection={<IconFileText size={15} />}>
-              Export
-            </Button>
-          </a>
-        </div>
-      </div>
-      <div className="mt-3 flex flex-col gap-3">
+    <div className="a4-horizontal relative flex flex-col p-7 text-[14px]">
+      <div className="flex flex-col gap-3">
         <Card withBorder>
           <div className="flex justify-between">
             <div className="flex flex-col">
@@ -146,7 +138,7 @@ export default function Summary(
             </div>
           </Card>
         </div>
-        <Card withBorder>
+        <Card p={0} withBorder>
           <DataTable
             records={getSummaryProject.data?.data.jobs}
             columns={[
@@ -192,73 +184,6 @@ export default function Summary(
             ]}
           />
         </Card>
-        {/* <BarChart
-          h={300}
-          data={[
-            { month: "January", Smartphones: 1200 },
-            { month: "February", Smartphones: 1900 },
-            { month: "March", Smartphones: 400 },
-            { month: "April", Smartphones: 1000 },
-            { month: "May", Smartphones: 800 },
-            { month: "June", Smartphones: 750 },
-          ]}
-          dataKey="month"
-          series={[{ name: "Smartphones", color: "violet.6" }]}
-          tickLine="y"
-          gridAxis="xy"
-        /> */}
-        {/* <Card withBorder>
-          <div className="flex flex-col">
-            <Text fw={700}>เปรียบเทียบต้นทุนและกำไร</Text>
-            <BarChart
-              h={300}
-              data={[]}
-              dataKey="job_name"
-              withLegend
-              tickLine="xy"
-              gridAxis="xy"
-              series={[
-                { name: "overall_cost", color: "violet.6", label: "ต้นทุนรวม" },
-                {
-                  name: "actual_overall_cost",
-                  color: "blue.5",
-                  label: "ต้นทุนจริง",
-                },
-                {
-                  name: "actual_profit",
-                  color: "red.5",
-                  label: "กำไรจริง",
-                },
-              ]}
-            />
-          </div>
-        </Card> */}
-        {/* <Card withBorder>
-          <div className="flex flex-col">
-            <Text fw={700}>เปรียบเทียบต้นทุนและกำไร</Text>
-            <BarChart
-              h={300}
-              data={getSummaryProject.data?.data.jobs ?? []}
-              dataKey="job_name"
-              withLegend
-              tickLine="xy"
-              gridAxis="xy"
-              series={[
-                { name: "overall_cost", color: "violet.6", label: "ต้นทุนรวม" },
-                {
-                  name: "actual_overall_cost",
-                  color: "blue.5",
-                  label: "ต้นทุนจริง",
-                },
-                {
-                  name: "actual_profit",
-                  color: "red.5",
-                  label: "กำไรจริง",
-                },
-              ]}
-            />
-          </div>
-        </Card> */}
       </div>
     </div>
   );

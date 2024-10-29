@@ -29,6 +29,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     "/login",
     "/pdf/quotation/[id]",
     "/pdf/boq/[id]",
+    "/pdf/summary/[id]",
     "/pdf",
     "/auth/sign-in"
   ];
