@@ -1,9 +1,16 @@
 import BackButton from "@/components/BackButton/BackButton";
+import { DeleteConfirmModalConfig } from "@/config/ConfirmModalConfig/ConfirmModalConfig";
+import useCancelProject from "@/hooks/mutates/project/useCancelProject";
+import useChangeStatusProject from "@/hooks/mutates/project/useChangeStatusProject";
 import useGetBoqFromProject from "@/hooks/queries/boq/useGetBoqFromProject";
 import useGetProject from "@/hooks/queries/project/useGetProject";
+import useGetQuotationByProject from "@/hooks/queries/quotation/useGetQuotationByProject";
 import { getBoqStatusMap } from "@/utils/boqStatusMap";
 import { getProjectStatusMap } from "@/utils/projectStatusMap";
-import { Button, Card, Text } from "@mantine/core";
+import { Badge, Button, Card, Text } from "@mantine/core";
+import { modals } from "@mantine/modals";
+import { notifications } from "@mantine/notifications";
+import { AxiosError } from "axios";
 import clsx from "clsx";
 import {
   type GetServerSidePropsContext,
@@ -44,6 +51,142 @@ export default function Project(
   const getBoqFromProject = useGetBoqFromProject({
     project_id: props.id ?? "",
   });
+  const getQuoTationByProject = useGetQuotationByProject({
+    project_id: props.id ?? "",
+  });
+  const changeStatusProject = useChangeStatusProject();
+  const cancelProject = useCancelProject();
+
+  const changeStatus = () => {
+    const boqStatus = getBoqFromProject.data?.data.status;
+    const quotationStatus = getQuoTationByProject.data?.data.status;
+    const projectStatus = getProjectApi.data?.data.status;
+
+    if (
+      boqStatus === "approved" &&
+      quotationStatus === "approved" &&
+      projectStatus === "planning"
+    ) {
+      changeStatusProject.mutate(
+        {
+          project_id: props.id!,
+          status: "in_progress",
+        },
+        {
+          onSuccess: () => {
+            notifications.show({
+              title: "สําเร็จ",
+              message: "เปลี่ยนสถานะโครงการเรียบร้อย",
+            });
+            getQuoTationByProject.refetch();
+            getBoqFromProject.refetch();
+            getProjectApi.refetch();
+          },
+          onError: (error) => {
+            if (error instanceof AxiosError) {
+              notifications.show({
+                title: "เกิดข้อผิดพลาด",
+                message: error.response?.data.error,
+                color: "red",
+              });
+            }
+          },
+        },
+      );
+    } else if (
+      boqStatus === "approved" &&
+      quotationStatus === "approved" &&
+      projectStatus === "in_progress"
+    ) {
+      changeStatusProject.mutate(
+        {
+          project_id: props.id!,
+          status: "completed",
+        },
+        {
+          onSuccess: () => {
+            notifications.show({
+              title: "สําเร็จ",
+              message: "เปลี่ยนสถานะโครงการเรียบร้อย",
+            });
+            getQuoTationByProject.refetch();
+            getBoqFromProject.refetch();
+            getProjectApi.refetch();
+          },
+          onError: (error) => {
+            if (error instanceof AxiosError) {
+              notifications.show({
+                title: "เกิดข้อผิดพลาด",
+                message: error.response?.data.error,
+                color: "red",
+              });
+            }
+          },
+        },
+      );
+    }
+  };
+
+  const isChangeStatusValid = () => {
+    const boqStatus = getBoqFromProject.data?.data.status;
+    const quotationStatus = getQuoTationByProject.data?.data.status;
+    const projectStatus = getProjectApi.data?.data.status;
+
+    if (
+      boqStatus === "approved" &&
+      quotationStatus === "approved" &&
+      projectStatus === "planning"
+    ) {
+      return true;
+    }
+
+    if (
+      boqStatus === "approved" &&
+      quotationStatus === "approved" &&
+      projectStatus === "in_progress"
+    ) {
+      return true;
+    }
+
+    return false;
+  };
+
+  const onCancelProject = () => {
+    modals.openConfirmModal({
+      ...DeleteConfirmModalConfig,
+      children: (
+        <Text size="sm">
+          คุณแน่ใจหรือไม่ว่าต้องการยกเลิกโครงการ{" "}
+          <Badge>{getProjectApi.data?.data.name}</Badge>
+        </Text>
+      ),
+      onConfirm: () => {
+        cancelProject.mutate(
+          {
+            project_id: props.id!,
+          },
+          {
+            onSuccess: () => {
+              notifications.show({
+                title: "สําเร็จ",
+                message: "ยกเลิกโครงการเรียบร้อย",
+              });
+              getProjectApi.refetch();
+            },
+            onError: (error) => {
+              if (error instanceof AxiosError) {
+                notifications.show({
+                  title: "เกิดข้อผิดพลาด",
+                  message: error.response?.data.error,
+                  color: "red",
+                });
+              }
+            },
+          },
+        );
+      },
+    });
+  };
 
   return (
     <div className="flex flex-col">
@@ -85,8 +228,15 @@ export default function Project(
       </div>
       <div className="mt-5 flex flex-col gap-3">
         <div className="flex gap-3">
-          <Button size="xs">เปลี่ยนสถานะ</Button>
-          <Button size="xs" color="red">
+          <Button disabled={!isChangeStatusValid()} size="xs" onClick={changeStatus}>
+            เปลี่ยนสถานะ
+          </Button>
+          <Button
+            disabled={getProjectApi.data?.data.status === "cancelled"}
+            size="xs"
+            onClick={onCancelProject}
+            color="red"
+          >
             ยกเลิกโครงการ
           </Button>
         </div>

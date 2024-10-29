@@ -1,22 +1,11 @@
-import useGetProject from "@/hooks/queries/project/useGetProject";
-import { Project } from "@/services/project/getProjects.service";
+import { type Project } from "@/services/project/getProjects.service";
 import { getProjectStatusMap } from "@/utils/projectStatusMap";
 import {
-  ActionIcon,
   Card,
-  Menu,
-  rem,
   Text,
-  UnstyledButton,
 } from "@mantine/core";
 import {
   IconCalendar,
-  IconClock,
-  IconDotsVertical,
-  IconEdit,
-  IconEye,
-  IconSettings,
-  IconTrash,
 } from "@tabler/icons-react";
 import Link from "next/link";
 
@@ -34,31 +23,6 @@ export default function ProjectCard(props: Props) {
               {props.project.name}
             </Text>
           </Link>
-          <Menu
-            shadow="md"
-            width={200}
-            position="bottom-end"
-            trigger="hover"
-            offset={1}
-            withArrow
-          >
-            <Menu.Target>
-              <UnstyledButton variant="transparent">
-                <IconDotsVertical size={15} color="gray" />
-              </UnstyledButton>
-            </Menu.Target>
-
-            <Menu.Dropdown>
-              <Menu.Item
-                leftSection={
-                  <IconTrash style={{ width: rem(14), height: rem(14) }} />
-                }
-                c="red"
-              >
-                ลบ
-              </Menu.Item>
-            </Menu.Dropdown>
-          </Menu>
         </div>
         <Text c="dimmed" size="xs" fw={500}>
           {props.project.description}
