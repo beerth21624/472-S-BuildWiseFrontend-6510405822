@@ -18,7 +18,9 @@ interface Data {
   sub_total: number;
   tax_amount: number;
   jobs: Job[];
+  general_costs: number;
   final_amount: number;
+  selling_general_cost: number;
 }
 
 interface Job {

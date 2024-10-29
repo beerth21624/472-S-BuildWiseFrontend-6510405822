@@ -1,6 +1,7 @@
 import BackButton from "@/components/BackButton/BackButton";
 import MaterialProjectActualPriceForm from "@/components/Project/MaterialProject/MaterialProjectActualPriceForm/MaterialProjectActualPriceForm";
 import MaterialProjectEstimatePriceForm from "@/components/Project/MaterialProject/MaterialProjectEstimatePriceForm/MaterialProjectEstimatePriceForm";
+import useUpdateMaterialActualProject from "@/hooks/mutates/project/MaterialProject/useUpdateActualEstimateProject";
 import useUpdateMaterialEstimateProject from "@/hooks/mutates/project/MaterialProject/useUpdateMaterialEstimateProject";
 import useGetBoqFromProject from "@/hooks/queries/boq/useGetBoqFromProject";
 import useGetMaterialsProject from "@/hooks/queries/project/MaterialProject/useGetMaterialsProject";
@@ -36,6 +37,7 @@ export default function Material(
     project_id: props.id ?? "",
   });
   const updateMaterialEstimateProject = useUpdateMaterialEstimateProject();
+  const updateMaterialActualProject = useUpdateMaterialActualProject();
 
   const onEditEstimate = (data: MaterialProjectEstimateSchemaType) => {
     updateMaterialEstimateProject.mutate(
@@ -62,6 +64,26 @@ export default function Material(
               color: "red",
             });
           }
+        },
+      },
+    );
+  };
+
+  const onEditActual = (data: MaterialProjectActualSchemaType) => {
+    updateMaterialActualProject.mutate(
+      {
+        boq_id: getBoqFromProject.data?.data.id!,
+        ...data,
+      },
+      {
+        onSuccess: () => {
+          notifications.show({
+            title: "สําเร็จ",
+            message: "แก้ไขราคาซื้อจริงต่อหน่วยสําเร็จ",
+            color: "green",
+          });
+          closeEditMaterialActual();
+          getMaterialsProject.refetch();
         },
       },
     );
@@ -125,6 +147,7 @@ export default function Material(
           project_id={props.id!}
           type="edit"
           data={EditMaterialActualProject}
+          onFinish={onEditActual}
         />
       </Modal>
       <div className="flex flex-col">
@@ -185,7 +208,13 @@ export default function Material(
                 <div className="flex items-center gap-1">
                   <Text>{value.actual_price}</Text>
                   {isActualPriceValid() && (
-                    <ActionIcon variant="transparent">
+                    <ActionIcon
+                      onClick={() => {
+                        setEditMaterialActualProject(value);
+                        openEditMaterialActual();
+                      }}
+                      variant="transparent"
+                    >
                       <IconPencil size={15} />
                     </ActionIcon>
                   )}

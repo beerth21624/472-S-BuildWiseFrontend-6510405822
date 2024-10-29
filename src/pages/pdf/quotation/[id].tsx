@@ -32,7 +32,13 @@ export default function Quotation(
           <div>
             <h2 className="mb-1 font-semibold">ผู้ทำใบเสนอราคา</h2>
             <p>{getCompanyByUser.data?.data.name}</p>
-            <p>{getCompanyByUser.data?.data.address?.address}, {getCompanyByUser.data?.data.address?.subdistrict}, {getCompanyByUser.data?.data.address?.district}, {getCompanyByUser.data?.data.address?.province}, {getCompanyByUser.data?.data.address?.postal_code}</p>
+            <p>
+              {getCompanyByUser.data?.data.address?.address},{" "}
+              {getCompanyByUser.data?.data.address?.subdistrict},{" "}
+              {getCompanyByUser.data?.data.address?.district},{" "}
+              {getCompanyByUser.data?.data.address?.province},{" "}
+              {getCompanyByUser.data?.data.address?.postal_code}
+            </p>
             <div className="flex gap-5">
               <div className="flex items-center gap-1">
                 <IconPhone size={15} />
@@ -154,7 +160,7 @@ export default function Quotation(
               <span>ค่าใช้จ่ายอื่นๆ</span>
               <span>
                 <NumberFormatter
-                  value={getExportQuotationByProject.data?.data.final_amount.toFixed(
+                  value={getExportQuotationByProject.data?.data.selling_general_cost.toFixed(
                     2,
                   )}
                   thousandSeparator

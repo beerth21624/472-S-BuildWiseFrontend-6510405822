@@ -5,6 +5,8 @@ interface Data {
   quotation_id: string;
   status: string;
   valid_date: string;
+  tax_percentage: number;
+  selling_general_cost: number;
   jobs: Job[];
   general_costs: Generalcost[];
 }
@@ -15,6 +17,7 @@ interface Generalcost {
 }
 
 interface Job {
+  id: string;
   name: string;
   unit: string;
   quantity: number;

@@ -151,6 +151,21 @@ export default function Project(
     return false;
   };
 
+  const isSummaryValid = () => {
+    const boqStatus = getBoqFromProject.data?.data.status;
+    const quotationStatus = getQuoTationByProject.data?.data.status;
+    const projectStatus = getProjectApi.data?.data.status;
+
+    if (
+      boqStatus === "approved" &&
+      quotationStatus === "approved" &&
+      projectStatus === "completed"
+    ) {
+      return true;
+    }
+    return false;
+  };
+
   const onCancelProject = () => {
     modals.openConfirmModal({
       ...DeleteConfirmModalConfig,
@@ -221,14 +236,22 @@ export default function Project(
           <Link href={`/project/${props.id}/document`}>
             <Button variant="white">เอกสาร</Button>
           </Link>
-          <Button disabled variant="white">
-            สรุป
-          </Button>
+          {isSummaryValid() ? (
+            <Link href={`/project/${props.id}/summary`}>
+              <Button variant="white">สรุป</Button>
+            </Link>
+          ) : (
+            <Button disabled variant="white">สรุป</Button>
+          )}
         </div>
       </div>
       <div className="mt-5 flex flex-col gap-3">
         <div className="flex gap-3">
-          <Button disabled={!isChangeStatusValid()} size="xs" onClick={changeStatus}>
+          <Button
+            disabled={!isChangeStatusValid()}
+            size="xs"
+            onClick={changeStatus}
+          >
             เปลี่ยนสถานะ
           </Button>
           <Button

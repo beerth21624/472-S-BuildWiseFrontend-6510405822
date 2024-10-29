@@ -13,6 +13,7 @@ interface Material {
   estimated_price: number;
   avg_actual_price: number;
   actual_price: number;
+  supplier_id: string;
   supplier_name: string;
 }
 

@@ -1,3 +1,4 @@
+import ControlledInputNumber from "@/components/Controlled/ControlledInputNumber";
 import ControlledInputText from "@/components/Controlled/ControlledInputText";
 import ControlledSelect from "@/components/Controlled/ControlledSelect";
 import useGetBoqFromProject from "@/hooks/queries/boq/useGetBoqFromProject";
@@ -47,6 +48,7 @@ export default function MaterialProjectActualPriceForm(props: Props) {
 
   useEffect(() => {
     if (props.data) {
+      setValue("name", props.data.name);
       setValue("supplier_id", props.data.supplier_id);
       setValue("material_id", props.data.material_id);
       setValue("actual_price", props.data.actual_price);
@@ -76,21 +78,23 @@ export default function MaterialProjectActualPriceForm(props: Props) {
           label: "ซัพพลายเออร์",
           placeholder: "เลือกซัพพลายเออร์",
           withAsterisk: true,
-          data: getSuppliers.data?.data.suppliers.map((item) => ({
-            value: item.id,
-            label: item.name,
-          })),
+          data:
+            getSuppliers.data?.data.suppliers?.map((item) => ({
+              value: item.id,
+              label: item.name,
+            })) ?? [],
           searchable: true,
           disabled: !isActualPriceValid(),
         }}
       />
-      <ControlledInputText
+      <ControlledInputNumber
         control={control}
         name="actual_price"
         props={{
           label: "ราคาซื้อจริง",
           placeholder: "กรอกราคาซื้อจริง",
           withAsterisk: true,
+          thousandSeparator: true,
         }}
       />
       <Button type="submit">

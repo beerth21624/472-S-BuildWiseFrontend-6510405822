@@ -146,7 +146,31 @@ export default function BoqReport(
                 </td>
               </tr>
             ))}
-
+            {getExportBoqFromProject.data?.data.general_costs.map(
+              (general_cost, index) => {
+                const old_index = getExportBoqFromProject.data?.data.jobs.length
+                return (
+                  <tr key={index}>
+                    <td className="border px-2 py-1 text-center">
+                      {index + 1 + old_index}
+                    </td>
+                    <td className="border px-2 py-1">
+                      {general_cost.type_name}
+                    </td>
+                    <td className="border px-2 py-1 text-center"></td>
+                    <td className="border px-2 py-1 text-center"></td>
+                    <td className="border px-2 py-1 text-right"></td>
+                    <td className="border px-2 py-1 text-right"></td>
+                    <td className="border px-2 py-1 text-right">
+                      <NumberFormatter
+                        value={general_cost.estimated_cost.toFixed(2)}
+                        thousandSeparator
+                      />
+                    </td>
+                  </tr>
+                );
+              },
+            )}
             <tr className="font-semibold">
               <td className="border px-2 py-1 text-right" colSpan={4}>
                 รวมค่าวัสดุและค่าแรง
@@ -228,14 +252,23 @@ export default function BoqReport(
                 <tr key={index}>
                   <td className="border px-2 py-1">{material.material_name}</td>
                   <td className="border px-2 py-1 text-right">
-                    {material.quantity}
+                    <NumberFormatter
+                      value={material.quantity.toFixed(2)}
+                      thousandSeparator
+                    />
                   </td>
                   <td className="border px-2 py-1">{material.unit}</td>
                   <td className="border px-2 py-1 text-right">
-                    {material.estimated_price}
+                    <NumberFormatter
+                      value={material.estimated_price.toFixed(2)}
+                      thousandSeparator
+                    />
                   </td>
                   <td className="border px-2 py-1 text-right">
-                    {material.total}
+                    <NumberFormatter
+                      value={material.total.toFixed(2)}
+                      thousandSeparator
+                    />
                   </td>
                 </tr>
               ))}
