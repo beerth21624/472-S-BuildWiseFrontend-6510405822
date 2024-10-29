@@ -5,9 +5,9 @@ import GeneralCostForm from "./GeneralCostForm/GeneralCostForm";
 import useGetGeneralCostBoq from "@/hooks/queries/boq/GeneralCostBoq/useGetGeneralCostBoq";
 import { useState } from "react";
 import { type BoqGeneralCostSchemaType } from "@/schemas/boq/boq-general-cost.schema";
-import useUpdateGeneralCost from "@/hooks/mutates/boq/GeneralCostBoq/useUpdateGeneralCost";
 import { notifications } from "@mantine/notifications";
 import useGetBoqFromProject from "@/hooks/queries/boq/useGetBoqFromProject";
+import useUpdateEstimateGeneralCost from "@/hooks/mutates/boq/GeneralCostBoq/useUpdateEstimateGeneralCost";
 
 interface Props {
   project_id: string;
@@ -18,7 +18,7 @@ export default function GeneralCost(props: Props) {
   const getGeneralCostBoq = useGetGeneralCostBoq({
     project_id: props.project_id,
   });
-  const updateGeneralCost = useUpdateGeneralCost();
+  const updateEstimateGeneralCost = useUpdateEstimateGeneralCost();
   const getBoqFromProject = useGetBoqFromProject({
     project_id: props.project_id,
   });
@@ -27,7 +27,7 @@ export default function GeneralCost(props: Props) {
     useState<BoqGeneralCostSchemaType>();
 
   const onEdit = (data: BoqGeneralCostSchemaType) => {
-    updateGeneralCost.mutate(data, {
+    updateEstimateGeneralCost.mutate(data, {
       onSuccess: () => {
         notifications.show({
           title: "สําเร็จ",

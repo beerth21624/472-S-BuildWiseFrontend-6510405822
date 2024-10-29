@@ -1,61 +1,124 @@
 import BackButton from "@/components/BackButton/BackButton";
-import { Button, Menu, Modal, rem, Text, UnstyledButton } from "@mantine/core";
+import ActualGeneralCostForm from "@/components/GeneralCost/ActualGeneralCostForm/ActualGeneralCostForm";
+import useUpdateActualGeneralCost from "@/hooks/mutates/generalCost/useUpdateActualGeneralCost";
+import useGetBoqFromProject from "@/hooks/queries/boq/useGetBoqFromProject";
+import useGetGeneralCosts from "@/hooks/queries/generalCost/useGetGeneralCosts";
+import useGetProject from "@/hooks/queries/project/useGetProject";
+import useGetQuotationByProject from "@/hooks/queries/quotation/useGetQuotationByProject";
+import { ActualGeneralCostSchemaType } from "@/schemas/generalCost/actualGeneralCost.schema";
+import { ActionIcon, Modal, Text } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconDotsVertical, IconPencil, IconTrash } from "@tabler/icons-react";
+import { notifications } from "@mantine/notifications";
+import { IconPencil } from "@tabler/icons-react";
+import { AxiosError } from "axios";
 import { DataTable } from "mantine-datatable";
 import {
   type GetServerSidePropsContext,
   type InferGetServerSidePropsType,
 } from "next";
-import Link from "next/link";
+import { useState } from "react";
+import { record } from "zod";
 
 export default function GeneralCost(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
-  const [openedAdd, { open: openAdd, close: closeAdd }] = useDisclosure(false);
+  const getProject = useGetProject({ id: props.id! });
+  const getBoqFromProject = useGetBoqFromProject({ project_id: props.id! });
+  const getQuotationByProject = useGetQuotationByProject({
+    project_id: props.id!,
+  });
   const [openedEdit, { open: openEdit, close: closeEdit }] =
     useDisclosure(false);
+  const getGeneralCosts = useGetGeneralCosts({ project_id: props.id! });
+  const updateActualGeneralCost = useUpdateActualGeneralCost();
+  const [EditActualGeneralCost, setEditActualGeneralCost] =
+    useState<ActualGeneralCostSchemaType>();
+
+  const onEditActualGeneralCost = (data: ActualGeneralCostSchemaType) => {
+    updateActualGeneralCost.mutate(data, {
+      onSuccess: () => {
+        notifications.show({
+          title: "สําเร็จ",
+          message: "แก้ไขค่าใช้จ่ายจริงสําเร็จ",
+          color: "green",
+        });
+        getGeneralCosts.refetch();
+        closeEdit();
+      },
+      onError: (error) => {
+        if (error instanceof AxiosError) {
+          notifications.show({
+            title: "เกิดข้อผิดพลาด",
+            message: error.response?.data.error,
+            color: "red",
+          });
+        }
+      },
+    });
+  };
+
+  const isEditActualGeneralCostValid = () => {
+    return (
+      getBoqFromProject.data?.data.status === "approved" &&
+      getQuotationByProject.data?.data.status === "approved"
+    );
+  };
+
   return (
     <>
       <Modal
-        opened={openedAdd}
-        onClose={closeAdd}
-        title="เพิ่มค่าใช้จ่าย"
-      ></Modal>
-      <Modal
         opened={openedEdit}
         onClose={closeEdit}
-        title="แก้ไขค่าใช้จ่าย"
-      ></Modal>
+        title="แก้ไขค่าใช้จ่ายจริง"
+      >
+        <ActualGeneralCostForm
+          type="edit"
+          data={EditActualGeneralCost}
+          onFinish={onEditActualGeneralCost}
+        />
+      </Modal>
       <div className="flex flex-col gap-3">
         <BackButton label="ย้อนกลับไปหน้ารายละเอียดโครงการ" />
         <div className="flex items-center justify-between">
-          <Text fw={700}>ค่าใช้จ่ายทั่วไปของโครงการ</Text>
+          <div className="flex flex-col">
+            <div className="text-xl font-bold">
+              <div className="flex items-center gap-2">
+                ค่าใช้จ่ายทั่วไปของโครงการ
+              </div>
+            </div>
+            <Text size="md" fw={700}>
+              {getProject.data?.data.name}
+            </Text>
+          </div>
         </div>
         <DataTable
-          records={[
-            {
-              type: "ค่าใช้จ่ายทั่วไป",
-              estimated_price: "100 บาท",
-            },
-          ]}
-          // define columns
+          records={getGeneralCosts.data?.data.general_costs}
           columns={[
             {
-              accessor: "type",
+              accessor: "type_name",
               title: "ประเภท",
             },
             {
-              accessor: "estimated_price",
-              title: "ราคาประมาณการ",
+              accessor: "estimated_cost",
+              title: "ค่าใช้จ่ายประเมิน",
             },
             {
-              accessor: "id",
-              title: "ดำเนินการ",
-              textAlign: "center",
+              accessor: "actual_cost",
+              title: "ค่าใช้จ่ายจริง",
               render: (record) => (
-                <div className="flex gap-2">
-                  <Button>asdf</Button>
+                <div className="flex items-center gap-1">
+                  <Text>{record.actual_cost}</Text>
+                  {isEditActualGeneralCostValid() && (
+                    <ActionIcon
+                      onClick={() => {
+                        setEditActualGeneralCost(record);
+                        openEdit();
+                      }}
+                      variant="transparent"
+                    >
+                      <IconPencil size={15} />
+                    </ActionIcon>
+                  )}
                 </div>
               ),
             },

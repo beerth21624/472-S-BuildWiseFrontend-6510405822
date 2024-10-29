@@ -1,15 +1,17 @@
-import { BaseResponse } from "@/types/BaseResponse.type";
+import { type BaseResponse } from "@/types/BaseResponse.type";
 import { axiosAPI } from "@/utils/axios";
 import _ from "lodash";
 
-export type UpdateGeneralCostBoqProps = {
+export type UpdateEstimateGeneralCostBoqProps = {
   g_id: string;
   estimated_cost: number;
 };
 
-const updateGeneralCostBoq = async (props?: UpdateGeneralCostBoqProps) => {
+const updateEstimateGeneralCostBoq = async (
+  props: UpdateEstimateGeneralCostBoqProps,
+) => {
   try {
-    const data = _.omit(props, ["general_cost_id"]);
+    const data = _.omit(props, ["g_id"]);
     const res = await axiosAPI.put<BaseResponse<object>>(
       `/general-costs/${props?.g_id}`,
       data,
@@ -20,4 +22,4 @@ const updateGeneralCostBoq = async (props?: UpdateGeneralCostBoqProps) => {
   }
 };
 
-export default updateGeneralCostBoq;
+export default updateEstimateGeneralCostBoq;

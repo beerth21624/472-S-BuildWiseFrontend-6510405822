@@ -1,8 +1,8 @@
 import ControlledInputNumber from "@/components/Controlled/ControlledInputNumber";
 import {
-  boqGeneralCostSchema,
-  type BoqGeneralCostSchemaType,
-} from "@/schemas/boq/boq-general-cost.schema";
+  actualGeneralCostSchema,
+  type ActualGeneralCostSchemaType,
+} from "@/schemas/generalCost/actualGeneralCost.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Badge, Button } from "@mantine/core";
 import { useEffect } from "react";
@@ -10,22 +10,22 @@ import { useForm } from "react-hook-form";
 
 interface Props {
   type: "create" | "edit";
-  onFinish?: (data: BoqGeneralCostSchemaType) => void;
-  data?: BoqGeneralCostSchemaType;
+  onFinish?: (data: ActualGeneralCostSchemaType) => void;
+  data?: ActualGeneralCostSchemaType;
 }
 
-export default function GeneralCostForm(props: Props) {
+export default function ActualGeneralCostForm(props: Props) {
   const {
     control,
     setValue,
     watch,
     handleSubmit,
     formState: { errors },
-  } = useForm<BoqGeneralCostSchemaType>({
-    resolver: zodResolver(boqGeneralCostSchema),
+  } = useForm<ActualGeneralCostSchemaType>({
+    resolver: zodResolver(actualGeneralCostSchema),
   });
 
-  const onFinish = (data: BoqGeneralCostSchemaType) => {
+  const onFinish = (data: ActualGeneralCostSchemaType) => {
     console.log(data);
     props.onFinish?.(data);
   };
@@ -34,7 +34,7 @@ export default function GeneralCostForm(props: Props) {
     if (props.data) {
       setValue("g_id", props.data.g_id);
       setValue("type_name", props.data.type_name);
-      setValue("estimated_cost", props.data.estimated_cost);
+      setValue("actual_cost", props.data.actual_cost);
     }
   }, [props.data, setValue]);
 
@@ -43,10 +43,10 @@ export default function GeneralCostForm(props: Props) {
       <Badge variant="light">{watch("type_name")}</Badge>
       <ControlledInputNumber
         control={control}
-        name="estimated_cost"
+        name="actual_cost"
         props={{
-          label: "ราคาประเมิน",
-          placeholder: "กรอกราคาประเมิน",
+          label: "ค่าใช้จ่ายจริง",
+          placeholder: "กรอกค่าใช้จ่ายจริง",
           withAsterisk: true,
         }}
       />
