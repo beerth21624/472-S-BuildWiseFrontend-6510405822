@@ -3,11 +3,12 @@ import { DeleteConfirmModalConfig } from "@/config/ConfirmModalConfig/ConfirmMod
 import useCancelProject from "@/hooks/mutates/project/useCancelProject";
 import useChangeStatusProject from "@/hooks/mutates/project/useChangeStatusProject";
 import useGetBoqFromProject from "@/hooks/queries/boq/useGetBoqFromProject";
+import useGetOverviewProject from "@/hooks/queries/project/useGetOverviewProject";
 import useGetProject from "@/hooks/queries/project/useGetProject";
 import useGetQuotationByProject from "@/hooks/queries/quotation/useGetQuotationByProject";
 import { getBoqStatusMap } from "@/utils/boqStatusMap";
 import { getProjectStatusMap } from "@/utils/projectStatusMap";
-import { Badge, Button, Card, Text } from "@mantine/core";
+import { Badge, Button, Card, NumberFormatter, Text } from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
 import { AxiosError } from "axios";
@@ -54,6 +55,9 @@ export default function Project(
   const getQuoTationByProject = useGetQuotationByProject({
     project_id: props.id ?? "",
   });
+
+  const getOverviewProject = useGetOverviewProject({ id: props.id ?? "" });
+
   const changeStatusProject = useChangeStatusProject();
   const cancelProject = useCancelProject();
 
@@ -241,7 +245,9 @@ export default function Project(
               <Button variant="white">สรุป</Button>
             </Link>
           ) : (
-            <Button disabled variant="white">สรุป</Button>
+            <Button disabled variant="white">
+              สรุป
+            </Button>
           )}
         </div>
       </div>
@@ -313,19 +319,44 @@ export default function Project(
                     โครงการคอนโด 30 ชั้น
                   </FieldLabel>
                   <FieldLabel labelClass="min-w-[8rem]" label="กำไรประมาณการ">
-                    500,000 บาท
+                    <NumberFormatter
+                      value={getOverviewProject.data?.data.estimated_profit?.toFixed(
+                        2,
+                      )}
+                      thousandSeparator
+                    />
                   </FieldLabel>
                   <FieldLabel labelClass="min-w-[8rem]" label="ราคาขาย">
-                    500,000 บาท
+                    <NumberFormatter
+                      value={getOverviewProject.data?.data.total_selling_price?.toFixed(
+                        2,
+                      )}
+                      thousandSeparator
+                    />
                   </FieldLabel>
                   <FieldLabel labelClass="min-w-[8rem]" label="ราคาขายรวมภาษี">
-                    500,000 บาท
+                    <NumberFormatter
+                      value={getOverviewProject.data?.data.total_with_tax?.toFixed(
+                        2,
+                      )}
+                      thousandSeparator
+                    />
                   </FieldLabel>
                   <FieldLabel labelClass="min-w-[8rem]" label="ต้นทุนจริง">
-                    500,000 บาท
+                    <NumberFormatter
+                      value={getOverviewProject.data?.data.total_actual_cost?.toFixed(
+                        2,
+                      )}
+                      thousandSeparator
+                    />
                   </FieldLabel>
                   <FieldLabel labelClass="min-w-[8rem]" label="กำไรจริง">
-                    500,000 บาท
+                    <NumberFormatter
+                      value={getOverviewProject.data?.data.actual_profit?.toFixed(
+                        2,
+                      )}
+                      thousandSeparator
+                    />
                   </FieldLabel>
                 </div>
               </div>
