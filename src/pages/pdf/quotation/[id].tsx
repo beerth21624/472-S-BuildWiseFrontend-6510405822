@@ -131,21 +131,28 @@ export default function Quotation(
         {/* Summary */}
         <div className="mb-8 flex justify-end">
           <div className="w-64">
-            {/* <div className="flex justify-between">
-              <span>ราคารวม</span>
-              <span>200,000.00 บาท</span>
-            </div> */}
             <div className="flex justify-between">
               <span>
-                ภาษี {getExportQuotationByProject.data?.data.TaxPercentage}%
+                ราคารวม
               </span>
               <span>7 %</span>
             </div>
-
             <div className="flex justify-between font-bold">
-              <span>ราคาสุทธิ</span>
+              <span>ค่าใช้จ่ายอื่นๆ</span>
               <span>
-                {getExportQuotationByProject.data?.data.FinalAmount.Float64} บาท
+                
+              </span>
+            </div>
+            <div className="flex justify-between font-bold">
+              <span>ค่าภาษี</span>
+              <span>
+                
+              </span>
+            </div>
+            <div className="flex justify-between font-bold">
+              <span>ราคารวมภาษี</span>
+              <span>
+                
               </span>
             </div>
           </div>

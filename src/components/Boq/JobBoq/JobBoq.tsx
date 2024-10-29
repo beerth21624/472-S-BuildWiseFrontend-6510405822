@@ -49,6 +49,15 @@ export default function JobBoq(props: Props) {
           closeAdd();
           getBoqFromProject.refetch();
         },
+        onError: (error) => {
+            if (error instanceof AxiosError) {
+              notifications.show({
+                title: "เกิดข้อผิดพลาด",
+                message: error.response?.data.error,
+                color: "red",
+              });
+            }
+        }
       },
     );
   };

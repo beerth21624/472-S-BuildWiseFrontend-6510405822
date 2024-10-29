@@ -90,14 +90,25 @@ export default function BOQ(
             </Text>
           </div>
           <div className="flex items-center gap-2">
-            <a target="_blank" href={`/api/report/boq/${props.id}`}>
+            {isApproved ? (
+              <a target="_blank" href={`/api/report/boq/${props.id}`}>
+                <Button
+                  variant="default"
+                  leftSection={<IconFileText size={15} />}
+                >
+                  Export
+                </Button>
+              </a>
+            ) : (
               <Button
+                disabled
                 variant="default"
                 leftSection={<IconFileText size={15} />}
               >
                 Export
               </Button>
-            </a>
+            )}
+
             <Button disabled={isApproved} onClick={onChangeStatus}>
               เปลี่ยนสถานะ
             </Button>
