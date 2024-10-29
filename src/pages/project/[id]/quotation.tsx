@@ -36,7 +36,11 @@ export default function Quotation(
     modals.openConfirmModal({
       title: "ยืนยันการเปลี่ยนสถานะ",
       centered: true,
-      children: <Text>ยืนยันการเปลี่ยนสถานะ</Text>,
+      children: (
+        <div className="flex items-center gap-1">
+          คุณต้องการเปลี่ยนสถานะเป็น <Badge>อนุมัติ</Badge> ใช่หรือไม่ ?
+        </div>
+      ),
       labels: { confirm: "ยืนยัน", cancel: "ยกเลิก" },
       onConfirm: () => {
         approveQuotationByProject.mutate(

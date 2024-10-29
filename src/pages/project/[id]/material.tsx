@@ -170,7 +170,7 @@ export default function Material(
               title: "วัสดุ",
             },
             {
-              accessor: "name",
+              accessor: "total_quantity",
               title: "จำนวนรวม",
             },
             {
@@ -228,12 +228,16 @@ export default function Material(
             {
               accessor: "total_estimated_price",
               title: "ราคาประเมินรวม",
-              render: (value) => <Text>{value.estimated_price}</Text>,
+              render: (value) => (
+                <Text>{value.estimated_price * value.total_quantity}</Text>
+              ),
             },
             {
               accessor: "total_actual_price",
               title: "ราคาจริงรวม",
-              render: (value) => <Text>{value.actual_price}</Text>,
+              render: (value) => (
+                <Text>{value.actual_price * value.total_quantity}</Text>
+              ),
             },
           ]}
         />

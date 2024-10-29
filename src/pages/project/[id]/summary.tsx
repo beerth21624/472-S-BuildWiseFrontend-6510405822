@@ -6,11 +6,13 @@ import {
   type GetServerSidePropsContext,
   type InferGetServerSidePropsType,
 } from "next";
+import { BarChart } from "@mantine/charts";
 
 export default function Summary(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
   const getProject = useGetProject({ id: props.id! });
+//   const 
   return (
     <div className="flex flex-col">
       <BackButton label="ย้อนกลับไปหน้ารายละเอียดโครงการ" />
@@ -29,7 +31,21 @@ export default function Summary(
           </Button>
         </div>
       </div>
-      asdfasdf
+      <BarChart
+        h={300}
+        data={[
+          { month: "January", Smartphones: 1200 },
+          { month: "February", Smartphones: 1900 },
+          { month: "March", Smartphones: 400 },
+          { month: "April", Smartphones: 1000 },
+          { month: "May", Smartphones: 800 },
+          { month: "June", Smartphones: 750 },
+        ]}
+        dataKey="month"
+        series={[{ name: "Smartphones", color: "violet.6" }]}
+        tickLine="y"
+        gridAxis="xy"
+      />
     </div>
   );
 }

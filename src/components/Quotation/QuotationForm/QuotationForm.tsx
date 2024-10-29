@@ -76,6 +76,24 @@ export default function QuotationForm(props: Props) {
 
   const isDisable = getQuotationByProject.data?.data.status === "approved";
 
+  const FinalPrice = () => {
+    const total_selling_price = _.sumBy(
+      getQuotationByProject.data?.data.jobs,
+      (o) => o.total_selling_price,
+    );
+
+    const selling_general_cost =
+      getQuotationByProject.data?.data.selling_general_cost ?? 0;
+
+    const tax_percentage = getQuotationByProject.data?.data.tax_percentage ?? 0;
+
+    const tax_amount =
+      (selling_general_cost + total_selling_price) * (tax_percentage / 100);
+    const total_price = selling_general_cost + total_selling_price;
+
+    return tax_amount + total_price;
+  };
+
   return (
     <form className="flex flex-col gap-3" onSubmit={handleSubmit(onFinish)}>
       <div className="overflow-x-auto">
@@ -160,8 +178,9 @@ export default function QuotationForm(props: Props) {
             <div className="flex justify-end">
               <div className="flex flex-col items-end font-bold">
                 <div>ราคารวม</div>
+                <div>ค่าใช้จ่ายอื่นๆ</div>
                 <div>ภาษี ({watch("tax_percentage")}%)</div>
-                <div>ราคาสุทธิ</div>
+                <div>ราคารวมภาษี</div>
               </div>
             </div>
             <div className="flex justify-start">
@@ -178,11 +197,7 @@ export default function QuotationForm(props: Props) {
                 <div>
                   <NumberFormatter
                     value={(
-                      _.sumBy(
-                        getQuotationByProject.data?.data.jobs,
-                        "total_selling_price",
-                      ) *
-                      (watch("tax_percentage") / 100)
+                      getQuotationByProject.data?.data.selling_general_cost ?? 0
                     ).toFixed(2)}
                     thousandSeparator
                   />
@@ -190,16 +205,20 @@ export default function QuotationForm(props: Props) {
                 <div>
                   <NumberFormatter
                     value={(
-                      _.sumBy(
+                      (_.sumBy(
                         getQuotationByProject.data?.data.jobs,
                         "total_selling_price",
-                      ) *
-                        (watch("tax_percentage") / 100) +
-                      _.sumBy(
-                        getQuotationByProject.data?.data.jobs,
-                        "total_selling_price",
-                      )
+                      ) +
+                        (getQuotationByProject.data?.data
+                          .selling_general_cost ?? 0)) *
+                      (watch("tax_percentage") / 100)
                     ).toFixed(2)}
+                    thousandSeparator
+                  />
+                </div>
+                <div>
+                  <NumberFormatter
+                    value={FinalPrice().toFixed(2)}
                     thousandSeparator
                   />
                 </div>

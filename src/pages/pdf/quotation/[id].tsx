@@ -119,7 +119,7 @@ export default function Quotation(
                 </td>
                 <td className="px-4 text-center">
                   <NumberFormatter
-                    value={(job.amount ?? 0).toFixed(2)}
+                    value={(job.quantity ?? 0).toFixed(2)}
                     thousandSeparator
                   />
                 </td>
@@ -132,7 +132,7 @@ export default function Quotation(
                 <td className="px-4 text-right">
                   <NumberFormatter
                     value={(
-                      (job.selling_price ?? 0) * (job.amount ?? 0)
+                      (job.quantity ?? 0) * (job.selling_price ?? 0)
                     ).toFixed(2)}
                     thousandSeparator
                   />

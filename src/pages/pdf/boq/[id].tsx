@@ -148,7 +148,8 @@ export default function BoqReport(
             ))}
             {getExportBoqFromProject.data?.data.general_costs.map(
               (general_cost, index) => {
-                const old_index = getExportBoqFromProject.data?.data.jobs.length
+                const old_index =
+                  getExportBoqFromProject.data?.data.jobs.length;
                 return (
                   <tr key={index}>
                     <td className="border px-2 py-1 text-center">
@@ -209,10 +210,17 @@ export default function BoqReport(
                 รวมเป็นเงินทั้งสิ้น
               </td>
               <td className="border px-2 py-1 text-right text-red-600">
-                <NumberFormatter
+                {/* <NumberFormatter
                   value={(
                     getExportBoqFromProject.data?.data.summary_metrics
                       .grand_total ?? 0
+                  ).toFixed(2)}
+                  thousandSeparator
+                /> */}
+                <NumberFormatter
+                  value={(
+                    getExportBoqFromProject.data?.data.summary_metrics
+                      .total_amount ?? 0
                   ).toFixed(2)}
                   thousandSeparator
                 />

@@ -7,10 +7,10 @@ export const companySchema = z
     email: z.string().min(1),
     tel: z.string().min(1),
     tax_id: z
-      .string({ required_error: "กรุณากรอกเลขบัตรประชาชน" })
+      .string({ required_error: "กรุณากรอกเลขประจำตัวผู้เสียภาษี" })
       .refine((value) => {
         return value.length === 13;
-      }, "กรุณากรอกเลขบัตรประชาชนให้ถูกต้อง"),
+      }, "กรุณากรอกเลขประจำตัวผู้เสียภาษีให้ถูกต้อง"),
   })
   .merge(addressSchema);
 

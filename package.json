@@ -53,7 +53,7 @@
     "react-hook-form": "^7.53.0",
     "react-imask": "^7.6.1",
     "react-thailand-address-typeahead": "^2.0.1",
-    "recharts": "2",
+    "recharts": "^2.12.7",
     "zod": "^3.23.3"
   },
   "devDependencies": {

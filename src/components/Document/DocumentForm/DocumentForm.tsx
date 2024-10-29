@@ -72,7 +72,7 @@ export default function DocumentForm(props: Props) {
             variant="outline"
             {...props}
           >
-            Upload image
+            Upload PDF
           </Button>
         )}
       </FileButton>

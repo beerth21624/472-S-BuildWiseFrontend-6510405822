@@ -8,7 +8,15 @@ import useGetProject from "@/hooks/queries/project/useGetProject";
 import useGetQuotationByProject from "@/hooks/queries/quotation/useGetQuotationByProject";
 import { getBoqStatusMap } from "@/utils/boqStatusMap";
 import { getProjectStatusMap } from "@/utils/projectStatusMap";
-import { Badge, Button, Card, NumberFormatter, Text } from "@mantine/core";
+import { getQuotationStatusMap } from "@/utils/quotationStatusMap";
+import {
+  Badge,
+  Button,
+  Card,
+  Divider,
+  NumberFormatter,
+  Text,
+} from "@mantine/core";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
 import { AxiosError } from "axios";
@@ -71,63 +79,87 @@ export default function Project(
       quotationStatus === "approved" &&
       projectStatus === "planning"
     ) {
-      changeStatusProject.mutate(
-        {
-          project_id: props.id!,
-          status: "in_progress",
+      modals.openConfirmModal({
+        title: "ยืนยันการเปลี่ยนสถานะโครงการ",
+        children: (
+          <div className="flex gap-1 items-center">
+            ยืนยันการเปลี่ยนสถานะโครงการเป็น
+            <Badge>กำลังดำเนินการ</Badge>
+          </div>
+        ),
+        labels: { confirm: "ยืนยัน", cancel: "ยกเลิก" },
+        onConfirm: () => {
+          changeStatusProject.mutate(
+            {
+              project_id: props.id!,
+              status: "in_progress",
+            },
+            {
+              onSuccess: () => {
+                notifications.show({
+                  title: "สําเร็จ",
+                  message: "เปลี่ยนสถานะโครงการเรียบร้อย",
+                });
+                getQuoTationByProject.refetch();
+                getBoqFromProject.refetch();
+                getProjectApi.refetch();
+              },
+              onError: (error) => {
+                if (error instanceof AxiosError) {
+                  notifications.show({
+                    title: "เกิดข้อผิดพลาด",
+                    message: error.response?.data.error,
+                    color: "red",
+                  });
+                }
+              },
+            },
+          );
         },
-        {
-          onSuccess: () => {
-            notifications.show({
-              title: "สําเร็จ",
-              message: "เปลี่ยนสถานะโครงการเรียบร้อย",
-            });
-            getQuoTationByProject.refetch();
-            getBoqFromProject.refetch();
-            getProjectApi.refetch();
-          },
-          onError: (error) => {
-            if (error instanceof AxiosError) {
-              notifications.show({
-                title: "เกิดข้อผิดพลาด",
-                message: error.response?.data.error,
-                color: "red",
-              });
-            }
-          },
-        },
-      );
+      });
     } else if (
       boqStatus === "approved" &&
       quotationStatus === "approved" &&
       projectStatus === "in_progress"
     ) {
-      changeStatusProject.mutate(
-        {
-          project_id: props.id!,
-          status: "completed",
+      modals.openConfirmModal({
+        title: "ยืนยันการเปลี่ยนสถานะโครงการ",
+        children: (
+          <div className="flex gap-1 items-center">
+            ยืนยันการเปลี่ยนสถานะโครงการเป็น
+            <Badge>เสร็จสิ้น</Badge>
+          </div>
+        ),
+        labels: { confirm: "ยืนยัน", cancel: "ยกเลิก" },
+        onConfirm: () => {
+          changeStatusProject.mutate(
+            {
+              project_id: props.id!,
+              status: "completed",
+            },
+            {
+              onSuccess: () => {
+                notifications.show({
+                  title: "สําเร็จ",
+                  message: "เปลี่ยนสถานะโครงการเรียบร้อย",
+                });
+                getQuoTationByProject.refetch();
+                getBoqFromProject.refetch();
+                getProjectApi.refetch();
+              },
+              onError: (error) => {
+                if (error instanceof AxiosError) {
+                  notifications.show({
+                    title: "เกิดข้อผิดพลาด",
+                    message: error.response?.data.error,
+                    color: "red",
+                  });
+                }
+              },
+            },
+          );
         },
-        {
-          onSuccess: () => {
-            notifications.show({
-              title: "สําเร็จ",
-              message: "เปลี่ยนสถานะโครงการเรียบร้อย",
-            });
-            getQuoTationByProject.refetch();
-            getBoqFromProject.refetch();
-            getProjectApi.refetch();
-          },
-          onError: (error) => {
-            if (error instanceof AxiosError) {
-              notifications.show({
-                title: "เกิดข้อผิดพลาด",
-                message: error.response?.data.error,
-                color: "red",
-              });
-            }
-          },
-        },
-      );
+      });
     }
   };
 
@@ -173,6 +205,7 @@ export default function Project(
   const onCancelProject = () => {
     modals.openConfirmModal({
       ...DeleteConfirmModalConfig,
+      labels: { confirm: "ยกเลิกโครงการ", cancel: "ยกเลิก" },
       children: (
         <Text size="sm">
           คุณแน่ใจหรือไม่ว่าต้องการยกเลิกโครงการ{" "}
@@ -281,6 +314,7 @@ export default function Project(
                 </FieldLabel>
                 <FieldLabel labelClass="min-w-[5.4rem]" label="สถานที่">
                   {getProjectApi.data?.data.address.address},{" "}
+                  {getProjectApi.data?.data.address.subdistrict},{" "}
                   {getProjectApi.data?.data.address.district},{" "}
                   {getProjectApi.data?.data.address.province},{" "}
                   {getProjectApi.data?.data.address.postal_code}
@@ -296,9 +330,13 @@ export default function Project(
                 </FieldLabel>
               </div>
             </div>
-            <Link href={"/project/edit/" + props.id}>
-              <Button>แก้ไขรายละเอียด</Button>
-            </Link>
+            {getProjectApi.data?.data.status !== "cancelled" ? (
+              <Link href={"/project/edit/" + props.id}>
+                <Button>แก้ไขรายละเอียด</Button>
+              </Link>
+            ) : (
+              <Button disabled>แก้ไขรายละเอียด</Button>
+            )}
           </div>
         </Card>
         <Card withBorder className="flex flex-col">
@@ -316,9 +354,41 @@ export default function Project(
                     }
                   </FieldLabel>
                   <FieldLabel labelClass="min-w-[8rem]" label="Quotation สถานะ">
-                    โครงการคอนโด 30 ชั้น
+                    {
+                      getQuotationStatusMap(
+                        getQuoTationByProject.data?.data.status ?? "",
+                      )?.label
+                    }
                   </FieldLabel>
-                  <FieldLabel labelClass="min-w-[8rem]" label="กำไรประมาณการ">
+                  <Divider my={5} />
+                  <FieldLabel
+                    labelClass="min-w-[8rem]"
+                    label="ต้นทุนประเมินรวม"
+                  >
+                    <NumberFormatter
+                      value={getOverviewProject.data?.data.total_overall_cost?.toFixed(
+                        2,
+                      )}
+                      thousandSeparator
+                    />
+                  </FieldLabel>
+                  <FieldLabel labelClass="min-w-[8rem]" label="ราคาขาย">
+                    <NumberFormatter
+                      value={getOverviewProject.data?.data.total_selling_price?.toFixed(
+                        2,
+                      )}
+                      thousandSeparator
+                    />
+                  </FieldLabel>
+                  <FieldLabel labelClass="min-w-[8rem]" label="ราคาขายรวมภาษี">
+                    <NumberFormatter
+                      value={getOverviewProject.data?.data.total_with_tax?.toFixed(
+                        2,
+                      )}
+                      thousandSeparator
+                    />
+                  </FieldLabel>
+                  <FieldLabel labelClass="min-w-[8rem]" label="กำไรประเมิน">
                     <NumberFormatter
                       value={getOverviewProject.data?.data.estimated_profit?.toFixed(
                         2,
@@ -326,7 +396,23 @@ export default function Project(
                       thousandSeparator
                     />
                   </FieldLabel>
-                  <FieldLabel labelClass="min-w-[8rem]" label="ราคาขาย">
+                  <FieldLabel labelClass="min-w-[8rem]" label="ต้นทุนจริงรวม">
+                    <NumberFormatter
+                      value={getOverviewProject.data?.data.total_actual_cost?.toFixed(
+                        2,
+                      )}
+                      thousandSeparator
+                    />
+                  </FieldLabel>
+                  <FieldLabel labelClass="min-w-[8rem]" label="กำไรจริง">
+                    <NumberFormatter
+                      value={getOverviewProject.data?.data.actual_profit?.toFixed(
+                        2,
+                      )}
+                      thousandSeparator
+                    />
+                  </FieldLabel>
+                  {/* <FieldLabel labelClass="min-w-[8rem]" label="ราคาขาย">
                     <NumberFormatter
                       value={getOverviewProject.data?.data.total_selling_price?.toFixed(
                         2,
@@ -357,7 +443,7 @@ export default function Project(
                       )}
                       thousandSeparator
                     />
-                  </FieldLabel>
+                  </FieldLabel> */}
                 </div>
               </div>
             </div>

@@ -9,6 +9,7 @@ import router from "next/router";
 import { useEffect } from "react";
 import { ModalsProvider } from "@mantine/modals";
 
+import '@mantine/charts/styles.css';
 import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/nprogress/styles.css";

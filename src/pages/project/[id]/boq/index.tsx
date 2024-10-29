@@ -45,25 +45,41 @@ export default function BOQ(
   const approveBoq = useApproveBoq();
   const onChangeStatus = () => {
     modals.openConfirmModal({
-      title: "เปลี่ยนสถานะ",
-      children: <Text size="sm">คุณต้องการเปลี่ยนสถานะใช่หรือไม่ ?</Text>,
+      title: "ยืนยันการเปลี่ยนสถานะโครงการ",
+      children: (
+        <div className="flex items-center gap-1">
+          ยืนยันการเปลี่ยนสถานะโครงการเป็น
+          <Badge>เสร็จสิ้น</Badge>
+        </div>
+      ),
       labels: { confirm: "ยืนยัน", cancel: "ยกเลิก" },
       onConfirm: () => {
-        approveBoq.mutate(
-          {
-            boq_id: getBoqFromProject.data?.data.id!,
+        modals.openConfirmModal({
+          title: "เปลี่ยนสถานะ",
+          children: (
+            <div className="flex items-center gap-1">
+              คุณต้องการเปลี่ยนสถานะเป็น <Badge>อนุมัติ</Badge> ใช่หรือไม่ ?
+            </div>
+          ),
+          labels: { confirm: "ยืนยัน", cancel: "ยกเลิก" },
+          onConfirm: () => {
+            approveBoq.mutate(
+              {
+                boq_id: getBoqFromProject.data?.data.id!,
+              },
+              {
+                onSuccess: () => {
+                  notifications.show({
+                    title: "สําเร็จ",
+                    message: "อนุมัติ boq สําเร็จ",
+                    color: "green",
+                  });
+                  getBoqFromProject.refetch();
+                },
+              },
+            );
           },
-          {
-            onSuccess: () => {
-              notifications.show({
-                title: "สําเร็จ",
-                message: "อนุมัติ boq สําเร็จ",
-                color: "green",
-              });
-              getBoqFromProject.refetch();
-            },
-          },
-        );
+        });
       },
     });
   };
@@ -93,7 +109,10 @@ export default function BOQ(
           </div>
           <div className="flex items-center gap-2">
             {isApproved ? (
-              <a target="_blank" href={`/api/report/boq/${props.id}?user_id=${session?.user.id}`}>
+              <a
+                target="_blank"
+                href={`/api/report/boq/${props.id}?user_id=${session?.user.id}`}
+              >
                 <Button
                   variant="default"
                   leftSection={<IconFileText size={15} />}
