@@ -177,8 +177,7 @@ export default function QuotationForm(props: Props) {
           <div className="flex gap-5">
             <div className="flex justify-end">
               <div className="flex flex-col items-end font-bold">
-                <div>ราคารวม</div>
-                <div>ค่าใช้จ่ายอื่นๆ</div>
+                <div>ราคารวมค่าใช้จ่าย</div>
                 <div>ภาษี ({watch("tax_percentage")}%)</div>
                 <div>ราคารวมภาษี</div>
               </div>
@@ -187,18 +186,10 @@ export default function QuotationForm(props: Props) {
               <div className="flex flex-col">
                 <div>
                   <NumberFormatter
-                    value={_.sumBy(
+                    value={((_.sumBy(
                       getQuotationByProject.data?.data.jobs,
                       "total_selling_price",
-                    ).toFixed(2)}
-                    thousandSeparator
-                  />
-                </div>
-                <div>
-                  <NumberFormatter
-                    value={(
-                      getQuotationByProject.data?.data.selling_general_cost ?? 0
-                    ).toFixed(2)}
+                    )) + (getQuotationByProject.data?.data.selling_general_cost ?? 0)).toFixed(2)}
                     thousandSeparator
                   />
                 </div>

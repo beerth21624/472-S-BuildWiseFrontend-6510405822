@@ -9,6 +9,7 @@ import {
   IconRecordMail,
 } from "@tabler/icons-react";
 import { format, addMonths } from "date-fns";
+import _ from "lodash";
 import {
   type GetServerSidePropsContext,
   type InferGetServerSidePropsType,
@@ -24,6 +25,28 @@ export default function Quotation(
   const getCompanyByUser = useGetCompanyByUser({
     user_id: props.user_id ?? "",
   });
+
+  const getQuotationByProject = useGetQuotationByProject({
+    project_id: props.id ?? "",
+  });
+
+  const FinalPrice = () => {
+    const total_selling_price = _.sumBy(
+      getQuotationByProject.data?.data.jobs,
+      (o) => o.total_selling_price,
+    );
+
+    const selling_general_cost =
+      getQuotationByProject.data?.data.selling_general_cost ?? 0;
+
+    const tax_percentage = getQuotationByProject.data?.data.tax_percentage ?? 0;
+
+    const tax_amount =
+      (selling_general_cost + total_selling_price) * (tax_percentage / 100);
+    const total_price = selling_general_cost + total_selling_price;
+
+    return tax_amount + total_price;
+  };
 
   return (
     <div className="a4-vertical relative flex flex-col p-7 text-[14px]">
@@ -146,21 +169,10 @@ export default function Quotation(
         <div className="mb-8 flex justify-end">
           <div className="w-64">
             <div className="flex justify-between">
-              <span>ราคารวม</span>
+              <span>ราคารวมค่าใช้จ่าย</span>
               <span>
                 <NumberFormatter
                   value={getExportQuotationByProject.data?.data.sub_total.toFixed(
-                    2,
-                  )}
-                  thousandSeparator
-                />
-              </span>
-            </div>
-            <div className="flex justify-between">
-              <span>ค่าใช้จ่ายอื่นๆ</span>
-              <span>
-                <NumberFormatter
-                  value={getExportQuotationByProject.data?.data.selling_general_cost.toFixed(
                     2,
                   )}
                   thousandSeparator
@@ -184,7 +196,7 @@ export default function Quotation(
               <span>ราคารวมภาษี</span>
               <span>
                 <NumberFormatter
-                  value={getExportQuotationByProject.data?.data.final_amount.toFixed(
+                  value={FinalPrice().toFixed(
                     2,
                   )}
                   thousandSeparator
