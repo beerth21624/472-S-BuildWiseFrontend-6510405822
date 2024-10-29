@@ -1,4 +1,4 @@
-import { Alert, Button, PasswordInput, TextInput } from "@mantine/core";
+import { Alert, Button, PasswordInput, Text, TextInput } from "@mantine/core";
 import { IconInfoCircle } from "@tabler/icons-react";
 import {
   type GetServerSidePropsContext,
@@ -13,12 +13,15 @@ export default function SignIn(
   const username = useRef<HTMLInputElement>(null);
   const password = useRef<HTMLInputElement>(null);
   return (
-    <div className="mx-auto max-w-md">
+    <div className="mx-auto flex min-h-screen max-w-md items-center justify-center px-3">
       <form
         method="post"
         action="/api/auth/callback/credentials"
-        className="flex flex-col gap-3"
+        className="flex w-full flex-col gap-3"
       >
+        <Text size="xl" fw={700}>
+          Build Wise
+        </Text>
         {props.error && (
           <Alert
             variant="light"

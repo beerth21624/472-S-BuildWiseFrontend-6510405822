@@ -1,3 +1,4 @@
+import useGetCompanyByUser from "@/hooks/queries/company/useGetCompanyByUser";
 import useGetExportQuotationByProject from "@/hooks/queries/quotation/useGetExportQuotationByProject";
 import useGetQuotationByProject from "@/hooks/queries/quotation/useGetQuotationByProject";
 import { Badge, Divider, NumberFormatter, Table } from "@mantine/core";
@@ -20,7 +21,9 @@ export default function Quotation(
     project_id: props.id ?? "",
   });
 
-  console.log(getExportQuotationByProject.data?.data);
+  const getCompanyByUser = useGetCompanyByUser({
+    user_id: props.user_id ?? "",
+  });
 
   return (
     <div className="a4-vertical relative flex flex-col p-7 text-[14px]">
@@ -28,12 +31,12 @@ export default function Quotation(
         <div className="flex items-start justify-between">
           <div>
             <h2 className="mb-1 font-semibold">ผู้ทำใบเสนอราคา</h2>
-            <p>บริษัท เทสล่า มอเตอร์ (ประเทศไทย) จำกัด</p>
-            <p>123 ถนนเจริญกรุง ทุ่งมหาเมฆ สาทร กรุงเทพมหานคร 10120</p>
+            <p>{getCompanyByUser.data?.data.name}</p>
+            <p>{getCompanyByUser.data?.data.address?.address}, {getCompanyByUser.data?.data.address?.subdistrict}, {getCompanyByUser.data?.data.address?.district}, {getCompanyByUser.data?.data.address?.province}, {getCompanyByUser.data?.data.address?.postal_code}</p>
             <div className="flex gap-5">
               <div className="flex items-center gap-1">
                 <IconPhone size={15} />
-                <div>0234567891</div>
+                <div>{getCompanyByUser.data?.data.tel}</div>
               </div>
               <div className="flex items-center gap-1">
                 <IconMail size={15} />
@@ -43,7 +46,7 @@ export default function Quotation(
           </div>
           <div className="text-right">
             <h1 className="text-2xl font-bold">ใบเสนอราคา</h1>
-            <div>{getExportQuotationByProject.data?.data.ProjectName}</div>
+            <div>{getExportQuotationByProject.data?.data.project_name}</div>
             <div>
               <div>
                 <span className="font-semibold">Issued Date:</span>{" "}
@@ -61,22 +64,29 @@ export default function Quotation(
         <div>
           <div className="mb-8">
             <h2 className="mb-1 font-semibold">ลูกค้า</h2>
-            <p>{getExportQuotationByProject.data?.data.ClientName}</p>
+            <p>{getExportQuotationByProject.data?.data.client_name}</p>
             <p>
-              {getExportQuotationByProject.data?.data.ClientAddress.address},{" "}
-              {getExportQuotationByProject.data?.data.ClientAddress.subdistrict}
-              , {getExportQuotationByProject.data?.data.ClientAddress.district},{" "}
-              {getExportQuotationByProject.data?.data.ClientAddress.province},{" "}
-              {getExportQuotationByProject.data?.data.ClientAddress.postal_code}
+              {getExportQuotationByProject.data?.data.client_address.address},{" "}
+              {
+                getExportQuotationByProject.data?.data.client_address
+                  .subdistrict
+              }
+              , {getExportQuotationByProject.data?.data.client_address.district}
+              , {getExportQuotationByProject.data?.data.client_address.province}
+              ,{" "}
+              {
+                getExportQuotationByProject.data?.data.client_address
+                  .postal_code
+              }
             </p>
             <div className="flex gap-5">
               <div className="flex items-center gap-1">
                 <IconPhone size={15} />
-                <div>{getExportQuotationByProject.data?.data.ClientTel}</div>
+                <div>{getExportQuotationByProject.data?.data.client_tel}</div>
               </div>
               <div className="flex items-center gap-1">
                 <IconMail size={15} />
-                <div>{getExportQuotationByProject.data?.data.ClientEmail}</div>
+                <div>{getExportQuotationByProject.data?.data.client_email}</div>
               </div>
             </div>
           </div>
@@ -93,38 +103,36 @@ export default function Quotation(
             </tr>
           </thead>
           <tbody>
-            {getExportQuotationByProject.data?.data.JobDetails.map(
-              (job, index) => (
-                <tr key={index}>
-                  <td className="px-4">
-                    <p className="font-semibold">{job.Name}</p>
-                  </td>
-                  <td className="px-4 text-center">
-                    <Badge variant="light">{job.Unit}</Badge>
-                  </td>
-                  <td className="px-4 text-center">
-                    <NumberFormatter
-                      value={job.Amount.Float64.toFixed(2)}
-                      thousandSeparator
-                    />
-                  </td>
-                  <td className="px-4 text-right">
-                    <NumberFormatter
-                      value={job.SellingPrice.Float64.toFixed(2)}
-                      thousandSeparator
-                    />
-                  </td>
-                  <td className="px-4 text-right">
-                    <NumberFormatter
-                      value={(
-                        job.SellingPrice.Float64 * job.Amount.Float64
-                      ).toFixed(2)}
-                      thousandSeparator
-                    />
-                  </td>
-                </tr>
-              ),
-            )}
+            {getExportQuotationByProject.data?.data.jobs.map((job, index) => (
+              <tr key={index}>
+                <td className="px-4">
+                  <p className="font-semibold">{job.name}</p>
+                </td>
+                <td className="px-4 text-center">
+                  <Badge variant="light">{job.unit}</Badge>
+                </td>
+                <td className="px-4 text-center">
+                  <NumberFormatter
+                    value={(job.amount ?? 0).toFixed(2)}
+                    thousandSeparator
+                  />
+                </td>
+                <td className="px-4 text-right">
+                  <NumberFormatter
+                    value={(job.selling_price ?? 0).toFixed(2)}
+                    thousandSeparator
+                  />
+                </td>
+                <td className="px-4 text-right">
+                  <NumberFormatter
+                    value={(
+                      (job.selling_price ?? 0) * (job.amount ?? 0)
+                    ).toFixed(2)}
+                    thousandSeparator
+                  />
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
         <Divider my={10} />
@@ -132,27 +140,49 @@ export default function Quotation(
         <div className="mb-8 flex justify-end">
           <div className="w-64">
             <div className="flex justify-between">
+              <span>ราคารวม</span>
               <span>
-                ราคารวม
+                <NumberFormatter
+                  value={getExportQuotationByProject.data?.data.sub_total.toFixed(
+                    2,
+                  )}
+                  thousandSeparator
+                />
               </span>
-              <span>7 %</span>
             </div>
-            <div className="flex justify-between font-bold">
+            <div className="flex justify-between">
               <span>ค่าใช้จ่ายอื่นๆ</span>
               <span>
-                
+                <NumberFormatter
+                  value={getExportQuotationByProject.data?.data.final_amount.toFixed(
+                    2,
+                  )}
+                  thousandSeparator
+                />
               </span>
             </div>
-            <div className="flex justify-between font-bold">
-              <span>ค่าภาษี</span>
+            <div className="flex justify-between">
               <span>
-                
+                ค่าภาษี {getExportQuotationByProject.data?.data.tax_percentage}%
+              </span>
+              <span>
+                <NumberFormatter
+                  value={getExportQuotationByProject.data?.data.tax_amount.toFixed(
+                    2,
+                  )}
+                  thousandSeparator
+                />
               </span>
             </div>
             <div className="flex justify-between font-bold">
               <span>ราคารวมภาษี</span>
               <span>
-                
+                <NumberFormatter
+                  value={getExportQuotationByProject.data?.data.final_amount.toFixed(
+                    2,
+                  )}
+                  thousandSeparator
+                />
               </span>
             </div>
           </div>
@@ -182,6 +212,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   return {
     props: {
       id: context.query.id?.toString(),
+      user_id: context.query.user_id?.toString(),
     },
   };
 }

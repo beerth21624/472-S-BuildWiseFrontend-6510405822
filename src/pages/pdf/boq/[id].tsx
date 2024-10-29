@@ -251,6 +251,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   return {
     props: {
       id: context.query.id?.toString(),
+      user_id: context.query.user_id?.toString(),
     },
   };
 }

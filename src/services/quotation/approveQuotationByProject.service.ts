@@ -9,7 +9,7 @@ const approveQuotationByProject = async (
   props: ApproveQuotationByProjectProps,
 ) => {
   try {
-    const res = await axiosAPI.post<BaseResponse<object>>(
+    const res = await axiosAPI.put<BaseResponse<object>>(
       `/quotations/projects/${props.project_id}/approve`,
     );
     return res.data;

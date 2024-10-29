@@ -3,6 +3,8 @@ import puppeteer, { type PDFOptions } from "puppeteer";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const quotation_id = req.query.id?.toString();
+  const user_id = req.query.user_id?.toString();
+
   const browser = await puppeteer.launch({
     headless: true,
     executablePath:
@@ -23,7 +25,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   await page.setViewport({ width: 1000, height: 0 });
 
-  await page.goto(`${process.env.NEXTAUTH_URL}/pdf/quotation/${quotation_id}`, {
+  await page.goto(`${process.env.NEXTAUTH_URL}/pdf/quotation/${quotation_id}?user_id=${user_id}`, {
     waitUntil: "networkidle2",
   });
 

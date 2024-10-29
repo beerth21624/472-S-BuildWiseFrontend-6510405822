@@ -8,6 +8,7 @@ import {
   type IconProps,
   type Icon,
   IconTruck,
+  IconBuilding,
 } from "@tabler/icons-react";
 import classes from "./Menu.module.css";
 import clsx from "clsx";
@@ -41,6 +42,11 @@ const menuList: MenuList[] = [
     link: "/material",
     label: "วัสดุ",
     icon: IconBox,
+  },
+  {
+    link: "/company",
+    label: "บริษัท", 
+    icon: IconBuilding,
   },
 ];
 
@@ -90,14 +96,25 @@ export function Menu() {
 
   return (
     <nav>
-      <div className={clsx("mt-3 flex flex-col")}>{links}</div>
+      {sessionStatus === "authenticated" && (
+        <div className={clsx("mt-3 flex flex-col")}>{links}</div>
+      )}
 
       {sessionStatus === "authenticated" ? (
-        <Card p={3} className="flex flex-col">
-          <Button py={0} variant="white" justify="start">
-            {session.user.email}
-          </Button>
-          <Button
+        <div className="mt-5">
+          <NavLink label={session.user.email} px={20} />
+          <NavLink
+            onClick={() => {
+              void signOut();
+            }}
+            leftSection={<IconLogout stroke={1.5} />}
+            label={"ออกจากระบบ"}
+            color="red"
+            variant="subtle"
+            px={20}
+          />
+
+          {/* <Button
             justify="start"
             variant={"subtle"}
             color="red"
@@ -108,8 +125,8 @@ export function Menu() {
             leftSection={<IconLogout stroke={1.5} />}
           >
             ออกจากระบบ
-          </Button>
-        </Card>
+          </Button> */}
+        </div>
       ) : (
         <div className={classes.footer}>
           <Link href="/auth/sign-in">

@@ -30,6 +30,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     "/pdf/quotation/[id]",
     "/pdf/boq/[id]",
     "/pdf",
+    "/auth/sign-in"
   ];
 
   if (excludeStartPathname.includes(router.pathname)) {

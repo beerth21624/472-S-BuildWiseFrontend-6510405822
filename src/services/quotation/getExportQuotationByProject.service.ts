@@ -2,34 +2,32 @@ import { type BaseResponse } from "@/types/BaseResponse.type";
 import { axiosAPI } from "@/utils/axios";
 
 interface Data {
-  ProjectID: string;
-  ProjectName: string;
-  Description: string;
-  Address: Address;
-  ClientName: string;
-  ClientAddress: Address;
-  ClientEmail: string;
-  ClientTel: string;
-  ClientTaxID: string;
-  QuotationID: string;
-  ValidDate: string;
-  TaxPercentage: number;
-  FinalAmount: FinalAmount;
-  Status: string;
-  JobDetails: JobDetail[];
+  project_id: string;
+  project_name: string;
+  description: string;
+  address: Address;
+  client_name: string;
+  client_address: Address;
+  client_email: string;
+  client_tel: string;
+  client_tax_id: string;
+  quotation_id: string;
+  valid_date: string;
+  tax_percentage: number;
+  status: string;
+  sub_total: number;
+  tax_amount: number;
+  jobs: Job[];
+  final_amount: number;
 }
 
-interface JobDetail {
-  Name: string;
-  Unit: string;
-  Quantity: number;
-  SellingPrice: FinalAmount;
-  Amount: FinalAmount;
-}
-
-interface FinalAmount {
-  Float64: number;
-  Valid: boolean;
+interface Job {
+  name: string;
+  description: string;
+  unit: string;
+  quantity: number;
+  selling_price: null;
+  amount: null;
 }
 
 interface Address {

@@ -32,10 +32,12 @@ import Link from "next/link";
 import useApproveBoq from "@/hooks/mutates/boq/useApproveBoq";
 import { notifications } from "@mantine/notifications";
 import { modals } from "@mantine/modals";
+import { useSession } from "next-auth/react";
 
 export default function BOQ(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
+  const { data: session } = useSession();
   const getProject = useGetProject({ id: props.id ?? "" });
   const getBoqFromProject = useGetBoqFromProject({
     project_id: props.id ?? "",
@@ -91,7 +93,7 @@ export default function BOQ(
           </div>
           <div className="flex items-center gap-2">
             {isApproved ? (
-              <a target="_blank" href={`/api/report/boq/${props.id}`}>
+              <a target="_blank" href={`/api/report/boq/${props.id}?user_id=${session?.user.id}`}>
                 <Button
                   variant="default"
                   leftSection={<IconFileText size={15} />}

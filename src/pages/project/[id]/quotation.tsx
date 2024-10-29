@@ -23,10 +23,12 @@ import {
   type GetServerSidePropsContext,
   type InferGetServerSidePropsType,
 } from "next";
+import { useSession } from "next-auth/react";
 
 export default function Quotation(
   props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
+  const { data: session } = useSession();
   const getProjectApi = useGetProject({
     id: props.id ?? "",
   });
@@ -52,6 +54,7 @@ export default function Quotation(
                 message: "อนุมัติใบเสนอราคาสําเร็จ",
                 color: "green",
               });
+              getQuotationByProject.refetch();
             },
             onError: (error) => {
               if (error instanceof AxiosError) {
@@ -96,14 +99,27 @@ export default function Quotation(
             </Text>
           </div>
           <div className="flex items-center gap-2">
-            <a target="_blank" href={`/api/report/quotation/${props.id}`}>
+            {/* <a target="_blank" href={`/api/report/quotation/${props.id}`}>
               <Button
                 variant="default"
                 leftSection={<IconFileText size={15} />}
               >
                 Export
               </Button>
-            </a>
+            </a> */}
+            {isDisable && (
+              <a
+                target="_blank"
+                href={`/api/report/quotation/${props.id}?user_id=${session?.user.id}`}
+              >
+                <Button
+                  variant="default"
+                  leftSection={<IconFileText size={15} />}
+                >
+                  Export
+                </Button>
+              </a>
+            )}
             <Button disabled={isDisable} onClick={onChangeStatus}>
               เปลี่ยนสถานะ
             </Button>
@@ -151,21 +167,21 @@ export default function Quotation(
                 accessor: "total_selling_price",
                 title: "ราคาขายรวม",
               },
-            //   {
-            //     accessor: "name",
-            //     title: "",
-            //     render: () => (
-            //       <div className="flex gap-2">
-            //         <Button
-            //           disabled={isDisable}
-            //           variant="light"
-            //           leftSection={<IconPencil size={15} />}
-            //         >
-            //           แก้ไขราคาขาย
-            //         </Button>
-            //       </div>
-            //     ),
-            //   },
+              //   {
+              //     accessor: "name",
+              //     title: "",
+              //     render: () => (
+              //       <div className="flex gap-2">
+              //         <Button
+              //           disabled={isDisable}
+              //           variant="light"
+              //           leftSection={<IconPencil size={15} />}
+              //         >
+              //           แก้ไขราคาขาย
+              //         </Button>
+              //       </div>
+              //     ),
+              //   },
             ]}
           />
         </Card>
