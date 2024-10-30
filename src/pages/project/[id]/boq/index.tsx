@@ -4,31 +4,19 @@ import GeneralCost from "@/components/Boq/GeneralCost/GeneralCost";
 import useGetBoqFromProject from "@/hooks/queries/boq/useGetBoqFromProject";
 import useGetProject from "@/hooks/queries/project/useGetProject";
 import { getBoqStatusMap } from "@/utils/boqStatusMap";
-import { getProjectStatusMap } from "@/utils/projectStatusMap";
 import {
   Badge,
   Button,
-  Menu,
-  rem,
-  Select,
-  Table,
   Tabs,
   Text,
-  TextInput,
-  UnstyledButton,
 } from "@mantine/core";
 import {
-  IconDotsVertical,
   IconFileText,
-  IconPencil,
-  IconTrash,
 } from "@tabler/icons-react";
-import { DataTable } from "mantine-datatable";
 import {
   type GetServerSidePropsContext,
   type InferGetServerSidePropsType,
 } from "next";
-import Link from "next/link";
 import useApproveBoq from "@/hooks/mutates/boq/useApproveBoq";
 import { notifications } from "@mantine/notifications";
 import { modals } from "@mantine/modals";
@@ -45,43 +33,31 @@ export default function BOQ(
   const approveBoq = useApproveBoq();
   const onChangeStatus = () => {
     modals.openConfirmModal({
-      title: "ยืนยันการเปลี่ยนสถานะโครงการ",
-      children: (
-        <div className="flex items-center gap-1">
-          ยืนยันการเปลี่ยนสถานะโครงการเป็น
-          <Badge>เสร็จสิ้น</Badge>
-        </div>
-      ),
-      labels: { confirm: "ยืนยัน", cancel: "ยกเลิก" },
-      onConfirm: () => {
-        modals.openConfirmModal({
-          title: "เปลี่ยนสถานะ",
-          children: (
-            <div className="flex items-center gap-1">
-              คุณต้องการเปลี่ยนสถานะเป็น <Badge>อนุมัติ</Badge> ใช่หรือไม่ ?
-            </div>
-          ),
-          labels: { confirm: "ยืนยัน", cancel: "ยกเลิก" },
-          onConfirm: () => {
-            approveBoq.mutate(
-              {
-                boq_id: getBoqFromProject.data?.data.id!,
+        title: "เปลี่ยนสถานะ",
+        children: (
+          <div className="flex items-center gap-1">
+            คุณต้องการเปลี่ยนสถานะเป็น <Badge>อนุมัติ</Badge> ใช่หรือไม่ ?
+          </div>
+        ),
+        labels: { confirm: "ยืนยัน", cancel: "ยกเลิก" },
+        onConfirm: () => {
+          approveBoq.mutate(
+            {
+              boq_id: getBoqFromProject.data?.data.id!,
+            },
+            {
+              onSuccess: () => {
+                notifications.show({
+                  title: "สําเร็จ",
+                  message: "อนุมัติ boq สําเร็จ",
+                  color: "green",
+                });
+                getBoqFromProject.refetch();
               },
-              {
-                onSuccess: () => {
-                  notifications.show({
-                    title: "สําเร็จ",
-                    message: "อนุมัติ boq สําเร็จ",
-                    color: "green",
-                  });
-                  getBoqFromProject.refetch();
-                },
-              },
-            );
-          },
-        });
-      },
-    });
+            },
+          );
+        },
+      });
   };
 
   const isApproved = getBoqFromProject.data?.data.status === "approved";
