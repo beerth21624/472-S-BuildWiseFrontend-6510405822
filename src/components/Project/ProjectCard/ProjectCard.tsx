@@ -7,6 +7,7 @@ import {
 import {
   IconCalendar,
 } from "@tabler/icons-react";
+import { format } from "date-fns";
 import Link from "next/link";
 
 interface Props {
@@ -38,7 +39,7 @@ export default function ProjectCard(props: Props) {
         <div className="flex items-center gap-1">
           <IconCalendar className="text-gray-400" size={15} />
           <Text c="dimmed" size="xs">
-            20 ก.ย. 2024
+            {format(props.project.updated_at, "dd/MMM/yyyy HH:mm")}
           </Text>
         </div>
       </div>
