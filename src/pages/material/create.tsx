@@ -13,7 +13,7 @@ export default function MaterialCreate() {
   const onCreate = (data: MaterialSchemaType) => {
     const keyNotification = notifications.show({
       title: "กำลังโหลด",
-      message: "กำลังสร้างวัดสุ กรุณารอสักครู่...",
+      message: "กำลังสร้างวัสดุ กรุณารอสักครู่...",
       color: "green",
       loading: true,
     });
@@ -26,7 +26,7 @@ export default function MaterialCreate() {
         onSuccess: () => {
           notifications.update({
             title: "สําเร็จ",
-            message: "สร้างวัดสุ สําเร็จ",
+            message: "สร้างวัสดุ สําเร็จ",
             color: "green",
             id: keyNotification,
             loading: false,

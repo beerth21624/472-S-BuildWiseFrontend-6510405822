@@ -107,7 +107,7 @@ export default function QuotationForm(props: Props) {
                 ราคาค่าแรงต่อหน่วย
               </Table.Th>
               <Table.Th className="whitespace-nowrap">
-                ราคาวัดสุประเมินต่อหน่วย
+                ราคาวัสดุประเมินต่อหน่วย
               </Table.Th>
               <Table.Th className="whitespace-nowrap">
                 ราคาประเมินรวมต่อหน่วย
