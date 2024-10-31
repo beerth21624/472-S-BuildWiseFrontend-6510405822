@@ -19,6 +19,11 @@ export default function BoqReport(
     project_id: props.id ?? "",
   });
 
+  const totalGeneralCost = _.sumBy(
+    getExportBoqFromProject.data?.data.general_costs,
+    (o) => o.estimated_cost,
+  );
+
   return (
     <div className="a4-horizontal relative flex flex-col p-5 text-[14px]">
       <div>
@@ -197,8 +202,8 @@ export default function BoqReport(
               <td className="border px-2 py-1 text-right text-red-600">
                 <NumberFormatter
                   value={(
-                    getExportBoqFromProject.data?.data.summary_metrics
-                      .total_amount ?? 0
+                    (getExportBoqFromProject.data?.data.summary_metrics
+                      .total_amount ?? 0) + totalGeneralCost
                   ).toFixed(2)}
                   thousandSeparator
                 />
@@ -219,8 +224,8 @@ export default function BoqReport(
                 /> */}
                 <NumberFormatter
                   value={(
-                    getExportBoqFromProject.data?.data.summary_metrics
-                      .total_amount ?? 0
+                    (getExportBoqFromProject.data?.data.summary_metrics
+                      .total_amount ?? 0) + totalGeneralCost
                   ).toFixed(2)}
                   thousandSeparator
                 />
