@@ -106,8 +106,8 @@ export default function ContractForm(props: Props) {
                         control={control}
                         name="start_date"
                         props={{
-                            label: "วันที่เริ่มต้นสัญญา",
-                            placeholder: "ระบุวันที่เริ่มต้นสัญญา",
+                            label: "วันเริ่มงาน",
+                            placeholder: "ระบุวันเริ่มงาน",
                             withAsterisk: true,
                             className: "w-full"
                         }}
@@ -116,8 +116,8 @@ export default function ContractForm(props: Props) {
                         control={control}
                         name="end_date"
                         props={{
-                            label: "วันที่สิ้นสุดสัญญา",
-                            placeholder: "ระบุวันที่สิ้นสุดสัญญา",
+                            label: "วันเสร็จสิ้นงาน",
+                            placeholder: "ระบุวันเสร็จสิ้นงาน",
                             withAsterisk: true,
                             className: "w-full"
                         }}
@@ -130,7 +130,7 @@ export default function ContractForm(props: Props) {
                     name="validate_within"
                     props={{
                         label: "4. ระยะเวลาในการตรวจรับมอบงาน (วัน)",
-                        description: "ระบุจำนวนวันให้ผู้ว่าจ้างหรือตัวแทนตรวจรับมอบงาน นับแต่วันที่ผู้รับจ้างได้มีหนังสือเป็นลายลักษณ์อักษรแจ้งให้ทราบ",
+                        description: "ระบุจำนวนวันว่าให้ผู้ว่าจ้างหรือตัวแทนตรวจรับมอบงวดงานภายในกี่วัน นับตั้งแต่วันที่......",
                         placeholder: "จำนวนวัน",
                         withAsterisk: true,
                         className: "w-full"
@@ -179,7 +179,7 @@ export default function ContractForm(props: Props) {
                 control={control}
                 name="amendment"
                 props={{
-                    label: "8. งานพิเศษและการแก้ไข เพิ่มเติม เปลี่ยนแปลงงาน",
+                    label: "8. งานพิเศษและการแก้ไข เพิ่มเติม เปลี่ยนแปลงงาน นับถัดจากวันที่ได้รับมอบงานดังกล่าว",
                     description: "ระบุรายละเอียดเกี่ยวกับงานพิเศษและการแก้ไข เพิ่มเติม เปลี่ยนแปลงงาน ตามข้อตกลง",
                     placeholder: "รายละเอียดงานพิเศษและการแก้ไข เพิ่มเติม เปลี่ยนแปลงงาน",
                     withAsterisk: true,

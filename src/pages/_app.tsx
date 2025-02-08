@@ -19,7 +19,7 @@ import "mantine-datatable/styles.layer.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const themeMantine = createTheme({
-  fontFamily: "Anuphan",
+  fontFamily: "Noto Sans Thai",
   radius: {
     sm: "0.4rem",
   },
