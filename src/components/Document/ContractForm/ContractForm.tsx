@@ -2,13 +2,13 @@ import ControlledDatePicker from "@/components/Controlled/ControlledDatePicker";
 import ControlledInputNumber from "@/components/Controlled/ControlledInputNumber";
 import ControlledInputText from "@/components/Controlled/ControlledInputText";
 import ControlledInputTextarea from "@/components/Controlled/ControlledInputTextarea";
-import ControlledMultiSelect from "@/components/Controlled/ControlledMultiSelect";
 import { contractSchema, type ContractSchemaType } from "@/schemas/document/contract/contract.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ActionIcon, Button, Group, Input, InputLabel, Text } from "@mantine/core";
+import { ActionIcon, Button, Group, Input, Paper, Stack } from "@mantine/core";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
 import { useEffect } from "react";
 import { useFieldArray, useForm } from "react-hook-form";
+import PeriodForm from "./PeriodForm/PeriodForm";
 
 interface Props {
     type: "create" | "edit";
@@ -28,7 +28,12 @@ export default function ContractForm(props: Props) {
     });
 
     const attachmentsFields = useFieldArray({
-        name: "attachments",
+        name: "format",
+        control,
+    })
+
+    const periodsFields = useFieldArray({
+        name: "periods",
         control,
     })
 
@@ -65,7 +70,7 @@ export default function ContractForm(props: Props) {
                         <ControlledInputText
                             key={field.id}
                             control={control}
-                            name={`attachments.${index}.value`}
+                            name={`format.${index}.value`}
                             props={{
                                 placeholder: "กรอกรูปแบบและรายการแนบท้ายสัญญา",
                                 withAsterisk: true,
@@ -83,18 +88,47 @@ export default function ContractForm(props: Props) {
                     </ActionIcon>
                 </div>
             </div>
-            <div className="flex flex-col gap-2 max-w-xl">
-                <Input.Wrapper withAsterisk label="ราคา" />
-                {attachmentsFields.fields.map((field, index) => (
-                    <div key={field.id} className="flex gap-3 items-center">
-
-                        <ActionIcon variant="light" onClick={() => attachmentsFields.remove(index)}>
-                            <IconTrash size={20} />
-                        </ActionIcon>
-                    </div>
+            <div className="flex flex-col gap-2 ">
+                <Input.Wrapper withAsterisk label="2. ราคา" />
+                {periodsFields.fields.map((field, index) => (
+                    <Paper key={field.id} component={Stack} withBorder p={"sm"}>
+                        <Input.Wrapper withAsterisk label={`งวดที่ ${index + 1}`} />
+                        <div key={field.id} className="flex gap-3 items-center pl-10">
+                            <ControlledInputNumber
+                                key={field.id}
+                                control={control}
+                                name={`periods.${index}.amount_period`}
+                                props={{
+                                    label: `${index + 1}. จำนวนเงิน`,
+                                    withAsterisk: true,
+                                    className: "w-full",
+                                    thousandSeparator: true,
+                                }}
+                            />
+                            <ControlledDatePicker
+                                key={field.id}
+                                control={control}
+                                name={`periods.${index}.delivered_within`}
+                                props={{
+                                    label: "กำหนดวันส่งมอบ",
+                                    placeholder: "ระบุวันส่งมอบ",
+                                    withAsterisk: true,
+                                    className: "w-full",
+                                    disabled: index === 0
+                                }}
+                            />
+                            <ActionIcon variant="light" color="red" onClick={() => periodsFields.remove(index)}>
+                                <IconTrash size={20} />
+                            </ActionIcon>
+                        </div>
+                        <div className="pl-10 flex flex-col">
+                            <Input.Wrapper withAsterisk label={`เลือกงาน`} className="" />
+                            <PeriodForm control={control} name={`periods.${index}.jobs`} />
+                        </div>
+                    </Paper>
                 ))}
                 <div className="flex">
-                    <ActionIcon variant="light" onClick={() => attachmentsFields.append({ value: "" })}>
+                    <ActionIcon variant="light" onClick={() => periodsFields.append({ amount_period: 0, delivered_within: null, jobs: [] })}>
                         <IconPlus size={20} />
                     </ActionIcon>
                 </div>
@@ -109,7 +143,8 @@ export default function ContractForm(props: Props) {
                             label: "วันเริ่มงาน",
                             placeholder: "ระบุวันเริ่มงาน",
                             withAsterisk: true,
-                            className: "w-full"
+                            className: "w-full",
+                            clearable: true,
                         }}
                     />
                     <ControlledDatePicker
@@ -119,7 +154,8 @@ export default function ContractForm(props: Props) {
                             label: "วันเสร็จสิ้นงาน",
                             placeholder: "ระบุวันเสร็จสิ้นงาน",
                             withAsterisk: true,
-                            className: "w-full"
+                            className: "w-full",
+                            clearable: true,
                         }}
                     />
                 </Group>
