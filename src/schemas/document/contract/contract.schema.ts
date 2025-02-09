@@ -5,7 +5,7 @@ const periodSchema = z.object({
     .number({ required_error: "กรุณากรอกจำนวนเงิน" })
     .min(0, { message: "จำนวนเงินไม่ถูกต้อง" }),
   delivered_within: z
-    .date({ required_error: "กรุณากรอกกำหนดวันส่งมอบ" })
+    .number({ required_error: "กรุณาระบุจำนวนวันในการส่งมอบ" })
     .nullable()
     .optional(),
   jobs: z
@@ -30,10 +30,9 @@ export const contractSchema = z.object({
     }),
     { required_error: "กรุณาเพิ่มรูปแบบและรายการแนบท้ายสัญญา" },
   ),
-  first_period: periodSchema,
   periods: z.array(periodSchema),
-  start_date: z.string({ required_error: "กรุณาระบุวันเริ่มงาน" }),
-  end_date: z.string({ required_error: "กรุณาระบุวันเสร็จสิ้นงาน" }),
+  start_date: z.date({ required_error: "กรุณาระบุวันเริ่มงาน" }),
+  end_date: z.date({ required_error: "กรุณาระบุวันเสร็จสิ้นงาน" }),
   validate_within: z.number({
     required_error: "กรุณาระบุระยะเวลาในการตรวจรับมอบงาน",
   }),

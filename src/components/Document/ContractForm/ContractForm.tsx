@@ -44,9 +44,29 @@ export default function ContractForm(props: Props) {
 
     useEffect(() => {
         if (props.data) {
-
+            
         }
+
+        setValue("project_id", "1");
+        setValue("area_size", 200);
+        setValue("format", [{ value: "รูปแบบและรายการแนบท้ายสัญญา" }, { value: "รูปแบบและรายการแนบท้ายสัญญา" }]);
+        setValue("periods", [{ amount_period: 10000 }, { amount_period: 10000, delivered_within: 20, jobs: [{ job_id: "1", job_amount: 10000 }] }]);
+        setValue("start_date", new Date());
+        setValue("end_date", new Date());
+        setValue("validate_within", 10);
+        setValue("pay_within", 10);
+        setValue("retention_money", 10000);
+        setValue("guarantee_within", 10);
+        setValue("amendment", "งานพิเศษและการแก้ไข เพิ่มเติม เปลี่ยนแปลงงาน");
+        setValue("termination_of_contract", "เหตุผลในการบอกเลิกสัญญา");
+        setValue("end_of_contract", "เงื่อนไขการสิ้นสุดสัญญา");
+        setValue("breach_of_contract", "การผิดสัญญา");
+        setValue("force_majeure", "เหตุสุดวิสัย");
+
     }, [props.data, setValue]);
+
+    console.log(errors);
+    
 
     return (
         <form className="flex flex-col gap-3" onSubmit={handleSubmit(onFinish)}>
@@ -92,8 +112,13 @@ export default function ContractForm(props: Props) {
                 <Input.Wrapper withAsterisk label="2. ราคา" />
                 {periodsFields.fields.map((field, index) => (
                     <Paper key={field.id} component={Stack} withBorder p={"sm"}>
-                        <Input.Wrapper withAsterisk label={`งวดที่ ${index + 1}`} />
-                        <div key={field.id} className="flex gap-3 items-center pl-10">
+                        <Group justify="space-between">
+                            <Input.Wrapper withAsterisk label={`งวดที่ ${index + 1}`} />
+                            <ActionIcon variant="light" color="red" onClick={() => periodsFields.remove(index)}>
+                                <IconTrash size={20} />
+                            </ActionIcon>
+                        </Group>
+                        <div key={field.id} className="flex gap-3 items-center">
                             <ControlledInputNumber
                                 key={field.id}
                                 control={control}
@@ -105,23 +130,22 @@ export default function ContractForm(props: Props) {
                                     thousandSeparator: true,
                                 }}
                             />
-                            <ControlledDatePicker
+                            <ControlledInputNumber
                                 key={field.id}
                                 control={control}
                                 name={`periods.${index}.delivered_within`}
                                 props={{
-                                    label: "กำหนดวันส่งมอบ",
-                                    placeholder: "ระบุวันส่งมอบ",
+                                    label: "ส่งมอบภายในกี่วัน",
+                                    placeholder: "ระบุจำนวนวัน",
                                     withAsterisk: true,
                                     className: "w-full",
-                                    disabled: index === 0
+                                    disabled: index === 0,
+                                    rightSection: "วัน",
+                                    rightSectionWidth: 30,
                                 }}
                             />
-                            <ActionIcon variant="light" color="red" onClick={() => periodsFields.remove(index)}>
-                                <IconTrash size={20} />
-                            </ActionIcon>
                         </div>
-                        <div className="pl-10 flex flex-col">
+                        <div className="flex flex-col">
                             <Input.Wrapper withAsterisk label={`เลือกงาน`} className="" />
                             <PeriodForm control={control} name={`periods.${index}.jobs`} />
                         </div>

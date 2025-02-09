@@ -1,7 +1,7 @@
 import ControlledInputNumber from "@/components/Controlled/ControlledInputNumber";
 import ControlledSelect from "@/components/Controlled/ControlledSelect";
 import { type ContractSchemaType } from "@/schemas/document/contract/contract.schema"
-import { ActionIcon } from "@mantine/core";
+import { ActionIcon, Group } from "@mantine/core";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
 import { type Control, type Path, useFieldArray, useFormContext } from "react-hook-form"
 
@@ -20,7 +20,7 @@ export default function PeriodForm(props: Props) {
         <div className="flex flex-col gap-2">
             {fields.map((field, index) => (
                 <div className="flex flex-col" key={field.id}>
-                    <div className="flex gap-2 items-baseline">
+                    <Group wrap="nowrap" align="normal">
                         <ControlledSelect
                             control={control}
                             name={`${props.name}[${index}].job_id` as unknown as Path<ContractSchemaType>}
@@ -43,10 +43,10 @@ export default function PeriodForm(props: Props) {
                                 placeholder: "จำนวนงาน"
                             }}
                         />
-                       <ActionIcon variant="light" color="red" onClick={() => remove(index)}>
+                        <ActionIcon variant="light" color="red" onClick={() => remove(index)}>
                             <IconTrash size={20} />
                         </ActionIcon>
-                    </div>
+                    </Group>
                 </div>
             ))}
             <ActionIcon variant="light" onClick={() => append({
