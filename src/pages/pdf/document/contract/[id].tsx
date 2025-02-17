@@ -1,4 +1,7 @@
 import ContractPdfView from "@/components/Document/ContractForm/ContractPdfView";
+import useGetCompanyByUser from "@/hooks/queries/company/useGetCompanyByUser";
+import useGetContractByProject from "@/hooks/queries/contract/useGetContractByProject";
+import useGetProject from "@/hooks/queries/project/useGetProject";
 import { Text } from "@mantine/core";
 import _ from "lodash";
 import {
@@ -6,30 +9,34 @@ import {
     type InferGetServerSidePropsType,
 } from "next";
 
-function LabelSection({ children, prefix, suffix }: { children: React.ReactNode | string; prefix?: React.ReactNode | string | undefined; suffix?: React.ReactNode | string | undefined }) {
-    return (
-        <div className="flex gap-2 items-center">
-            {prefix && typeof prefix === "string" ? <Text>{prefix}</Text> : prefix}
-            {typeof children === "string" ? <Text fw="bold">{children}</Text> : children}
-            {suffix && typeof suffix === "string" ? <Text>{suffix}</Text> : suffix}
-        </div>
-    )
-}
-
 export default function Contract(
     props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
 
+    const getProject = useGetProject({ id: props.id ?? "" });
+    const getCompanyByUser = useGetCompanyByUser({ user_id: props.user_id ?? "" });
+    const getContractByProject = useGetContractByProject({ project_id: props.id ?? "" });
+
     return (
-        <ContractPdfView isPrintMode={true} />
+        <>
+
+            {(getContractByProject.data && getProject.data?.data && getCompanyByUser.data?.data) ? <ContractPdfView
+                isPrintMode={true}
+                data={getContractByProject.data}
+                project={getProject.data?.data}
+                company={getCompanyByUser.data?.data}
+            /> : <div className="flex justify-center">
+                <Text size="xl">ไม่พบข้อมูลสัญญา</Text>
+            </div>}
+        </>
     );
 }
 
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
         props: {
-            //   id: context.query.id?.toString(),
-            //   user_id: context.query.user_id?.toString(),
+            id: context.query.id?.toString(),
+            user_id: context.query.user_id?.toString(),
         },
     };
 }

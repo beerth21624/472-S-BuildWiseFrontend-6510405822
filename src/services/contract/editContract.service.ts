@@ -1,8 +1,8 @@
 import { type BaseResponse } from "@/types/BaseResponse.type";
 import { axiosAPI } from "@/utils/axios";
+import _ from "lodash";
 
 interface Period {
-  period_id: string;
   period_number: number;
   amount_period: number;
   delivered_within: number;
@@ -12,19 +12,9 @@ interface Period {
 interface Job {
   job_id: string;
   job_amount: number;
-  job_detail: Jobdetail;
 }
 
-interface Jobdetail {
-  job_id: string;
-  name: string;
-  description: string;
-  unit: string;
-  quantity: number;
-  labor_cost: number;
-}
-
-interface Data {
+export type EditContractProps = {
   contract_id: string;
   project_id: string;
   project_description: string;
@@ -44,21 +34,19 @@ interface Data {
   created_at: string;
   updated_at: string;
   periods: Period[];
-}
-
-export type GetContractByProjectResponse = Data;
-
-export type GetContractByProjectProps = {
-  project_id: string;
 };
 
-const getContractByProject = async (props: GetContractByProjectProps) => {
+const editContract = async (props: EditContractProps) => {
   try {
-    const res = await axiosAPI.get<Data>(`/contracts/${props.project_id}`);
+    const data = props;
+    const res = await axiosAPI.put<BaseResponse<object>>(
+      `/contracts/${props.project_id}`,
+      data,
+    );
     return res.data;
   } catch (error) {
     throw error;
   }
 };
 
-export default getContractByProject;
+export default editContract;

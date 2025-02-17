@@ -21,6 +21,7 @@ const periodSchema = z.object({
 
 export const contractSchema = z.object({
   project_id: z.string({ required_error: "กรุณาเลือกโครงการ" }),
+  contract_id: z.string({ required_error: "กรุณาเลือกสัญญา" }),
   area_size: z
     .number({ required_error: "กรุณากรอกขนาดพื้นที่" })
     .min(0, { message: "กรุณากรอกขนาดพื้นที่" }),
@@ -59,6 +60,13 @@ export const contractSchema = z.object({
   force_majeure: z.string({
     required_error: "กรุณาระบุเหตุการณ์ที่ถือเป็นเหตุสุดวิสัย",
   }),
+});
+
+export const contractFormToApi = contractSchema.transform((data) => {
+  return {
+    ...data,
+    format: data.format.map((item) => item.value),
+  };
 });
 
 export type ContractSchemaType = z.infer<typeof contractSchema>;
