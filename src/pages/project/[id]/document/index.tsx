@@ -41,7 +41,7 @@ export default function Document(
                         <Button leftSection={<IconContract />} variant="outline" size="xl">สัญญา</Button>
                     </Link> : <Button leftSection={<IconContract />} variant="outline" size="xl" disabled>สัญญา</Button>}
                     
-                    <Button leftSection={<IconReceipt />} variant="outline" size="xl" disabled>invoice</Button>
+                    <Button leftSection={<IconReceipt />} variant="outline" size="xl" disabled>ใบแจ้งหนี้</Button>
                 </div>
             </div>
         </>
