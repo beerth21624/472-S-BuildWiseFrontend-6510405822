@@ -74,7 +74,7 @@ export default function ContractPdfView(props: Props) {
                 </div>
                 <div>สองฝ่ายตกลงกันว่ารูปแบบและรายการที่แนบท้ายสัญญาต่อไปนี้เป็นส่วนหนึ่งของสัญญา ได้แก่</div>
                 <ol className="list-decimal list-inside pl-4">
-                    {props.data.format.map((item, index) => (
+                    {props.data.format?.map((item, index) => (
                         <li key={index}>
                             <span className="font-semibold">{item}</span>
                         </li>
