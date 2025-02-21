@@ -44,29 +44,28 @@ export default function ContractForm(props: Props) {
 
     useEffect(() => {
         if (props.data) {
-            
+            setValue("area_size", props.data.area_size);
+            setValue("format", props.data.format);
+            setValue("periods", props.data.periods);
+            setValue("start_date", props.data.start_date);
+            setValue("end_date", props.data.end_date);
+            setValue("validate_within", props.data.validate_within);
+            setValue("pay_within", props.data.pay_within);
+            setValue("retention_money", props.data.retention_money);
+            setValue("guarantee_within", props.data.guarantee_within);
+            setValue("amendment", props.data.amendment);
+            setValue("termination_of_contract", props.data.termination_of_contract);
+            setValue("end_of_contract", props.data.end_of_contract);
+            setValue("breach_of_contract", props.data.breach_of_contract);
+            setValue("force_majeure", props.data.force_majeure);
+            setValue("project_id", props.data.project_id);
+            setValue("contract_id", props.data.contract_id);
         }
-
-        setValue("project_id", "1");
-        setValue("area_size", 200);
-        setValue("format", [{ value: "รูปแบบและรายการแนบท้ายสัญญา" }, { value: "รูปแบบและรายการแนบท้ายสัญญา" }]);
-        setValue("periods", [{ amount_period: 10000 }, { amount_period: 10000, delivered_within: 20, jobs: [{ job_id: "1", job_amount: 10000 }] }]);
-        setValue("start_date", new Date());
-        setValue("end_date", new Date());
-        setValue("validate_within", 10);
-        setValue("pay_within", 10);
-        setValue("retention_money", 10000);
-        setValue("guarantee_within", 10);
-        setValue("amendment", "งานพิเศษและการแก้ไข เพิ่มเติม เปลี่ยนแปลงงาน");
-        setValue("termination_of_contract", "เหตุผลในการบอกเลิกสัญญา");
-        setValue("end_of_contract", "เงื่อนไขการสิ้นสุดสัญญา");
-        setValue("breach_of_contract", "การผิดสัญญา");
-        setValue("force_majeure", "เหตุสุดวิสัย");
 
     }, [props.data, setValue]);
 
     console.log(errors);
-    
+
 
     return (
         <form className="flex flex-col gap-3" onSubmit={handleSubmit(onFinish)}>
@@ -145,10 +144,10 @@ export default function ContractForm(props: Props) {
                                 }}
                             />
                         </div>
-                        <div className="flex flex-col">
+                        {index !== 0 && <div className="flex flex-col">
                             <Input.Wrapper withAsterisk label={`เลือกงาน`} className="" />
                             <PeriodForm control={control} name={`periods.${index}.jobs`} />
-                        </div>
+                        </div>}
                     </Paper>
                 ))}
                 <div className="flex">

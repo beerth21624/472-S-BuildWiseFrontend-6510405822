@@ -17,7 +17,6 @@ interface Job {
 export type EditContractProps = {
   contract_id: string;
   project_id: string;
-  project_description: string;
   area_size: number;
   start_date: string;
   end_date: string;
@@ -31,8 +30,6 @@ export type EditContractProps = {
   pay_within: number;
   validate_within: number;
   format: string[];
-  created_at: string;
-  updated_at: string;
   periods: Period[];
 };
 
