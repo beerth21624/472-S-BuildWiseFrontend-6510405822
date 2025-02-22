@@ -53,7 +53,7 @@ export default function PeriodForm(props: Props) {
             ))}
             <ActionIcon variant="light" onClick={() => append({
                 job_id: undefined,
-                job_amount: undefined
+                job_amount: 1
             })}>
                 <IconPlus size={20} />
             </ActionIcon>
