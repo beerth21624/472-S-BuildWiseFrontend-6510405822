@@ -1,5 +1,6 @@
 import ControlledInputNumber from "@/components/Controlled/ControlledInputNumber";
 import ControlledSelect from "@/components/Controlled/ControlledSelect";
+import useGetJobsByProjectID from "@/hooks/queries/job/useGetJobsByProjectID";
 import { type ContractSchemaType } from "@/schemas/document/contract/contract.schema"
 import { ActionIcon, Group } from "@mantine/core";
 import { IconPlus, IconTrash } from "@tabler/icons-react";
@@ -8,9 +9,11 @@ import { type Control, type Path, useFieldArray, useFormContext } from "react-ho
 interface Props {
     control: Control<ContractSchemaType>
     name: string
+    project_id: string
 }
 
 export default function PeriodForm(props: Props) {
+    const getJobsByProjectID = useGetJobsByProjectID({ project_id: props.project_id });
     const { control } = props;
     const { fields, append, remove } = useFieldArray({
         control,
@@ -29,11 +32,10 @@ export default function PeriodForm(props: Props) {
                                 className: "w-full",
                                 leftSection: `${index + 1}.`,
                                 searchable: true,
-                                data: [
-                                    { value: "1", label: "งาน 1" },
-                                    { value: "2", label: "งาน 2" },
-                                    { value: "3", label: "งาน 3" },
-                                ]
+                                data: getJobsByProjectID.data?.data.map((job) => ({
+                                    value: job.job_id,
+                                    label: job.name
+                                })) ?? []
                             }}
                         />
                         <ControlledInputNumber
