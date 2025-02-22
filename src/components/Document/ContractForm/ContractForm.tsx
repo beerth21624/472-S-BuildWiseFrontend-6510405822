@@ -146,7 +146,7 @@ export default function ContractForm(props: Props) {
                         </div>
                         {index !== 0 && <div className="flex flex-col">
                             <Input.Wrapper withAsterisk label={`เลือกงาน`} className="" />
-                            <PeriodForm control={control} name={`periods.${index}.jobs`} />
+                            {props.data?.project_id && <PeriodForm control={control} name={`periods.${index}.jobs`} project_id={props.data.project_id} />}
                         </div>}
                     </Paper>
                 ))}
