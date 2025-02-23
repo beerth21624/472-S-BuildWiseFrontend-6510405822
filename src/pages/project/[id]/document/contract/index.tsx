@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import BackButton from "@/components/BackButton/BackButton";
 import useGetCompanyByUser from "@/hooks/queries/company/useGetCompanyByUser";
 import useGetContractByProject from "@/hooks/queries/contract/useGetContractByProject";
@@ -9,6 +10,11 @@ import { type GetServerSidePropsContext, type InferGetServerSidePropsType } from
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import ContractPdfView from "@/components/Document/ContractForm/ContractPdfView";
+import { getContractStatusMap } from "@/utils/contractStatusMap";
+import useChangeStatusContract from "@/hooks/mutates/contract/useChangeStatusContract";
+import { modals } from "@mantine/modals";
+import { notifications } from "@mantine/notifications";
+import { AxiosError } from "axios";
 
 export default function Contract(
     props: InferGetServerSidePropsType<typeof getServerSideProps>,
@@ -17,6 +23,48 @@ export default function Contract(
     const getProject = useGetProject({ id: props.id ?? "" });
     const getCompanyByUser = useGetCompanyByUser({ user_id: session?.user?.id ?? "" });
     const getContractByProject = useGetContractByProject({ project_id: props.id ?? "" });
+    const changeStatusContract = useChangeStatusContract();
+
+    const isApproved = getContractByProject.data?.status === "approved";
+
+    const onChnageStatus = () => {
+        modals.openConfirmModal({
+            title: "ยืนยันการเปลี่ยนสถานะ",
+            centered: true,
+            children: (
+                <div className="flex items-center gap-1">
+                    คุณต้องการเปลี่ยนสถานะเป็น <Badge>อนุมัติ</Badge> ใช่หรือไม่ ?
+                </div>
+            ),
+            labels: { confirm: "ยืนยัน", cancel: "ยกเลิก" },
+            onConfirm: () => {
+                changeStatusContract.mutate(
+                    {
+                        project_id: props.id ?? "",
+                    },
+                    {
+                        onSuccess: () => {
+                            notifications.show({
+                                title: "สําเร็จ",
+                                message: "เปลี่ยนสถานะสัญญาสําเร็จ",
+                                color: "green",
+                            });
+                            getContractByProject.refetch();
+                        },
+                        onError: (error) => {
+                            if (error instanceof AxiosError) {
+                                notifications.show({
+                                    title: "เกิดข้อผิดพลาด",
+                                    message: error.response?.data.message,
+                                    color: "red",
+                                });
+                            }
+                        },
+                    }
+                );
+            },
+        })
+    }
 
     return (
         <div className="flex flex-col">
@@ -25,9 +73,9 @@ export default function Contract(
                 <div className="flex flex-col">
                     <div className="text-xl font-bold">
                         <div className="flex items-center gap-2">
-                            สัญญา{" "}
+                            สัญญา
                             <Badge variant="dot">
-                                แบบร่าง
+                                {getContractStatusMap(getContractByProject.data?.status ?? "")?.label}
                             </Badge>
                         </div>
                     </div>
@@ -36,7 +84,7 @@ export default function Contract(
                     </Text>
                 </div>
                 <div className="flex gap-2">
-                    <a
+                    {isApproved ? <a
                         target="_blank"
                         href={`/api/report/document/contract/${props.id}?user_id=${session?.user.id}`}
                     >
@@ -46,13 +94,18 @@ export default function Contract(
                         >
                             Export
                         </Button>
-                    </a>
-                    <Link href={`/project/${props.id}/document/contract/edit`}>
+                    </a> : <Button disabled>
+                        Export
+                    </Button>}
+
+                    {isApproved ? <Button disabled>
+                        แก้ไข
+                    </Button> : <Link href={`/project/${props.id}/document/contract/edit`}>
                         <Button>
                             แก้ไข
                         </Button>
-                    </Link>
-                    <Button>
+                    </Link>}
+                    <Button onClick={onChnageStatus} disabled={isApproved}>
                         เปลี่ยนสถานะ
                     </Button>
                 </div>

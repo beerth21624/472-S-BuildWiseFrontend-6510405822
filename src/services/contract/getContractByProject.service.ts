@@ -44,6 +44,7 @@ interface Data {
   created_at: string;
   updated_at: string;
   periods: Period[];
+  status: string;
 }
 
 export type GetContractByProjectResponse = Data;

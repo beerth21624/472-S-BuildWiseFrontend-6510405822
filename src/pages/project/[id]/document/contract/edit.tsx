@@ -42,6 +42,7 @@ export default function ContractEdit(
             })),
         }, {
             onSuccess: () => {
+                getContractByProject.refetch();
                 notifications.show({
                     title: "สําเร็จ",
                     message: "แก้ไขสัญญาสําเร็จ",
@@ -80,7 +81,7 @@ export default function ContractEdit(
                 type="edit"
                 data={getContractByProject.data ? {
                     ...getContractByProject.data,
-                    format: getContractByProject.data.format.map((value: string) => ({ value })),
+                    format: (getContractByProject.data.format?.map((value: string) => ({ value })) ?? []),
                     start_date: parseISO(getContractByProject.data.start_date),
                     end_date: parseISO(getContractByProject.data.end_date)
                 } : undefined}

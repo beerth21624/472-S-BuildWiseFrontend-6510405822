@@ -62,7 +62,7 @@ export default function ContractPdfView(props: Props) {
                 <h2 className="text-xl font-bold">1. ขอบเขตและลักษณะของงาน</h2>
                 <div>
                     <span>ผู้ว่าจ้าง ตกลงจ้าง ผู้รับจ้าง ให้ก่อสร้าง</span>
-                    <span className="ml-2 font-semibold">{props.project.description}</span>
+                    <span className="ml-2 font-semibold">{props.data.project_description}</span>
                     <span className="ml-2">เนื้อที่</span>
                     <span className="ml-2 font-semibold">{props.data.area_size.toLocaleString("th-TH")}</span>
                     <span className="ml-2">ตารางเมตร</span>

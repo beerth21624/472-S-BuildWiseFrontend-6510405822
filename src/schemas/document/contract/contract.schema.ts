@@ -22,9 +22,12 @@ const periodSchema = z.object({
 export const contractSchema = z.object({
   project_id: z.string({ required_error: "กรุณาเลือกโครงการ" }),
   contract_id: z.string({ required_error: "กรุณาเลือกสัญญา" }),
+  project_description: z.string({ required_error: "กรุณากรอกรายละเอียดโครงการ" }).min(1, {
+    message: "กรุณากรอกรายละเอียดโครงการ",
+  }),
   area_size: z
     .number({ required_error: "กรุณากรอกขนาดพื้นที่" })
-    .min(0, { message: "กรุณากรอกขนาดพื้นที่" }),
+    .min(1, { message: "กรุณากรอกขนาดพื้นที่" }),
   format: z.array(
     z.object({
       value: z.string(),
@@ -47,19 +50,19 @@ export const contractSchema = z.object({
   amendment: z.string({
     required_error:
       "กรุณาระบุรายละเอียดงานพิเศษและการแก้ไข เพิ่มเติม เปลี่ยนแปลงงาน",
-  }),
+  }).min(1, { message: "กรุณาระบุรายละเอียดงานพิเศษและการแก้ไข เพิ่มเติม เปลี่ยนแปลงงาน" }),
   termination_of_contract: z.string({
     required_error: "กรุณากรอกเหตุผลในการบอกเลิกสัญญา",
-  }),
+  }).min(1, { message: "กรุณากรอกเหตุผลในการบอกเลิกสัญญา" }),
   end_of_contract: z.string({
     required_error: "กรุณาระบุเงื่อนไขการสิ้นสุดสัญญา",
-  }),
+  }).min(1, { message: "กรุณาระบุเงื่อนไขการสิ้นสุดสัญญา" }),
   breach_of_contract: z.string({
     required_error: "กรุณาระบุเงื่อนไขและผลของการผิดสัญญา",
-  }),
+  }).min(1, { message: "กรุณาระบุเงื่อนไขและผลของการผิดสัญญา" }),
   force_majeure: z.string({
     required_error: "กรุณาระบุเหตุการณ์ที่ถือเป็นเหตุสุดวิสัย",
-  }),
+  }).min(1, { message: "กรุณาระบุเหตุการณ์ที่ถือเป็นเหตุสุดวิสัย" }),
 });
 
 export const contractFormToApi = contractSchema.transform((data) => {

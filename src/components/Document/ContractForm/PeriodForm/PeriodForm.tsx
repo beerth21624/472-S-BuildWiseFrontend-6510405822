@@ -32,7 +32,7 @@ export default function PeriodForm(props: Props) {
                                 className: "w-full",
                                 leftSection: `${index + 1}.`,
                                 searchable: true,
-                                data: getJobsByProjectID.data?.data.map((job) => ({
+                                data: getJobsByProjectID.data?.data?.map((job) => ({
                                     value: job.job_id,
                                     label: job.name
                                 })) ?? []

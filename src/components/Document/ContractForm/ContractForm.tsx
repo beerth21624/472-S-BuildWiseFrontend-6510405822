@@ -44,6 +44,7 @@ export default function ContractForm(props: Props) {
 
     useEffect(() => {
         if (props.data) {
+            setValue("project_description", props.data.project_description);
             setValue("area_size", props.data.area_size);
             setValue("format", props.data.format);
             setValue("periods", props.data.periods);
@@ -62,13 +63,22 @@ export default function ContractForm(props: Props) {
             setValue("contract_id", props.data.contract_id);
         }
 
-    }, [props.data, setValue]);
+    }, [props.data]);
 
     console.log(errors);
 
 
     return (
         <form className="flex flex-col gap-3" onSubmit={handleSubmit(onFinish)}>
+            <ControlledInputTextarea
+                control={control}
+                name="project_description"
+                props={{
+                    label: "ลักษณะงาน",
+                    placeholder: "กรอกลักษณะงาน",
+                    withAsterisk: true,
+                }}
+            />
             <ControlledInputNumber
                 control={control}
                 name="area_size"
