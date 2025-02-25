@@ -40,8 +40,10 @@ export default function Document(
                     {isContractAvailable ? <Link href={`/project/${props.id}/document/contract`}>
                         <Button leftSection={<IconContract />} variant="outline" size="xl">สัญญา</Button>
                     </Link> : <Button leftSection={<IconContract />} variant="outline" size="xl" disabled>สัญญา</Button>}
-                    
-                    <Button leftSection={<IconReceipt />} variant="outline" size="xl" disabled>ใบแจ้งหนี้</Button>
+
+                    <Link href={`/project/${props.id}/document/invoice`}>
+                        <Button leftSection={<IconReceipt />} variant="outline" size="xl">ใบแจ้งหนี้</Button>
+                    </Link>
                 </div>
             </div>
         </>

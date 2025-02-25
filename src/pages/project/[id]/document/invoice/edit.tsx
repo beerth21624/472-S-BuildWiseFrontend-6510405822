@@ -13,8 +13,10 @@ import { parseISO } from "date-fns";
 import { ContractSchemaType } from "@/schemas/document/contract/contract.schema";
 import useEditContract from "@/hooks/mutates/contract/useEditContract";
 import { notifications } from "@mantine/notifications";
+import InvoiceForm from "@/components/Document/Invoice/InvoiceForm";
+import { InvoiceSchemaType } from "@/schemas/document/invoice/invoice.schema";
 
-export default function ContractEdit(
+export default function InvoiceEdit(
     props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
     const { data: session } = useSession();
@@ -23,50 +25,50 @@ export default function ContractEdit(
     const getContractByProject = useGetContractByProject({ project_id: props.id ?? "" });
     const editContract = useEditContract();
 
-    const onSave = (data: ContractSchemaType) => {
-        editContract.mutate({
-            ...data,
-            project_id: props.id ?? "",
-            format: data.format.map((value) => value.value),
-            start_date: data.start_date.toISOString(),
-            end_date: data.end_date.toISOString(),
-            periods: data.periods.map((period, index) => ({
-                ...period,
-                period_number: index + 1,
-                delivered_within: period.delivered_within ?? 0,
-                amount_period: period.amount_period ?? 0,
-                jobs: (period.jobs?.map((job) => ({
-                    job_id: job.job_id,
-                    job_amount: job.job_amount,
-                })) ?? []),
-            })),
-        }, {
-            onSuccess: () => {
-                getContractByProject.refetch();
-                notifications.show({
-                    title: "สําเร็จ",
-                    message: "แก้ไขสัญญาสําเร็จ",
-                    color: "green",
-                });
-            },
-            onError: (error) => {
-                notifications.show({
-                    title: "เกิดข้อผิดพลาด",
-                    message: error.message,
-                    color: "red",
-                });
-            },
-        })
+    const onSave = (data: InvoiceSchemaType) => {
+        // editContract.mutate({
+        //     ...data,
+        //     project_id: props.id ?? "",
+        //     format: data.format.map((value) => value.value),
+        //     start_date: data.start_date.toISOString(),
+        //     end_date: data.end_date.toISOString(),
+        //     periods: data.periods.map((period, index) => ({
+        //         ...period,
+        //         period_number: index + 1,
+        //         delivered_within: period.delivered_within ?? 0,
+        //         amount_period: period.amount_period ?? 0,
+        //         jobs: (period.jobs?.map((job) => ({
+        //             job_id: job.job_id,
+        //             job_amount: job.job_amount,
+        //         })) ?? []),
+        //     })),
+        // }, {
+        //     onSuccess: () => {
+        //         getContractByProject.refetch();
+        //         notifications.show({
+        //             title: "สําเร็จ",
+        //             message: "แก้ไขสัญญาสําเร็จ",
+        //             color: "green",
+        //         });
+        //     },
+        //     onError: (error) => {
+        //         notifications.show({
+        //             title: "เกิดข้อผิดพลาด",
+        //             message: error.message,
+        //             color: "red",
+        //         });
+        //     },
+        // })
     }
 
     return (
         <div className="flex flex-col">
-            <BackButton label="กลับไปหน้ารายละเอียดสัญญา" />
+            <BackButton label="กลับไปหน้ารายละเอียดใบแจ้งหนี้" />
             <div className="flex justify-between">
                 <div className="flex flex-col">
                     <div className="text-xl font-bold">
                         <div className="flex items-center gap-2">
-                            แก้ไขสัญญา
+                            แก้ไขใบแจ้งหนี้
                         </div>
                     </div>
                     <Text size="md" fw={700}>
@@ -77,14 +79,9 @@ export default function ContractEdit(
                 </div>
             </div>
             <Divider my={"md"} />
-            <ContractForm
+            <InvoiceForm
                 type="edit"
-                data={getContractByProject.data ? {
-                    ...getContractByProject.data,
-                    format: (getContractByProject.data.format?.map((value: string) => ({ value })) ?? []),
-                    start_date: parseISO(getContractByProject.data.start_date),
-                    end_date: parseISO(getContractByProject.data.end_date)
-                } : undefined}
+                data={undefined}
                 onFinish={onSave}
             />
         </div>

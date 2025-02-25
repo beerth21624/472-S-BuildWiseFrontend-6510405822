@@ -9,7 +9,7 @@ import _ from "lodash";
 import { type GetServerSidePropsContext, type InferGetServerSidePropsType } from "next";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import ContractPdfView from "@/components/Document/ContractForm/ContractPdfView";
+import ContractPdfView from "@/components/Document/Contract/ContractPdfView";
 import { getContractStatusMap } from "@/utils/contractStatusMap";
 import useChangeStatusContract from "@/hooks/mutates/contract/useChangeStatusContract";
 import { modals } from "@mantine/modals";
