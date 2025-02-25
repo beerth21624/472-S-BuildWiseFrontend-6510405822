@@ -4,19 +4,23 @@ import ControlledInputText from "@/components/Controlled/ControlledInputText";
 import ControlledInputTextarea from "@/components/Controlled/ControlledInputTextarea";
 import { contractSchema, type ContractSchemaType } from "@/schemas/document/contract/contract.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ActionIcon, Button, Group, Input, Paper, Stack } from "@mantine/core";
-import { IconPlus, IconTrash } from "@tabler/icons-react";
+import { ActionIcon, Button, Group, Input, List, NumberFormatter, Paper, Stack, Text, ThemeIcon } from "@mantine/core";
+import { IconBriefcase, IconCircleCheck, IconCircleDashed, IconPlus, IconTrash } from "@tabler/icons-react";
 import { useEffect } from "react";
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import PeriodForm from "./PeriodForm/PeriodForm";
+import useGetJobsByProjectID from "@/hooks/queries/job/useGetJobsByProjectID";
 
 interface Props {
     type: "create" | "edit";
     onFinish?: (data: ContractSchemaType) => void;
     data?: ContractSchemaType;
+    project_id: string
 }
 
 export default function ContractForm(props: Props) {
+    const getJobsByProjectID = useGetJobsByProjectID({ project_id: props.project_id });
+
     const {
         control,
         setValue,
@@ -26,6 +30,11 @@ export default function ContractForm(props: Props) {
     } = useForm<ContractSchemaType>({
         resolver: zodResolver(contractSchema),
     });
+
+    const periods = useWatch({
+        control,
+        name: "periods",
+    })
 
     const attachmentsFields = useFieldArray({
         name: "format",
@@ -41,6 +50,7 @@ export default function ContractForm(props: Props) {
         console.log(data);
         props.onFinish?.(data);
     };
+
 
     useEffect(() => {
         if (props.data) {
@@ -119,6 +129,42 @@ export default function ContractForm(props: Props) {
             </div>
             <div className="flex flex-col gap-2 ">
                 <Input.Wrapper withAsterisk label="2. ราคา" />
+                <Paper withBorder p={"sm"}>
+                    <List
+                        spacing="xs"
+                        size="sm"
+                        center
+                    >
+                        {getJobsByProjectID.data?.data.map((job, index) => {
+                            const selectedJobs = periods?.map((period) => period.jobs).flat();
+                            const selectedJob = selectedJobs?.find((selectedJob) => selectedJob?.job_id === job.job_id);
+                            const remaining = job.quantity - (selectedJob?.job_amount ?? 0);
+
+                            return (
+                                <List.Item
+                                    key={index}
+                                    icon={
+                                        <ThemeIcon color={remaining === 0 ? "green" : remaining < 0 ? "red" : "blue"} size={24} radius="xl">
+                                            {remaining === 0 ? <IconCircleCheck title="งานใช้หมดแล้ว" size={16} /> : remaining < 0 ? <IconCircleDashed title="งานเกินจำนวนที่มี" size={16} /> : <IconBriefcase title="งานยังใช้ไม่หมด" size={16} />}
+                                        </ThemeIcon>
+                                    }
+                                    component={Stack}
+                                >
+                                    <Text>
+                                        {job.name}
+                                    </Text>
+                                    <Group gap={5}>
+                                        <Text c="dimmed" size="sm">
+                                            คงเหลือ:
+                                        </Text>
+                                        <NumberFormatter thousandSeparator className="text-gray-500 font-bold" value={remaining} suffix=" งาน" />
+                                    </Group>
+                                </List.Item>
+                            )
+                        })}
+
+                    </List>
+                </Paper>
                 {periodsFields.fields.map((field, index) => (
                     <Paper key={field.id} component={Stack} withBorder p={"sm"}>
                         <Group justify="space-between">
