@@ -1,4 +1,5 @@
 import BackButton from "@/components/BackButton/BackButton";
+import useGetContractByProject from "@/hooks/queries/contract/useGetContractByProject";
 import useGetProject from "@/hooks/queries/project/useGetProject";
 import useGetQuotationByProject from "@/hooks/queries/quotation/useGetQuotationByProject";
 import {
@@ -17,10 +18,12 @@ export default function Document(
 ) {
     const getProject = useGetProject({ id: props.id ?? "" });
     const getQuotationByProject = useGetQuotationByProject({ project_id: props.id ?? "" });
+    const getContractByProject = useGetContractByProject({ project_id: props.id ?? "" });
 
     const quotationStatus = getQuotationByProject.data?.data.status;
+    const contractStatus = getContractByProject.data?.status
 
-    const isContractAvailable = quotationStatus === "approved";
+    const isContractAvailable = quotationStatus === "approved" && contractStatus !== "approved";
 
     return (
         <>
