@@ -21,7 +21,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 const themeMantine = createTheme({
   fontFamily: "Noto Sans Thai",
   radius: {
-    sm: "0.4rem",
+    sm: "0.6rem",
   },
 });
 

@@ -1,4 +1,5 @@
 import ContractPdfView from "@/components/Document/Contract/ContractPdfView";
+import InvoicePdfView from "@/components/Document/Invoice/InvoicePdfView";
 import useGetCompanyByUser from "@/hooks/queries/company/useGetCompanyByUser";
 import useGetContractByProject from "@/hooks/queries/contract/useGetContractByProject";
 import useGetProject from "@/hooks/queries/project/useGetProject";
@@ -15,18 +16,16 @@ export default function Contract(
 
     const getProject = useGetProject({ id: props.id ?? "" });
     const getCompanyByUser = useGetCompanyByUser({ user_id: props.user_id ?? "" });
-    const getContractByProject = useGetContractByProject({ project_id: props.id ?? "" });
 
     return (
         <>
 
-            {(getContractByProject.data && getProject.data?.data && getCompanyByUser.data?.data) ? <ContractPdfView
+            {(getProject.data?.data && getCompanyByUser.data?.data) ? <InvoicePdfView
                 isPrintMode={true}
-                data={getContractByProject.data}
                 project={getProject.data?.data}
                 company={getCompanyByUser.data?.data}
             /> : <div className="flex justify-center">
-                <Text size="xl">ไม่พบข้อมูลสัญญา</Text>
+                <Text size="xl">ไม่พบข้อมูลใบแจ้งหนี้</Text>
             </div>}
         </>
     );

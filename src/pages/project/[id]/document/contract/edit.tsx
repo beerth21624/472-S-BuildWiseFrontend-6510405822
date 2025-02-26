@@ -3,13 +3,14 @@ import useGetProject from "@/hooks/queries/project/useGetProject";
 import { Divider, Text } from "@mantine/core";
 import _ from "lodash";
 import { type GetServerSidePropsContext, type InferGetServerSidePropsType } from "next";
-import ContractForm from "@/components/Document/ContractForm/ContractForm";
+
 import useGetContractByProject from "@/hooks/queries/contract/useGetContractByProject";
 import { parseISO } from "date-fns";
 import { type ContractSchemaType } from "@/schemas/document/contract/contract.schema";
 import useEditContract from "@/hooks/mutates/contract/useEditContract";
 import { notifications } from "@mantine/notifications";
 import { AxiosError } from "axios";
+import ContractForm from "@/components/Document/Contract/ContractForm";
 
 export default function ContractEdit(
     props: InferGetServerSidePropsType<typeof getServerSideProps>,
