@@ -1,25 +1,21 @@
 import BackButton from "@/components/BackButton/BackButton";
 import useGetProject from "@/hooks/queries/project/useGetProject";
-import { Button, Divider, Text } from "@mantine/core";
-import { IconFileText } from "@tabler/icons-react";
+import { Divider, Text } from "@mantine/core";
 import _ from "lodash";
 import { type GetServerSidePropsContext, type InferGetServerSidePropsType } from "next";
-import { useSession } from "next-auth/react";
-import ContractForm from "@/components/Document/Contract/ContractForm";
-import Link from "next/link";
-import useGetCompanyByUser from "@/hooks/queries/company/useGetCompanyByUser";
+
 import useGetContractByProject from "@/hooks/queries/contract/useGetContractByProject";
 import { parseISO } from "date-fns";
-import { ContractSchemaType } from "@/schemas/document/contract/contract.schema";
+import { type ContractSchemaType } from "@/schemas/document/contract/contract.schema";
 import useEditContract from "@/hooks/mutates/contract/useEditContract";
 import { notifications } from "@mantine/notifications";
+import { AxiosError } from "axios";
+import ContractForm from "@/components/Document/Contract/ContractForm";
 
 export default function ContractEdit(
     props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
-    const { data: session } = useSession();
     const getProject = useGetProject({ id: props.id ?? "" });
-    const getCompanyByUser = useGetCompanyByUser({ user_id: session?.user?.id ?? "" });
     const getContractByProject = useGetContractByProject({ project_id: props.id ?? "" });
     const editContract = useEditContract();
 
@@ -50,11 +46,13 @@ export default function ContractEdit(
                 });
             },
             onError: (error) => {
-                notifications.show({
-                    title: "เกิดข้อผิดพลาด",
-                    message: error.message,
-                    color: "red",
-                });
+                if (error instanceof AxiosError) {
+                    notifications.show({
+                        title: "เกิดข้อผิดพลาด",
+                        message: error.response?.data.message ?? "เกิดข้อผิดพลาด",
+                        color: "red",
+                    });
+                }
             },
         })
     }
@@ -85,6 +83,7 @@ export default function ContractEdit(
                     start_date: parseISO(getContractByProject.data.start_date),
                     end_date: parseISO(getContractByProject.data.end_date)
                 } : undefined}
+                project_id={props.id ?? ""}
                 onFinish={onSave}
             />
         </div>
