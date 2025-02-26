@@ -113,9 +113,9 @@ export default function ContractPdfView(props: Props) {
                                 <div>
                                     <span className="font-semibold underline">งวดที่ {period.period_number}</span>
                                     <span className="ml-2">ผู้ว่าจ้างตกลงจ่ายเงินจำนวน</span>
-                                    <span className="ml-2 font-semibold">300,000</span>
+                                    <span className="ml-2 font-semibold">{period.amount_period.toLocaleString("th-TH")}</span>
                                     <span className="ml-1">บาท</span>
-                                    <span className="ml-1 font-semibold">(สามแสนบาทถ้วน)</span>
+                                    <span className="ml-1 font-semibold">({bahttext(period.amount_period)})</span>
                                     <span className="ml-1" >โดยจ่ายให้เมื่อผู้รับจ้างดำเนินงานต่อไปนี้แล้วเสร็จ</span>
                                 </div>
                                 <ol className="list-decimal list-inside pl-4">
