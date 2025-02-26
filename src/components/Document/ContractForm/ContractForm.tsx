@@ -4,12 +4,16 @@ import ControlledInputText from "@/components/Controlled/ControlledInputText";
 import ControlledInputTextarea from "@/components/Controlled/ControlledInputTextarea";
 import { contractSchema, type ContractSchemaType } from "@/schemas/document/contract/contract.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ActionIcon, Button, Group, Input, List, NumberFormatter, Paper, Stack, Text, ThemeIcon } from "@mantine/core";
-import { IconBriefcase, IconCircleCheck, IconCircleDashed, IconPlus, IconTrash } from "@tabler/icons-react";
+import { ActionIcon, Alert, Button, Group, Input, List, Notification, NumberFormatter, Paper, Stack, Text, ThemeIcon } from "@mantine/core";
+import { IconBriefcase, IconCircleCheck, IconCircleDashed, IconEqual, IconPlus, IconTrash } from "@tabler/icons-react";
 import { useEffect } from "react";
 import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import PeriodForm from "./PeriodForm/PeriodForm";
 import useGetJobsByProjectID from "@/hooks/queries/job/useGetJobsByProjectID";
+import useGetQuotationByProject from "@/hooks/queries/quotation/useGetQuotationByProject";
+import _ from "lodash";
+import clsx from "clsx";
+import { Notifications } from "@mantine/notifications";
 
 interface Props {
     type: "create" | "edit";
@@ -46,8 +50,42 @@ export default function ContractForm(props: Props) {
         control,
     })
 
+    const getQuotationByProject = useGetQuotationByProject({
+        project_id: props.project_id,
+    });
+
+    const FinalPrice = () => {
+        const total_selling_price = _.sumBy(
+            getQuotationByProject.data?.data.jobs,
+            (o) => o.total_selling_price,
+        );
+
+        const selling_general_cost =
+            getQuotationByProject.data?.data.selling_general_cost ?? 0;
+
+        const tax_percentage = getQuotationByProject.data?.data.tax_percentage ?? 0;
+
+        const tax_amount =
+            (selling_general_cost + total_selling_price) * (tax_percentage / 100);
+        const total_price = selling_general_cost + total_selling_price;
+
+        return tax_amount + total_price;
+    };
+
+    const periodTotalPrice = () => {
+        return _.sumBy(periods, o => o.amount_period);
+    }
+
     const onFinish = (data: ContractSchemaType) => {
         console.log(data);
+        // check periodTotalPrice and FinalPrice
+        if (periodTotalPrice() !== FinalPrice()) {
+            return Notifications.show({
+                title: "Error",
+                message: "Period total price does not match final price",
+                color: "red",
+            })
+        }
         props.onFinish?.(data);
     };
 
@@ -74,8 +112,6 @@ export default function ContractForm(props: Props) {
         }
 
     }, [props.data]);
-
-    console.log(errors);
 
 
     return (
@@ -106,6 +142,7 @@ export default function ContractForm(props: Props) {
                 <Input.Wrapper withAsterisk label="รูปแบบและรายการแนบท้ายสัญญา" />
                 {attachmentsFields.fields.map((field, index) => (
                     <div key={field.id} className="flex gap-3 items-center">
+
                         <ControlledInputText
                             key={field.id}
                             control={control}
@@ -129,6 +166,23 @@ export default function ContractForm(props: Props) {
             </div>
             <div className="flex flex-col gap-2 ">
                 <Input.Wrapper withAsterisk label="2. ราคา" />
+                <Paper withBorder p={"sm"}>
+                    <Stack>
+                        <Group justify="center">
+                            <Stack gap={5}>
+                                <Text>ราคารวมสุทธิ</Text>
+                                <NumberFormatter className="font-bold" value={FinalPrice().toFixed(2)} thousandSeparator />
+                            </Stack>
+                            {/* <div>
+                                <IconEqual className={clsx(periodTotalPrice() === FinalPrice() ? "text-green-500" : periodTotalPrice() > FinalPrice() ? "text-red-500" : "text-blue-500")} size={30} />
+                            </div> */}
+                            <Stack gap={5}>
+                                <Text>ราคารวมของงวด</Text>
+                                <NumberFormatter className="font-bold" value={periodTotalPrice().toFixed(2)} thousandSeparator />
+                            </Stack>
+                        </Group>
+                    </Stack>
+                </Paper>
                 <Paper withBorder p={"sm"}>
                     <List
                         spacing="xs"
