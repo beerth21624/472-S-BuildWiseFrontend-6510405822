@@ -1,12 +1,23 @@
 import BackButton from "@/components/BackButton/BackButton";
 import useGetContractByProject from "@/hooks/queries/contract/useGetContractByProject";
+import useGetInvoiceListByProjectId from "@/hooks/queries/invoice/useGetInvoiceListByProjectId";
 import useGetProject from "@/hooks/queries/project/useGetProject";
 import useGetQuotationByProject from "@/hooks/queries/quotation/useGetQuotationByProject";
+import { getInvoiceStatusMap } from "@/utils/invoiceStatusMap";
 import {
+    Badge,
     Button,
+    Drawer,
+    Group,
+    List,
+    NumberFormatter,
+    Paper,
+    Stack,
     Text,
+    ThemeIcon,
 } from "@mantine/core";
-import { IconContract, IconReceipt } from "@tabler/icons-react";
+import { useDisclosure } from "@mantine/hooks";
+import { IconCircleCheck, IconCircleDashed, IconContract, IconFile, IconReceipt } from "@tabler/icons-react";
 import {
     type GetServerSidePropsContext,
     type InferGetServerSidePropsType,
@@ -25,8 +36,41 @@ export default function Document(
 
     const isContractAvailable = quotationStatus === "approved" && contractStatus !== "approved";
 
+    const [openedInvoiceList, { open: openInvoiceList, close: closeInvoiceList }] = useDisclosure(false);
+
+    const getInvoiceListByProjectId = useGetInvoiceListByProjectId({ project_id: props.id ?? "" });
+
     return (
         <>
+            <Drawer position="right" opened={openedInvoiceList} onClose={closeInvoiceList} title={<Text size="xl" fw="bold">รายการใบแจ้งหนี้</Text>}>
+                <Stack gap="sm">
+                    {getInvoiceListByProjectId.data?.data.map((invoice) => (
+                        <Link key={invoice.invoice_id} href={`/project/${props.id}/document/invoice/${invoice.invoice_id}`} target="_blank">
+                            <Paper withBorder p="xs" className="cursor-pointer" >
+                                <Group>
+                                    <ThemeIcon color="blue" size={24} >
+                                        <IconFile size={16} />
+                                    </ThemeIcon>
+                                    <Stack gap={0}>
+                                        <Group gap="xs">
+                                            <Text fw="bold">
+                                                <span>ใบแจ้งหนี้งวดที่</span>
+                                                <span className="ml-2">{invoice.period.period_number}</span>
+                                            </Text>
+                                            <Badge variant="dot">
+                                                {getInvoiceStatusMap(invoice.status ?? "")?.label}
+                                            </Badge>
+                                        </Group>
+                                        <Text size="sm" c="dimmed">
+                                            <NumberFormatter value={invoice.period.amount_period} thousandSeparator prefix="จำนวนเงิน " suffix=" บาท" />
+                                        </Text>
+                                    </Stack>
+                                </Group>
+                            </Paper>
+                        </Link>
+                    ))}
+                </Stack>
+            </Drawer>
             <div className="flex flex-col">
                 <BackButton label="ย้อนกลับไปหน้ารายละเอียดโครงการ" />
                 <div className="flex flex-col">
@@ -44,9 +88,12 @@ export default function Document(
                         <Button leftSection={<IconContract />} variant="outline" size="xl">สัญญา</Button>
                     </Link> : <Button leftSection={<IconContract />} variant="outline" size="xl" disabled>สัญญา</Button>}
 
-                    <Link href={`/project/${props.id}/document/invoice`}>
+                    {/* <Link href={`/project/${props.id}/document/invoice`}>
                         <Button leftSection={<IconReceipt />} variant="outline" size="xl">ใบแจ้งหนี้</Button>
-                    </Link>
+                    </Link> */}
+                    <Button leftSection={<IconReceipt />} variant="outline" size="xl" onClick={openInvoiceList} >
+                        ใบแจ้งหนี้
+                    </Button>
                 </div>
             </div>
         </>

@@ -1,7 +1,6 @@
-import ContractPdfView from "@/components/Document/Contract/ContractPdfView";
 import InvoicePdfView from "@/components/Document/Invoice/InvoicePdfView";
 import useGetCompanyByUser from "@/hooks/queries/company/useGetCompanyByUser";
-import useGetContractByProject from "@/hooks/queries/contract/useGetContractByProject";
+import useGetInvoice from "@/hooks/queries/invoice/useGetInvoice";
 import useGetProject from "@/hooks/queries/project/useGetProject";
 import { Text } from "@mantine/core";
 import _ from "lodash";
@@ -14,13 +13,15 @@ export default function Contract(
     props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
 
-    const getProject = useGetProject({ id: props.id ?? "" });
+    const getProject = useGetProject({ id: props.project_id ?? "" });
     const getCompanyByUser = useGetCompanyByUser({ user_id: props.user_id ?? "" });
+    const getInvoice = useGetInvoice({ invoice_id: props.id ?? "" });
 
     return (
         <>
 
-            {(getProject.data?.data && getCompanyByUser.data?.data) ? <InvoicePdfView
+            {(getProject.data?.data && getCompanyByUser.data?.data && getInvoice.data?.data) ? <InvoicePdfView
+                data={getInvoice.data?.data}
                 isPrintMode={true}
                 project={getProject.data?.data}
                 company={getCompanyByUser.data?.data}
@@ -36,6 +37,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
         props: {
             id: context.query.id?.toString(),
             user_id: context.query.user_id?.toString(),
+            project_id: context.query.project_id?.toString(),
         },
     };
 }
