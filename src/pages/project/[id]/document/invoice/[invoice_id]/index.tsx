@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
 import BackButton from "@/components/BackButton/BackButton";
 import useGetCompanyByUser from "@/hooks/queries/company/useGetCompanyByUser";
 import useGetProject from "@/hooks/queries/project/useGetProject";
@@ -11,18 +10,62 @@ import Link from "next/link";
 import InvoicePdfView from "@/components/Document/Invoice/InvoicePdfView";
 import useGetInvoice from "@/hooks/queries/invoice/useGetInvoice";
 import { getInvoiceStatusMap } from "@/utils/invoiceStatusMap";
+import { modals } from "@mantine/modals";
+import useEditInvoiceStatus from "@/hooks/mutates/invoice/useEditInvoiceStatus";
+import { notifications } from "@mantine/notifications";
+import { AxiosError } from "axios";
 
 export default function Contract(
     props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
     const { data: session } = useSession();
-    const getProject = useGetProject({ id: props.id ?? "" });
+    const getProject = useGetProject({ id: props.project_id ?? "" });
     const getCompanyByUser = useGetCompanyByUser({ user_id: session?.user?.id ?? "" });
     const getInvoice = useGetInvoice({ invoice_id: props.invoice_id ?? "" });
+    const editInvoiceStatus = useEditInvoiceStatus();
+
+    const onChangeStatus = () => {
+        modals.openConfirmModal({
+            title: "ยืนยันการเปลี่ยนสถานะ",
+            centered: true,
+            children: (
+                <div className="flex items-center gap-1">
+                    คุณต้องการเปลี่ยนสถานะเป็น <Badge>อนุมัติ</Badge> ใช่หรือไม่ ?
+                </div>
+            ),
+            labels: { confirm: "ยืนยัน", cancel: "ยกเลิก" },
+            onConfirm: () => {
+                editInvoiceStatus.mutate({
+                    invoice_id: props.invoice_id ?? "",
+                    status: "approved",
+                }, {
+                    onSuccess: () => {
+                        notifications.show({
+                            title: "สําเร็จ",
+                            message: "เปลี่ยนสถานะสัญญาสําเร็จ",
+                            color: "green",
+                        });
+                        getInvoice.refetch();
+                    },
+                    onError: (error) => {
+                        if (error instanceof AxiosError) {
+                            notifications.show({
+                                title: "เกิดข้อผิดพลาด",
+                                message: error.response?.data.error,
+                                color: "red",
+                            });
+                        }
+                    },
+                })
+            },
+        })
+    }
+
+    const isApproved = getInvoice.data?.data.status === "approved";
 
     return (
         <div className="flex flex-col">
-            <BackButton label="กลับไปหน้าเอกสาร" href={`/project/${props.id}/document`} />
+            <BackButton label="กลับไปหน้าเอกสาร" href={`/project/${props.project_id}/document`} />
             <div className="flex justify-between">
                 <div className="flex flex-col">
                     <div className="text-xl font-bold">
@@ -38,9 +81,9 @@ export default function Contract(
                     </Text>
                 </div>
                 <div className="flex gap-2">
-                    <a
+                    {isApproved ? <a
                         target="_blank"
-                        href={`/api/report/document/invoice/${props.id}?user_id=${session?.user.id}`}
+                        href={`/api/report/document/invoice/${props.invoice_id}?user_id=${session?.user.id}&project_id=${props.project_id}`}
                     >
                         <Button
                             variant="default"
@@ -48,15 +91,22 @@ export default function Contract(
                         >
                             Export
                         </Button>
-                    </a>
-                    <Link href={`/project/${props.id}/document/invoice/${props.invoice_id}/edit`}>
+                    </a> : <Button
+                        variant="default"
+                        leftSection={<IconFileText size={15} />}
+                        disabled
+                    >
+                        Export
+                    </Button>}
+
+                    {getInvoice.data?.data.status === "draft" ? <Link href={`/project/${props.project_id}/document/invoice/${props.invoice_id}/edit`}>
                         <Button>
                             แก้ไข
                         </Button>
-                    </Link>
-                    <Button>
+                    </Link> : <Button disabled>แก้ไข</Button>}
+                    {isApproved ? <Button disabled>เปลี่ยนสถานะ</Button> : <Button onClick={onChangeStatus}>
                         เปลี่ยนสถานะ
-                    </Button>
+                    </Button>}
                 </div>
             </div>
             <Divider my={"md"} />
@@ -78,7 +128,7 @@ export default function Contract(
 export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
         props: {
-            id: context.query.id?.toString(),
+            project_id: context.query.id?.toString(),
             invoice_id: context.query.invoice_id?.toString(),
         },
     };

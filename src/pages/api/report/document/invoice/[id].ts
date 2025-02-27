@@ -2,7 +2,8 @@ import { type NextApiRequest, type NextApiResponse } from "next";
 import puppeteer, { type PDFOptions } from "puppeteer";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-  const project_id = req.query.id?.toString();
+  const invoice_id = req.query.id?.toString();
+  const project_id = req.query.project_id?.toString();
   const user_id = req.query.user_id?.toString();
 
   const browser = await puppeteer.launch({
@@ -26,7 +27,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   await page.setViewport({ width: 1000, height: 0 });
 
   await page.goto(
-    `${process.env.NEXTAUTH_URL}/pdf/document/invoice/${project_id}?user_id=${user_id}`,
+    `${process.env.NEXTAUTH_URL}/pdf/document/invoice/${invoice_id}?user_id=${user_id}&project_id=${project_id}`,
     {
       waitUntil: "networkidle2",
     },

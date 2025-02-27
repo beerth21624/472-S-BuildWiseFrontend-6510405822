@@ -54,7 +54,7 @@ export default function InvoiceForm(props: Props) {
                 <Stack>
                     <Group justify="center">
                         <Stack gap={5} align="center">
-                            <Text>ราคารวมสุทธิ</Text>
+                            <Text>จำนวนเงินสุทธิของใบแจ้งหนี้งวดที่ {invoice_date.period.period_number}</Text>
                             <NumberFormatter suffix=" บาท" className="font-bold" value={(invoice_date.period.amount_period - (watch("retention") ?? 0)).toFixed(2)} thousandSeparator />
                         </Stack>
                     </Group>

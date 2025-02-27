@@ -3,7 +3,9 @@ import useGetContractByProject from "@/hooks/queries/contract/useGetContractByPr
 import useGetInvoiceListByProjectId from "@/hooks/queries/invoice/useGetInvoiceListByProjectId";
 import useGetProject from "@/hooks/queries/project/useGetProject";
 import useGetQuotationByProject from "@/hooks/queries/quotation/useGetQuotationByProject";
+import { getInvoiceStatusMap } from "@/utils/invoiceStatusMap";
 import {
+    Badge,
     Button,
     Drawer,
     Group,
@@ -50,10 +52,15 @@ export default function Document(
                                         <IconFile size={16} />
                                     </ThemeIcon>
                                     <Stack gap={0}>
-                                        <Text fw="bold">
-                                            <span>ใบแจ้งหนี้งวดที่</span>
-                                            <span className="ml-2">{invoice.period.period_number}</span>
-                                        </Text>
+                                        <Group gap="xs">
+                                            <Text fw="bold">
+                                                <span>ใบแจ้งหนี้งวดที่</span>
+                                                <span className="ml-2">{invoice.period.period_number}</span>
+                                            </Text>
+                                            <Badge variant="dot">
+                                                {getInvoiceStatusMap(invoice.status ?? "")?.label}
+                                            </Badge>
+                                        </Group>
                                         <Text size="sm" c="dimmed">
                                             <NumberFormatter value={invoice.period.amount_period} thousandSeparator prefix="จำนวนเงิน " suffix=" บาท" />
                                         </Text>
