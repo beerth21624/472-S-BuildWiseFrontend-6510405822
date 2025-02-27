@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 import BackButton from "@/components/BackButton/BackButton";
 import useGetCompanyByUser from "@/hooks/queries/company/useGetCompanyByUser";
-import useGetContractByProject from "@/hooks/queries/contract/useGetContractByProject";
 import useGetProject from "@/hooks/queries/project/useGetProject";
 import { Badge, Box, Button, Divider, LoadingOverlay, Text } from "@mantine/core";
 import { IconFileText } from "@tabler/icons-react";
@@ -9,12 +8,9 @@ import _ from "lodash";
 import { type GetServerSidePropsContext, type InferGetServerSidePropsType } from "next";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { getContractStatusMap } from "@/utils/contractStatusMap";
-import useChangeStatusContract from "@/hooks/mutates/contract/useChangeStatusContract";
-import { modals } from "@mantine/modals";
-import { notifications } from "@mantine/notifications";
-import { AxiosError } from "axios";
 import InvoicePdfView from "@/components/Document/Invoice/InvoicePdfView";
+import useGetInvoice from "@/hooks/queries/invoice/useGetInvoice";
+import { getInvoiceStatusMap } from "@/utils/invoiceStatusMap";
 
 export default function Contract(
     props: InferGetServerSidePropsType<typeof getServerSideProps>,
@@ -22,17 +18,18 @@ export default function Contract(
     const { data: session } = useSession();
     const getProject = useGetProject({ id: props.id ?? "" });
     const getCompanyByUser = useGetCompanyByUser({ user_id: session?.user?.id ?? "" });
+    const getInvoice = useGetInvoice({ invoice_id: props.invoice_id ?? "" });
 
     return (
         <div className="flex flex-col">
-            <BackButton label="กลับไปหน้าเอกสาร" />
+            <BackButton label="กลับไปหน้าเอกสาร" href={`/project/${props.id}/document`} />
             <div className="flex justify-between">
                 <div className="flex flex-col">
                     <div className="text-xl font-bold">
                         <div className="flex items-center gap-2">
-                            ใบแจ้งหนี้
+                            ใบแจ้งหนี้งวดที่ {getInvoice.data?.data.period.period_number}
                             <Badge variant="dot">
-                                ฟหกด
+                                {getInvoiceStatusMap(getInvoice.data?.data.status ?? "")?.label}
                             </Badge>
                         </div>
                     </div>
@@ -52,7 +49,7 @@ export default function Contract(
                             Export
                         </Button>
                     </a>
-                    <Link href={`/project/${props.id}/document/invoice/edit`}>
+                    <Link href={`/project/${props.id}/document/invoice/${props.invoice_id}/edit`}>
                         <Button>
                             แก้ไข
                         </Button>
@@ -65,7 +62,8 @@ export default function Contract(
             <Divider my={"md"} />
             <Box pos="relative">
                 <LoadingOverlay loaderProps={{ children: 'Loading...' }} />
-                {(getProject.data?.data && getCompanyByUser.data?.data) ? <InvoicePdfView
+                {(getProject.data?.data && getCompanyByUser.data?.data && getInvoice.data) ? <InvoicePdfView
+                    data={getInvoice.data?.data}
                     isPrintMode={false}
                     project={getProject.data?.data}
                     company={getCompanyByUser.data?.data}
@@ -81,6 +79,7 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
     return {
         props: {
             id: context.query.id?.toString(),
+            invoice_id: context.query.invoice_id?.toString(),
         },
     };
 }
