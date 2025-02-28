@@ -40,11 +40,13 @@ export default function Document(
 
     const getInvoiceListByProjectId = useGetInvoiceListByProjectId({ project_id: props.id ?? "" });
 
+    const contractIsApprove = getContractByProject.data?.status === "approved";
+
     return (
         <>
             <Drawer position="right" opened={openedInvoiceList} onClose={closeInvoiceList} title={<Text size="xl" fw="bold">รายการใบแจ้งหนี้</Text>}>
                 <Stack gap="sm">
-                    {getInvoiceListByProjectId.data?.data.map((invoice) => (
+                    {getInvoiceListByProjectId.data?.data?.map((invoice) => (
                         <Link key={invoice.invoice_id} href={`/project/${props.id}/document/invoice/${invoice.invoice_id}`} target="_blank">
                             <Paper withBorder p="xs" className="cursor-pointer" >
                                 <Group>
@@ -91,7 +93,7 @@ export default function Document(
                     {/* <Link href={`/project/${props.id}/document/invoice`}>
                         <Button leftSection={<IconReceipt />} variant="outline" size="xl">ใบแจ้งหนี้</Button>
                     </Link> */}
-                    <Button leftSection={<IconReceipt />} variant="outline" size="xl" onClick={openInvoiceList} >
+                    <Button disabled={!contractIsApprove} leftSection={<IconReceipt />} variant="outline" size="xl" onClick={openInvoiceList} >
                         ใบแจ้งหนี้
                     </Button>
                 </div>
