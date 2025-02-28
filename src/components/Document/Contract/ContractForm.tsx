@@ -42,8 +42,7 @@ export default function ContractForm(props: Props) {
 
         const tax_amount =
             (selling_general_cost + total_selling_price) * (tax_percentage / 100);
-        const total_price = selling_general_cost + total_selling_price;
-
+        const total_price = selling_general_cost + total_selling_price; 
         return tax_amount + total_price;
     };
 
@@ -165,14 +164,14 @@ export default function ContractForm(props: Props) {
                         <Group justify="center">
                             <Stack gap={5}>
                                 <Text>ราคารวมสุทธิ</Text>
-                                <NumberFormatter className="font-bold" value={FinalPrice().toFixed(2)} thousandSeparator />
+                                <NumberFormatter className="font-bold" value={(FinalPrice() ?? 0).toFixed(2)} thousandSeparator />
                             </Stack>
                             {/* <div>
                                 <IconEqual className={clsx(periodTotalPrice() === FinalPrice() ? "text-green-500" : periodTotalPrice() > FinalPrice() ? "text-red-500" : "text-blue-500")} size={30} />
                             </div> */}
                             <Stack gap={5}>
                                 <Text>ราคารวมของงวด</Text>
-                                <NumberFormatter className="font-bold" value={periodTotalPrice().toFixed(2)} thousandSeparator />
+                                <NumberFormatter className="font-bold" value={(periodTotalPrice() ?? 0).toFixed(2)} thousandSeparator />
                             </Stack>
                         </Group>
                     </Stack>
