@@ -56,13 +56,13 @@ export default function InvoicePdfView(props: Props) {
                         <div className="text-end">งวดงาน:</div>
                         <div className="font-medium text-end">{String(invoice.period.period_number).padStart(3, '0')}</div>
 
-                        <div className="text-end">วันที่ (แก้ไขได้):</div>
+                        <div className="text-end">วันที่:</div>
                         <div className="font-medium text-end">{dayjs(parseISO(invoice.invoice_date)).format("DD/MM/BBBB")}</div>
 
-                        <div className="text-end">วันครบกําหนด (แก้ไขได้):</div>
+                        <div className="text-end">วันครบกําหนด:</div>
                         <div className="font-medium text-end">{dayjs(parseISO(invoice.payment_due_date)).format("DD/MM/BBBB")}</div>
 
-                        <div className="text-end">วันที่รับเงิน (แก้ไขได้):</div>
+                        <div className="text-end">วันที่รับเงิน:</div>
                         <div className="font-medium text-end">{dayjs(parseISO(invoice.paid_date)).format("DD/MM/BBBB")}</div>
                     </div>
                 </Group>
@@ -96,7 +96,7 @@ export default function InvoicePdfView(props: Props) {
                         <Table.Td align="right"><NumberFormatter value={Number(0).toFixed(2)} thousandSeparator decimalScale={2} /></Table.Td>
                     </Table.Tr> */}
                     <Table.Tr>
-                        <Table.Td>หักเงินประกันผลงาน (แก้ไขได้)</Table.Td>
+                        <Table.Td>หักเงินประกันผลงาน</Table.Td>
                         <Table.Td colSpan={2}></Table.Td>
                         <Table.Td align="right"><NumberFormatter value={Number(invoice.retention).toFixed(2)} thousandSeparator decimalScale={2} /></Table.Td>
                     </Table.Tr>
@@ -109,11 +109,11 @@ export default function InvoicePdfView(props: Props) {
                 </Table.Tbody>
             </Table>
             <Group gap={3} mt={10}>
-                <div className="font-bold">เงื่อนไขการชำระเงิน (แก้ไขได้):</div>
+                <div className="font-bold">เงื่อนไขการชำระเงิน:</div>
                 <div>{invoice.payment_term}</div>
             </Group>
             <Group gap={3} mt={10}>
-                <div className="font-bold">หมายเหตุ (แก้ไขได้):</div>
+                <div className="font-bold">หมายเหตุ:</div>
                 <div>{invoice.remarks}</div>
             </Group>
             {props.isPrintMode && <Group justify="end" mt={20}>
