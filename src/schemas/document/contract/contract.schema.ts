@@ -33,7 +33,7 @@ export const contractSchema = z.object({
       value: z.string(),
     }),
     { required_error: "กรุณาเพิ่มรูปแบบและรายการแนบท้ายสัญญา" },
-  ),
+  ).nonempty({ message: "กรุณาเพิ่มรูปแบบและรายการแนบท้ายสัญญา" }),
   periods: z.array(periodSchema),
   start_date: z.date({ required_error: "กรุณาระบุวันเริ่มงาน" }),
   end_date: z.date({ required_error: "กรุณาระบุวันเสร็จสิ้นงาน" }),
