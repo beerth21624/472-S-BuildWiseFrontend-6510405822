@@ -22,9 +22,11 @@ const periodSchema = z.object({
 export const contractSchema = z.object({
   project_id: z.string({ required_error: "กรุณาเลือกโครงการ" }),
   contract_id: z.string({ required_error: "กรุณาเลือกสัญญา" }),
-  project_description: z.string({ required_error: "กรุณากรอกรายละเอียดโครงการ" }).min(1, {
-    message: "กรุณากรอกรายละเอียดโครงการ",
-  }),
+  project_description: z
+    .string({ required_error: "กรุณากรอกรายละเอียดโครงการ" })
+    .min(1, {
+      message: "กรุณากรอกรายละเอียดโครงการ",
+    }),
   area_size: z
     .number({ required_error: "กรุณากรอกขนาดพื้นที่" })
     .min(1, { message: "กรุณากรอกขนาดพื้นที่" }),
@@ -33,7 +35,7 @@ export const contractSchema = z.object({
       value: z.string(),
     }),
     { required_error: "กรุณาเพิ่มรูปแบบและรายการแนบท้ายสัญญา" },
-  ).nonempty({ message: "กรุณาเพิ่มรูปแบบและรายการแนบท้ายสัญญา" }),
+  ),
   periods: z.array(periodSchema),
   start_date: z.date({ required_error: "กรุณาระบุวันเริ่มงาน" }),
   end_date: z.date({ required_error: "กรุณาระบุวันเสร็จสิ้นงาน" }),
@@ -47,22 +49,35 @@ export const contractSchema = z.object({
   guarantee_within: z.number({
     required_error: "กรุณาระบุจำนวนวันในการรับประกันผลงาน",
   }),
-  amendment: z.string({
-    required_error:
-      "กรุณาระบุรายละเอียดงานพิเศษและการแก้ไข เพิ่มเติม เปลี่ยนแปลงงาน",
-  }).min(1, { message: "กรุณาระบุรายละเอียดงานพิเศษและการแก้ไข เพิ่มเติม เปลี่ยนแปลงงาน" }),
-  termination_of_contract: z.string({
-    required_error: "กรุณากรอกเหตุผลในการบอกเลิกสัญญา",
-  }).min(1, { message: "กรุณากรอกเหตุผลในการบอกเลิกสัญญา" }),
-  end_of_contract: z.string({
-    required_error: "กรุณาระบุเงื่อนไขการสิ้นสุดสัญญา",
-  }).min(1, { message: "กรุณาระบุเงื่อนไขการสิ้นสุดสัญญา" }),
-  breach_of_contract: z.string({
-    required_error: "กรุณาระบุเงื่อนไขและผลของการผิดสัญญา",
-  }).min(1, { message: "กรุณาระบุเงื่อนไขและผลของการผิดสัญญา" }),
-  force_majeure: z.string({
-    required_error: "กรุณาระบุเหตุการณ์ที่ถือเป็นเหตุสุดวิสัย",
-  }).min(1, { message: "กรุณาระบุเหตุการณ์ที่ถือเป็นเหตุสุดวิสัย" }),
+  amendment: z
+    .string({
+      required_error:
+        "กรุณาระบุรายละเอียดงานพิเศษและการแก้ไข เพิ่มเติม เปลี่ยนแปลงงาน",
+    })
+    .min(1, {
+      message:
+        "กรุณาระบุรายละเอียดงานพิเศษและการแก้ไข เพิ่มเติม เปลี่ยนแปลงงาน",
+    }),
+  termination_of_contract: z
+    .string({
+      required_error: "กรุณากรอกเหตุผลในการบอกเลิกสัญญา",
+    })
+    .min(1, { message: "กรุณากรอกเหตุผลในการบอกเลิกสัญญา" }),
+  end_of_contract: z
+    .string({
+      required_error: "กรุณาระบุเงื่อนไขการสิ้นสุดสัญญา",
+    })
+    .min(1, { message: "กรุณาระบุเงื่อนไขการสิ้นสุดสัญญา" }),
+  breach_of_contract: z
+    .string({
+      required_error: "กรุณาระบุเงื่อนไขและผลของการผิดสัญญา",
+    })
+    .min(1, { message: "กรุณาระบุเงื่อนไขและผลของการผิดสัญญา" }),
+  force_majeure: z
+    .string({
+      required_error: "กรุณาระบุเหตุการณ์ที่ถือเป็นเหตุสุดวิสัย",
+    })
+    .min(1, { message: "กรุณาระบุเหตุการณ์ที่ถือเป็นเหตุสุดวิสัย" }),
 });
 
 export const contractFormToApi = contractSchema.transform((data) => {
