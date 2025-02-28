@@ -146,7 +146,7 @@ export default function ContractPdfView(props: Props) {
                     <span className="ml-1">เดือน</span>
                     <span className="ml-1 font-semibold">{format(parseISO(props.data.start_date), "MMMM", { locale: th })}</span>
                     <span className="ml-1">พ.ศ.</span>
-                    <span className="ml-1 font-semibold">{dayjs(parseISO(props.data.end_date)).format("BBBB")}</span>
+                    <span className="ml-1 font-semibold">{dayjs(parseISO(props.data.start_date)).format("BBBB")}</span>
                     <span className="ml-1">ถึง วันที่</span>
                     <span className="ml-1 font-semibold">{format(parseISO(props.data.end_date), "dd", { locale: th })}</span>
                     <span className="ml-1">เดือน</span>
