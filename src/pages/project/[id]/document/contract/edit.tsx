@@ -11,13 +11,17 @@ import useEditContract from "@/hooks/mutates/contract/useEditContract";
 import { notifications } from "@mantine/notifications";
 import { AxiosError } from "axios";
 import ContractForm from "@/components/Document/Contract/ContractForm";
+import { useEffect, useState } from "react";
 
 export default function ContractEdit(
     props: InferGetServerSidePropsType<typeof getServerSideProps>,
 ) {
+    const editContract = useEditContract();
+
     const getProject = useGetProject({ id: props.id ?? "" });
     const getContractByProject = useGetContractByProject({ project_id: props.id ?? "" });
-    const editContract = useEditContract();
+
+    const [contract, setContract] = useState<ContractSchemaType | undefined>(undefined);
 
     const onSave = (data: ContractSchemaType) => {
         editContract.mutate({
@@ -57,6 +61,18 @@ export default function ContractEdit(
         })
     }
 
+    useEffect(() => {
+        if (getContractByProject.data) {
+            setContract({
+                ...getContractByProject.data,
+                format: (getContractByProject.data.format?.map((value: string) => ({ value })) ?? []),
+                start_date: parseISO(getContractByProject.data.start_date),
+                end_date: parseISO(getContractByProject.data.end_date)
+            });
+        }
+    }, [getContractByProject.data])
+
+
     return (
         <div className="flex flex-col">
             <BackButton label="กลับไปหน้ารายละเอียดสัญญา" />
@@ -77,12 +93,7 @@ export default function ContractEdit(
             <Divider my={"md"} />
             <ContractForm
                 type="edit"
-                data={getContractByProject.data ? {
-                    ...getContractByProject.data,
-                    format: (getContractByProject.data.format?.map((value: string) => ({ value })) ?? []),
-                    start_date: parseISO(getContractByProject.data.start_date),
-                    end_date: parseISO(getContractByProject.data.end_date)
-                } : undefined}
+                data={contract}
                 project_id={props.id ?? ""}
                 onFinish={onSave}
             />

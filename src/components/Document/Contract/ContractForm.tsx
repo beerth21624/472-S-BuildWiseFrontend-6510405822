@@ -25,6 +25,28 @@ interface Props {
 export default function ContractForm(props: Props) {
     const getJobsByProjectID = useGetJobsByProjectID({ project_id: props.project_id });
 
+    const getQuotationByProject = useGetQuotationByProject({
+        project_id: props.project_id,
+    });
+
+    const FinalPrice = () => {
+        const total_selling_price = _.sumBy(
+            getQuotationByProject.data?.data.jobs,
+            (o) => o.total_selling_price,
+        );
+
+        const selling_general_cost =
+            getQuotationByProject.data?.data.selling_general_cost ?? 0;
+
+        const tax_percentage = getQuotationByProject.data?.data.tax_percentage ?? 0;
+
+        const tax_amount =
+            (selling_general_cost + total_selling_price) * (tax_percentage / 100);
+        const total_price = selling_general_cost + total_selling_price;
+
+        return tax_amount + total_price;
+    };
+
     const {
         control,
         setValue,
@@ -50,35 +72,11 @@ export default function ContractForm(props: Props) {
         control,
     })
 
-    const getQuotationByProject = useGetQuotationByProject({
-        project_id: props.project_id,
-    });
-
-    const FinalPrice = () => {
-        const total_selling_price = _.sumBy(
-            getQuotationByProject.data?.data.jobs,
-            (o) => o.total_selling_price,
-        );
-
-        const selling_general_cost =
-            getQuotationByProject.data?.data.selling_general_cost ?? 0;
-
-        const tax_percentage = getQuotationByProject.data?.data.tax_percentage ?? 0;
-
-        const tax_amount =
-            (selling_general_cost + total_selling_price) * (tax_percentage / 100);
-        const total_price = selling_general_cost + total_selling_price;
-
-        return tax_amount + total_price;
-    };
-
     const periodTotalPrice = () => {
         return _.sumBy(periods, o => o.amount_period);
     }
 
     const onFinish = (data: ContractSchemaType) => {
-        console.log(data);
-        // check periodTotalPrice and FinalPrice
         if (periodTotalPrice() !== FinalPrice()) {
             return Notifications.show({
                 title: "Error",
@@ -88,7 +86,6 @@ export default function ContractForm(props: Props) {
         }
         props.onFinish?.(data);
     };
-
 
     useEffect(() => {
         if (props.data) {
@@ -110,7 +107,6 @@ export default function ContractForm(props: Props) {
             setValue("project_id", props.data.project_id);
             setValue("contract_id", props.data.contract_id);
         }
-
     }, [props.data]);
 
 
@@ -142,9 +138,7 @@ export default function ContractForm(props: Props) {
                 <Input.Wrapper withAsterisk label="รูปแบบและรายการแนบท้ายสัญญา" />
                 {attachmentsFields.fields.map((field, index) => (
                     <div key={field.id} className="flex gap-3 items-center">
-
                         <ControlledInputText
-                            key={field.id}
                             control={control}
                             name={`format.${index}.value`}
                             props={{
@@ -229,7 +223,7 @@ export default function ContractForm(props: Props) {
                         </Group>
                         <div key={field.id} className="flex gap-3 items-center">
                             <ControlledInputNumber
-                                key={field.id}
+                                key={`${field.id}-amount`}
                                 control={control}
                                 name={`periods.${index}.amount_period`}
                                 props={{
@@ -240,7 +234,7 @@ export default function ContractForm(props: Props) {
                                 }}
                             />
                             <ControlledInputNumber
-                                key={field.id}
+                                key={`${field.id}-delivered`}
                                 control={control}
                                 name={`periods.${index}.delivered_within`}
                                 props={{
