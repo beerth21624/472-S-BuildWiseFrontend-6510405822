@@ -25,12 +25,10 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
   await page.setViewport({ width: 1000, height: 0 });
 
-  const nextAuthUrl = process.env.NEXTAUTH_URL;
-  if (!nextAuthUrl) {
-    throw new Error("NEXTAUTH_URL environment variable is not set");
-  }
+  const url = new URL(`/pdf/boq/${boq_id}`, process.env.NEXTAUTH_URL);
+  url.searchParams.append("user_id", user_id ?? "");
 
-  await page.goto(`${nextAuthUrl}/pdf/boq/${boq_id}?user_id=${user_id}`, {
+  await page.goto(url.toString(), {
     waitUntil: "networkidle2",
   });
 
