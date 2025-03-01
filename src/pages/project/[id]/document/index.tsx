@@ -74,7 +74,7 @@ export default function Document(
                 </Stack>
             </Drawer>
             <div className="flex flex-col">
-                <BackButton label="ย้อนกลับไปหน้ารายละเอียดโครงการ" />
+                <BackButton label="ย้อนกลับไปหน้ารายละเอียดโครงการ" href={`/project/${props.id}`} />
                 <div className="flex flex-col">
                     <div className="text-xl font-bold">
                         <div className="flex items-center gap-2">
