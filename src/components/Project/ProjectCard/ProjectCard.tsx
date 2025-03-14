@@ -36,12 +36,12 @@ export default function ProjectCard(props: Props) {
             {getProjectStatusMap(props.project.status)?.label}
           </Text>
         </div>
-        <div className="flex items-center gap-1">
+        {/* <div className="flex items-center gap-1">
           <IconCalendar className="text-gray-400" size={15} />
           <Text c="dimmed" size="xs">
             {format(props.project.updated_at, "dd/MMM/yyyy HH:mm")}
           </Text>
-        </div>
+        </div> */}
       </div>
     </Card>
   );
