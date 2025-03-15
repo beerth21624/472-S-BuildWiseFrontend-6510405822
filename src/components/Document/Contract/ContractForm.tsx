@@ -135,7 +135,7 @@ export default function ContractForm(props: Props) {
             />
             <div className="flex flex-col gap-2 ">
                 <Input.Wrapper withAsterisk label="รูปแบบและรายการแนบท้ายสัญญา" />
-                {attachmentsFields.fields.map((field, index) => (
+                {attachmentsFields.fields?.map((field, index) => (
                     <div key={field.id} className="flex gap-3 items-center">
                         <ControlledInputText
                             control={control}
@@ -182,7 +182,7 @@ export default function ContractForm(props: Props) {
                         size="sm"
                         center
                     >
-                        {getJobsByProjectID.data?.data.map((job, index) => {
+                        {getJobsByProjectID.data?.data?.map((job, index) => {
                             const selectedJobs = periods?.map((period) => period.jobs).flat();
                             const selectedJob = selectedJobs?.find((selectedJob) => selectedJob?.job_id === job.job_id);
                             const remaining = job.quantity - (selectedJob?.job_amount ?? 0);
@@ -212,7 +212,7 @@ export default function ContractForm(props: Props) {
 
                     </List>
                 </Paper>
-                {periodsFields.fields.map((field, index) => (
+                {periodsFields.fields?.map((field, index) => (
                     <Paper key={field.id} component={Stack} withBorder p={"sm"}>
                         <Group justify="space-between">
                             <Input.Wrapper withAsterisk label={`งวดที่ ${index + 1}`} />
