@@ -17,7 +17,7 @@ interface Props {
 export default function ProjectCard(props: Props) {
   return (
     <Card withBorder className="flex flex-col gap-3">
-      <div className="flex flex-col">
+      <div className="flex flex-col grow">
         <div className="flex justify-between">
           <Link href={"/project/" + props.project.id}>
             <Text size="md" fw={500}>
@@ -25,7 +25,7 @@ export default function ProjectCard(props: Props) {
             </Text>
           </Link>
         </div>
-        <Text c="dimmed" size="xs" fw={500}>
+        <Text c="dimmed" size="xs" fw={500} lineClamp={2}>
           {props.project.description}
         </Text>
       </div>
