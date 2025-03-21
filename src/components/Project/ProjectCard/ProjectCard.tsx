@@ -1,6 +1,7 @@
 import { type Project } from "@/services/project/getProjects.service";
 import { getProjectStatusMap } from "@/utils/projectStatusMap";
 import {
+    Badge,
   Card,
   Text,
 } from "@mantine/core";
@@ -30,12 +31,13 @@ export default function ProjectCard(props: Props) {
         </Text>
       </div>
       <div className="flex flex-col">
-        <div className="flex items-center gap-1">
+        {/* <div className="flex items-center gap-1">
           {getProjectStatusMap(props.project.status)?.icon}
           <Text c="dimmed" size="xs">
             {getProjectStatusMap(props.project.status)?.label}
           </Text>
-        </div>
+        </div> */}
+         <Badge variant='light' color={getProjectStatusMap(props.project.status)?.color} leftSection={getProjectStatusMap(props.project.status)?.icon}>{getProjectStatusMap(props.project.status)?.label}</Badge>
         {/* <div className="flex items-center gap-1">
           <IconCalendar className="text-gray-400" size={15} />
           <Text c="dimmed" size="xs">
