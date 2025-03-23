@@ -131,7 +131,7 @@ export default function Index() {
                 <div className="flex justify-between items-center">
                     {getProjectsApi.isLoading ? <Skeleton height={20} width={200} mt={6} /> : <Group gap="xs">
                         <Text size="sm" c="dimmed">
-                            รายการโครงการทั้งหมด <NumberFormatter value={projectFiltered?.length} thousandSeparator /> รายการ
+                            รายการโครงการทั้งหมด <NumberFormatter value={projectFiltered().length} thousandSeparator /> รายการ
                         </Text>
                         <Group gap={8}>
                             {projectSortStatus.map((status) => (
