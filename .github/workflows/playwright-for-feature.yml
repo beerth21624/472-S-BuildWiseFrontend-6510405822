@@ -1,7 +1,11 @@
 name: Playwright Tests For Feature
 on:
   push:
-    branches: [test/*]
+    branches:
+      - feature/*
+      - test/*
+      - develop
+      - main
 jobs:
   test:
     timeout-minutes: 60
