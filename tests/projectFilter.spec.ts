@@ -1,9 +1,6 @@
 import { type Project } from "@/services/project/getProjects.service";
 import { type BaseResponse } from "@/types/BaseResponse.type";
 import { test, expect } from "@playwright/test";
-
-const BASE_URL = "http://localhost:3000";
-
 test.describe.configure({ mode: "serial" });
 
 test.describe("Project Filter Status", () => {
@@ -11,7 +8,7 @@ test.describe("Project Filter Status", () => {
     browser,
   }) => {
     const page = await browser.newPage();
-    await page.goto(`${BASE_URL}/project`);
+    await page.goto("/project");
     await page.getByRole("button", { name: "Sign In" }).click();
     const responseRaw = await page.waitForResponse((response) => {
       return response.url().includes("/projects");
@@ -34,7 +31,7 @@ test.describe("Project Filter Status", () => {
     browser,
   }) => {
     const page = await browser.newPage();
-    await page.goto(`${BASE_URL}/project`);
+    await page.goto("/project");
     await page.getByRole("button", { name: "Sign In" }).click();
 
     const responseRaw = await page.waitForResponse((response) => {
@@ -98,7 +95,7 @@ test.describe("Project Filter Status", () => {
     browser,
   }) => {
     const page = await browser.newPage();
-    await page.goto(`${BASE_URL}/project`);
+    await page.goto("/project");
     await page.getByRole("button", { name: "Sign In" }).click();
     await page.waitForResponse((response) => {
       return response.url().includes("/projects");
