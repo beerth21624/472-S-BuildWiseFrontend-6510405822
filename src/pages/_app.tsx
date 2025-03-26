@@ -17,6 +17,7 @@ import "@mantine/dates/styles.css";
 import "@mantine/core/styles.layer.css";
 import "mantine-datatable/styles.layer.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Head from "next/head";
 
 const themeMantine = createTheme({
     fontFamily: "Noto Sans Thai",
@@ -59,19 +60,24 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     }, []);
 
     return (
-        <QueryClientProvider client={queryClient}>
-            <SessionProvider>
-                <MantineProvider theme={themeMantine}>
-                    <ModalsProvider>
-                        <NavigationProgress />
-                        <Notifications position="top-right" />
-                        <AppLayout>
-                            <Component {...pageProps} />
-                        </AppLayout>
-                    </ModalsProvider>
-                </MantineProvider>
-            </SessionProvider>
-        </QueryClientProvider>
+        <>
+            <Head>
+                <title>BuildWise</title>
+            </Head>
+            <QueryClientProvider client={queryClient}>
+                <SessionProvider>
+                    <MantineProvider theme={themeMantine}>
+                        <ModalsProvider>
+                            <NavigationProgress />
+                            <Notifications position="top-right" />
+                            <AppLayout>
+                                <Component {...pageProps} />
+                            </AppLayout>
+                        </ModalsProvider>
+                    </MantineProvider>
+                </SessionProvider>
+            </QueryClientProvider>
+        </>
     );
 };
 
