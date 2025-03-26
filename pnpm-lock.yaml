@@ -103,7 +103,7 @@ importers:
         version: 7.1.0
       geist:
         specifier: ^1.3.0
-        version: 1.3.1(next@14.2.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
+        version: 1.3.1(next@14.2.13(@playwright/test@1.51.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))
       jwt-decode:
         specifier: ^4.0.0
         version: 4.0.0
@@ -115,10 +115,10 @@ importers:
         version: 7.12.4(@mantine/core@7.13.0(@mantine/hooks@7.13.0(react@18.3.1))(@types/react@18.3.10)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(@mantine/hooks@7.13.0(react@18.3.1))(clsx@2.1.1)(react@18.3.1)
       next:
         specifier: ^14.2.4
-        version: 14.2.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 14.2.13(@playwright/test@1.51.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-auth:
         specifier: ^4.24.7
-        version: 4.24.8(next@14.2.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+        version: 4.24.8(next@14.2.13(@playwright/test@1.51.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       next-connect:
         specifier: 0.13.0
         version: 0.13.0
@@ -153,6 +153,9 @@ importers:
         specifier: ^3.23.3
         version: 3.23.8
     devDependencies:
+      '@playwright/test':
+        specifier: ^1.51.1
+        version: 1.51.1
       '@types/crypto-js':
         specifier: ^4.2.2
         version: 4.2.2
@@ -665,6 +668,11 @@ packages:
   '@pkgjs/parseargs@0.11.0':
     resolution: {integrity: sha512-+1VkjdD0QBLPodGrJUeqarH8VAIvQODIbwh9XpP5Syisf7YoQgsJKPNFoqqLQlu+VQ/tVSshMR6loPMn8U+dPg==}
     engines: {node: '>=14'}
+
+  '@playwright/test@1.51.1':
+    resolution: {integrity: sha512-nM+kEaTSAoVlXmMPH10017vn3FSiFqr/bh4fKg9vmAdMfd9SDqRZNvPSiAHADc/itWak+qPvMPZQOPwCBW7k7Q==}
+    engines: {node: '>=18'}
+    hasBin: true
 
   '@popperjs/core@2.11.8':
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
@@ -1939,6 +1947,11 @@ packages:
   fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
 
+  fsevents@2.3.2:
+    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
+
   fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
@@ -2591,6 +2604,16 @@ packages:
   pirates@4.0.6:
     resolution: {integrity: sha512-saLsH7WeYYPiD25LDuLRRY/i+6HaPYr6G1OUlN39otzkSTxKnubR9RTxS3/Kk50s1g2JTgFwWQDQyplC5/SHZg==}
     engines: {node: '>= 6'}
+
+  playwright-core@1.51.1:
+    resolution: {integrity: sha512-/crRMj8+j/Nq5s8QcvegseuyeZPxpQCZb6HNk3Sos3BlZyAknRjoyJPFWkpNn8v0+P3WiwqFF8P+zQo4eqiNuw==}
+    engines: {node: '>=18'}
+    hasBin: true
+
+  playwright@1.51.1:
+    resolution: {integrity: sha512-kkx+MB2KQRkyxjYPc3a0wLZZoDczmppyGJIvQ43l+aZihkaVvmu/21kiyaHeHjiFxjxNNFnUncKmcGIyOojsaw==}
+    engines: {node: '>=18'}
+    hasBin: true
 
   possible-typed-array-names@1.0.0:
     resolution: {integrity: sha512-d7Uw+eZoloe0EHDIYoe+bQ5WXnGMOpmiZFTuMWCwpjzzkL2nTjcKiAk4hh8TjnGye2TwWOk3UXucZ+3rbmBa8Q==}
@@ -4196,6 +4219,10 @@ snapshots:
 
   '@pkgjs/parseargs@0.11.0':
     optional: true
+
+  '@playwright/test@1.51.1':
+    dependencies:
+      playwright: 1.51.1
 
   '@popperjs/core@2.11.8': {}
 
@@ -5854,6 +5881,9 @@ snapshots:
 
   fs.realpath@1.0.0: {}
 
+  fsevents@2.3.2:
+    optional: true
+
   fsevents@2.3.3:
     optional: true
 
@@ -5870,9 +5900,9 @@ snapshots:
 
   fuse.js@7.1.0: {}
 
-  geist@1.3.1(next@14.2.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
+  geist@1.3.1(next@14.2.13(@playwright/test@1.51.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)):
     dependencies:
-      next: 14.2.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      next: 14.2.13(@playwright/test@1.51.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
 
   get-caller-file@2.0.5: {}
 
@@ -6323,13 +6353,13 @@ snapshots:
 
   netmask@2.0.2: {}
 
-  next-auth@4.24.8(next@14.2.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  next-auth@4.24.8(next@14.2.13(@playwright/test@1.51.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1))(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@babel/runtime': 7.25.6
       '@panva/hkdf': 1.2.1
       cookie: 0.5.0
       jose: 4.15.9
-      next: 14.2.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
+      next: 14.2.13(@playwright/test@1.51.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
       oauth: 0.9.15
       openid-client: 5.7.0
       preact: 10.24.1
@@ -6342,7 +6372,7 @@ snapshots:
     dependencies:
       trouter: 3.2.1
 
-  next@14.2.13(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
+  next@14.2.13(@playwright/test@1.51.1)(react-dom@18.3.1(react@18.3.1))(react@18.3.1):
     dependencies:
       '@next/env': 14.2.13
       '@swc/helpers': 0.5.5
@@ -6363,6 +6393,7 @@ snapshots:
       '@next/swc-win32-arm64-msvc': 14.2.13
       '@next/swc-win32-ia32-msvc': 14.2.13
       '@next/swc-win32-x64-msvc': 14.2.13
+      '@playwright/test': 1.51.1
     transitivePeerDependencies:
       - '@babel/core'
       - babel-plugin-macros
@@ -6503,6 +6534,14 @@ snapshots:
   pify@2.3.0: {}
 
   pirates@4.0.6: {}
+
+  playwright-core@1.51.1: {}
+
+  playwright@1.51.1:
+    dependencies:
+      playwright-core: 1.51.1
+    optionalDependencies:
+      fsevents: 2.3.2
 
   possible-typed-array-names@1.0.0: {}
 

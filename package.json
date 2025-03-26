@@ -60,6 +60,7 @@
     "zod": "^3.23.3"
   },
   "devDependencies": {
+    "@playwright/test": "^1.51.1",
     "@types/crypto-js": "^4.2.2",
     "@types/eslint": "^8.56.10",
     "@types/express-fileupload": "^1.5.1",
