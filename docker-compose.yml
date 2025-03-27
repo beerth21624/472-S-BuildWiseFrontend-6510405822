@@ -2,7 +2,7 @@ version: "3.8"
 services:
   buildwise:
     restart: unless-stopped
-    image: teerut26/buildwise:latest
+    image: beerth21624/buildwise:latest
     ports:
       - 3010:3000
     environment:
